@@ -1,4 +1,4 @@
-![Architect Logo](https://raw.githubusercontent.com/steve-rodrigue/architect/main/assets/logo.png)
+![Architect Logo](https://raw.githubusercontent.com/steve-rodrigue/architect-lang/refs/heads/main/assets/logo.png)
 
 # Architect Language
 
