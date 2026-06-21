@@ -1,3 +1,5 @@
+![Architect Logo](https://raw.githubusercontent.com/steve-rodrigue/architect/main/assets/logo.png)
+
 # Architect Language
 
 Architect is an AI-native software architecture language and compiler.
