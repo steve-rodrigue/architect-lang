@@ -1,3 +1,4 @@
 .antlr
 .vscode
 example
+.DS_Store

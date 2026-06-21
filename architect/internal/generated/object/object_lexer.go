@@ -1,4 +1,4 @@
-// Code generated from /Users/steve/Documents/projects/github.com/steve-rodrigue/architect-lang/architect/internal/infrastructure/antlr/object.g4 by ANTLR 4.13.1. DO NOT EDIT.
+// Code generated from internal/infrastructure/antlr/grammars/Object.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
 package object
 
@@ -186,7 +186,7 @@ func NewObjectLexer(input antlr.CharStream) *ObjectLexer {
 	l.RuleNames = staticData.RuleNames
 	l.LiteralNames = staticData.LiteralNames
 	l.SymbolicNames = staticData.SymbolicNames
-	l.GrammarFileName = "object.g4"
+	l.GrammarFileName = "Object.g4"
 	// TODO: l.EOF = antlr.TokenEOF
 
 	return l
