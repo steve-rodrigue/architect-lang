@@ -13,10 +13,37 @@ antlr4 \
 
 antlr4 \
   -Dlanguage=Go \
+  -package object \
+  -visitor \
+  -no-listener \
+  -Xexact-output-dir \
+  -o internal/generated/common \
+  internal/infrastructure/antlr/grammars/Common.g4
+
+antlr4 \
+  -Dlanguage=Go \
+  -package workflow \
+  -visitor \
+  -no-listener \
+  -Xexact-output-dir \
+  -o internal/generated/workflow \
+  internal/infrastructure/antlr/grammars/Workflow.g4
+
+antlr4 \
+  -Dlanguage=Go \
   -package endpoint \
   -visitor \
   -no-listener \
   -Xexact-output-dir \
   -o internal/generated/endpoint \
   internal/infrastructure/antlr/grammars/Endpoint.g4
+
+antlr4 \
+  -Dlanguage=Go \
+  -package consumer \
+  -visitor \
+  -no-listener \
+  -Xexact-output-dir \
+  -o internal/generated/consumer \
+  internal/infrastructure/antlr/grammars/Consumer.g4
 ```

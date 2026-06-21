@@ -3,18 +3,19 @@ package antlr
 import (
 	"testing"
 
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/common"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/endpoints"
-	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/workflows"
 )
 
-func assertAssignmentSelector(t *testing.T, assignment endpoints.Assignment, name string, parts []string) {
+func assertAssignmentSelector(t *testing.T, assignment workflows.Assignment, name string, parts []string) {
 	t.Helper()
 
 	if assignment.Name() != name {
 		t.Fatalf("expected assignment %s, got %s", name, assignment.Name())
 	}
 
-	selector, ok := assignment.Value().(endpoints.SelectorExpression)
+	selector, ok := assignment.Value().(workflows.SelectorExpression)
 	if !ok {
 		t.Fatalf("expected selector expression for %s", name)
 	}
@@ -31,10 +32,10 @@ func assertAssignmentSelector(t *testing.T, assignment endpoints.Assignment, nam
 	}
 }
 
-func assertLiteral(t *testing.T, expression endpoints.Expression, kind objects.ValueKind, raw string) {
+func assertLiteral(t *testing.T, expression workflows.Expression, kind common.ValueKind, raw string) {
 	t.Helper()
 
-	literal, ok := expression.(endpoints.LiteralExpression)
+	literal, ok := expression.(workflows.LiteralExpression)
 	if !ok {
 		t.Fatalf("expected literal expression")
 	}
@@ -70,14 +71,14 @@ func assertSingleSource(t *testing.T, field endpoints.InputField, kind endpoints
 	}
 }
 
-func assertAssignmentFunctionCall(t *testing.T, assignment endpoints.Assignment, name string, functionName string, argCount int) {
+func assertAssignmentFunctionCall(t *testing.T, assignment workflows.Assignment, name string, functionName string, argCount int) {
 	t.Helper()
 
 	if assignment.Name() != name {
 		t.Fatalf("expected assignment %s, got %s", name, assignment.Name())
 	}
 
-	call, ok := assignment.Value().(endpoints.FunctionCallExpression)
+	call, ok := assignment.Value().(workflows.FunctionCallExpression)
 	if !ok {
 		t.Fatalf("expected function call expression for %s", name)
 	}

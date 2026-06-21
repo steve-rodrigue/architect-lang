@@ -2,15 +2,26 @@ package antlr
 
 import (
 	"fmt"
-	"strings"
 
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/common"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
 	generated "github.com/steve-rodrigue/architect-lang/architect/internal/generated/object"
 )
 
 type objectVisitor struct {
 	*generated.BaseObjectVisitor
-	err error
+	common *objectCommonVisitor
+	err    error
+}
+
+func newObjectVisitor() *objectVisitor {
+	visitor := &objectVisitor{
+		BaseObjectVisitor: &generated.BaseObjectVisitor{},
+	}
+
+	visitor.common = newObjectCommonVisitor(visitor.setErr)
+
+	return visitor
 }
 
 func (v *objectVisitor) setErr(err error) {
@@ -29,7 +40,7 @@ func (v *objectVisitor) VisitObjectDecl(ctx *generated.ObjectDeclContext) interf
 
 	for _, modifier := range ctx.AllObjectModifier() {
 		if modifier.HISTORY_OF() != nil {
-			historyOf, err := objects.NewTypeReferenceBuilder().
+			historyOf, err := common.NewTypeReferenceBuilder().
 				Name(modifier.IDENT().GetText()).
 				Build()
 			if err != nil {
@@ -66,15 +77,36 @@ func (v *objectVisitor) VisitObjectDecl(ctx *generated.ObjectDeclContext) interf
 }
 
 func (v *objectVisitor) VisitFieldDecl(ctx *generated.FieldDeclContext) interface{} {
-	typeRefResult := ctx.TypeRef().Accept(v)
-	if v.err != nil {
-		return nil
-	}
-
-	typeRef, ok := typeRefResult.(objects.TypeReference)
+	typeRef, ok := ctx.TypeRef().Accept(v.common).(common.TypeReference)
 	if !ok || typeRef == nil {
 		v.setErr(fmt.Errorf("failed to parse type reference for field %q", ctx.IDENT().GetText()))
 		return nil
+	}
+
+	if ctx.DefaultValue() != nil {
+		if !typeRef.IsOptional() {
+			v.setErr(fmt.Errorf("default value can only be used with optional type: %s", ctx.GetText()))
+			return nil
+		}
+
+		value, ok := ctx.DefaultValue().Accept(v.common).(common.Value)
+		if !ok || value == nil {
+			v.setErr(fmt.Errorf("failed to parse default value for field %q", ctx.IDENT().GetText()))
+			return nil
+		}
+
+		var err error
+		typeRef, err = common.NewTypeReferenceBuilder().
+			Name(typeRef.Name()).
+			List(typeRef.IsList()).
+			Optional(typeRef.IsOptional()).
+			NumberConstraint(typeRef.NumberConstraint()).
+			DefaultValue(value).
+			Build()
+		if err != nil {
+			v.setErr(err)
+			return nil
+		}
 	}
 
 	builder := objects.NewFieldBuilder().
@@ -126,212 +158,4 @@ func (v *objectVisitor) VisitFieldDecl(ctx *generated.FieldDeclContext) interfac
 	}
 
 	return field
-}
-
-func (v *objectVisitor) VisitTypeRef(ctx *generated.TypeRefContext) interface{} {
-	builder := objects.NewTypeReferenceBuilder()
-
-	if ctx.LIST() != nil {
-		builder.
-			Name(ctx.TypeName().GetText()).
-			List(true)
-	} else {
-		builder.Name(ctx.TypeName().GetText())
-	}
-
-	if ctx.NumberConstraint() != nil {
-		constraintResult := ctx.NumberConstraint().Accept(v)
-		if v.err != nil {
-			return nil
-		}
-
-		constraint, ok := constraintResult.(objects.NumberConstraint)
-		if !ok || constraint == nil {
-			v.setErr(fmt.Errorf("failed to parse number constraint for type %q", ctx.TypeName().GetText()))
-			return nil
-		}
-
-		builder.NumberConstraint(constraint)
-	} else {
-		constraint, err := objects.NewNumberConstraintBuilder().
-			Kind(objects.NumberConstraintNone).
-			Build()
-		if err != nil {
-			v.setErr(err)
-			return nil
-		}
-
-		builder.NumberConstraint(constraint)
-	}
-
-	if ctx.OptionalMarker() != nil {
-		builder.Optional(true)
-	}
-
-	if ctx.DefaultValue() != nil {
-		if ctx.OptionalMarker() == nil {
-			v.setErr(fmt.Errorf("default value can only be used with optional type: %s", ctx.GetText()))
-			return nil
-		}
-
-		valueResult := ctx.DefaultValue().Accept(v)
-		if v.err != nil {
-			return nil
-		}
-
-		value, ok := valueResult.(objects.Value)
-		if !ok || value == nil {
-			v.setErr(fmt.Errorf("failed to parse default value for type %q", ctx.TypeName().GetText()))
-			return nil
-		}
-
-		builder.DefaultValue(value)
-	}
-
-	typeRef, err := builder.Build()
-	if err != nil {
-		v.setErr(err)
-		return nil
-	}
-
-	return typeRef
-}
-
-func (v *objectVisitor) VisitNumberConstraint(ctx *generated.NumberConstraintContext) interface{} {
-	builder := objects.NewNumberConstraintBuilder()
-
-	switch {
-	case ctx.PLUS() != nil:
-		constraint, err := builder.
-			Kind(objects.NumberConstraintOneOrMore).
-			Build()
-		if err != nil {
-			v.setErr(err)
-			return nil
-		}
-
-		return constraint
-
-	case ctx.STAR() != nil:
-		constraint, err := builder.
-			Kind(objects.NumberConstraintZeroOrMore).
-			Build()
-		if err != nil {
-			v.setErr(err)
-			return nil
-		}
-
-		return constraint
-	}
-
-	builder.Kind(objects.NumberConstraintRange)
-
-	text := strings.TrimSpace(ctx.GetText())
-	text = strings.TrimPrefix(text, "[")
-	text = strings.TrimSuffix(text, "]")
-
-	parts := strings.Split(text, ",")
-	if len(parts) != 2 {
-		v.setErr(fmt.Errorf("invalid number range constraint: %s", ctx.GetText()))
-		return nil
-	}
-
-	minRaw := strings.TrimSpace(parts[0])
-	maxRaw := strings.TrimSpace(parts[1])
-
-	if minRaw != "" {
-		min, err := parseNumberValue(minRaw)
-		if err != nil {
-			v.setErr(err)
-			return nil
-		}
-
-		builder.Min(min)
-	}
-
-	if maxRaw != "" {
-		max, err := parseNumberValue(maxRaw)
-		if err != nil {
-			v.setErr(err)
-			return nil
-		}
-
-		builder.Max(max)
-	}
-
-	constraint, err := builder.Build()
-	if err != nil {
-		v.setErr(err)
-		return nil
-	}
-
-	return constraint
-}
-
-func (v *objectVisitor) VisitDefaultValue(ctx *generated.DefaultValueContext) interface{} {
-	return ctx.Value().Accept(v)
-}
-
-func (v *objectVisitor) VisitValue(ctx *generated.ValueContext) interface{} {
-	builder := objects.NewValueBuilder()
-
-	switch {
-	case ctx.STRING() != nil:
-		value, err := builder.String(unquote(ctx.STRING().GetText()))
-		if err != nil {
-			v.setErr(err)
-			return nil
-		}
-
-		return value
-
-	case ctx.INT() != nil:
-		value, err := builder.Int(ctx.INT().GetText())
-		if err != nil {
-			v.setErr(err)
-			return nil
-		}
-
-		return value
-
-	case ctx.FLOAT() != nil:
-		value, err := builder.Float(ctx.FLOAT().GetText())
-		if err != nil {
-			v.setErr(err)
-			return nil
-		}
-
-		return value
-
-	case ctx.TRUE() != nil:
-		value, err := builder.Bool("true")
-		if err != nil {
-			v.setErr(err)
-			return nil
-		}
-
-		return value
-
-	case ctx.FALSE() != nil:
-		value, err := builder.Bool("false")
-		if err != nil {
-			v.setErr(err)
-			return nil
-		}
-
-		return value
-	}
-
-	v.setErr(fmt.Errorf("unknown value: %s", ctx.GetText()))
-	return nil
-}
-
-func parseNumberValue(raw string) (objects.NumberValue, error) {
-	builder := objects.NewNumberValueBuilder()
-
-	if strings.Contains(raw, ".") {
-		return builder.Float(raw)
-	}
-
-	return builder.Int(raw)
 }

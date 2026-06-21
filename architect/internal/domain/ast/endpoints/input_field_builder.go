@@ -3,12 +3,12 @@ package endpoints
 import (
 	"fmt"
 
-	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/common"
 )
 
 type inputFieldBuilder struct {
 	name    string
-	typeRef objects.TypeReference
+	typeRef common.TypeReference
 	sources InputSourceRule
 }
 
@@ -17,7 +17,7 @@ func (b *inputFieldBuilder) Name(name string) InputFieldBuilder {
 	return b
 }
 
-func (b *inputFieldBuilder) Type(typeRef objects.TypeReference) InputFieldBuilder {
+func (b *inputFieldBuilder) Type(typeRef common.TypeReference) InputFieldBuilder {
 	b.typeRef = typeRef
 	return b
 }

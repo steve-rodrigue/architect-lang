@@ -2,3 +2,4 @@
 .vscode
 example
 .DS_Store
+architect/internal/infrastructure/generated

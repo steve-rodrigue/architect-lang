@@ -1,6 +1,7 @@
 package parsers
 
 import (
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/consumers"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/endpoints"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
 )
@@ -9,4 +10,5 @@ import (
 type Application interface {
 	Object(script string) (objects.Object, error)
 	Endpoint(script string) (endpoints.Endpoint, error)
+	Consumer(script string) (consumers.Consumer, error)
 }

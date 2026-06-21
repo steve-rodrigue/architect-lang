@@ -1,10 +1,12 @@
 package endpoints
 
-import "github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
+import (
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/common"
+)
 
 type inputField struct {
 	name    string
-	typeRef objects.TypeReference
+	typeRef common.TypeReference
 	sources InputSourceRule
 }
 
@@ -12,7 +14,7 @@ func (f *inputField) Name() string {
 	return f.name
 }
 
-func (f *inputField) Type() objects.TypeReference {
+func (f *inputField) Type() common.TypeReference {
 	return f.typeRef
 }
 

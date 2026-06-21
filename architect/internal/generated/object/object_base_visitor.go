@@ -23,6 +23,14 @@ func (v *BaseObjectVisitor) VisitFieldDecl(ctx *FieldDeclContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseObjectVisitor) VisitDefaultValue(ctx *DefaultValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseObjectVisitor) VisitFieldModifier(ctx *FieldModifierContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseObjectVisitor) VisitTypeRef(ctx *TypeRefContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -39,18 +47,14 @@ func (v *BaseObjectVisitor) VisitOptionalMarker(ctx *OptionalMarkerContext) inte
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseObjectVisitor) VisitDefaultValue(ctx *DefaultValueContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseObjectVisitor) VisitFieldModifier(ctx *FieldModifierContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BaseObjectVisitor) VisitValue(ctx *ValueContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
 func (v *BaseObjectVisitor) VisitNumberValue(ctx *NumberValueContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseObjectVisitor) VisitIdentifier(ctx *IdentifierContext) interface{} {
 	return v.VisitChildren(ctx)
 }

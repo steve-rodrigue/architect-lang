@@ -1,10 +1,14 @@
 package objects
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/common"
+)
 
 type fieldBuilder struct {
 	name      string
-	typeRef   TypeReference
+	typeRef   common.TypeReference
 	modifiers []FieldModifier
 }
 
@@ -14,7 +18,7 @@ func (b *fieldBuilder) Name(name string) FieldBuilder {
 	return b
 }
 
-func (b *fieldBuilder) Type(typeRef TypeReference) FieldBuilder {
+func (b *fieldBuilder) Type(typeRef common.TypeReference) FieldBuilder {
 	b.typeRef = typeRef
 
 	return b

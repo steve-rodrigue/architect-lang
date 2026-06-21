@@ -19,6 +19,12 @@ type ObjectVisitor interface {
 	// Visit a parse tree produced by ObjectParser#fieldDecl.
 	VisitFieldDecl(ctx *FieldDeclContext) interface{}
 
+	// Visit a parse tree produced by ObjectParser#defaultValue.
+	VisitDefaultValue(ctx *DefaultValueContext) interface{}
+
+	// Visit a parse tree produced by ObjectParser#fieldModifier.
+	VisitFieldModifier(ctx *FieldModifierContext) interface{}
+
 	// Visit a parse tree produced by ObjectParser#typeRef.
 	VisitTypeRef(ctx *TypeRefContext) interface{}
 
@@ -31,15 +37,12 @@ type ObjectVisitor interface {
 	// Visit a parse tree produced by ObjectParser#optionalMarker.
 	VisitOptionalMarker(ctx *OptionalMarkerContext) interface{}
 
-	// Visit a parse tree produced by ObjectParser#defaultValue.
-	VisitDefaultValue(ctx *DefaultValueContext) interface{}
-
-	// Visit a parse tree produced by ObjectParser#fieldModifier.
-	VisitFieldModifier(ctx *FieldModifierContext) interface{}
-
 	// Visit a parse tree produced by ObjectParser#value.
 	VisitValue(ctx *ValueContext) interface{}
 
 	// Visit a parse tree produced by ObjectParser#numberValue.
 	VisitNumberValue(ctx *NumberValueContext) interface{}
+
+	// Visit a parse tree produced by ObjectParser#identifier.
+	VisitIdentifier(ctx *IdentifierContext) interface{}
 }

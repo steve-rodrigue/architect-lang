@@ -1,10 +1,14 @@
 package objects
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/common"
+)
 
 type objectBuilder struct {
 	name      string
-	historyOf TypeReference
+	historyOf common.TypeReference
 	fields    []Field
 }
 
@@ -13,7 +17,7 @@ func (b *objectBuilder) Name(name string) ObjectBuilder {
 	return b
 }
 
-func (b *objectBuilder) HistoryOf(typeRef TypeReference) ObjectBuilder {
+func (b *objectBuilder) HistoryOf(typeRef common.TypeReference) ObjectBuilder {
 	b.historyOf = typeRef
 	return b
 }

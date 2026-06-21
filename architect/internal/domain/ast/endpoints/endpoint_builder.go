@@ -1,13 +1,17 @@
 package endpoints
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/workflows"
+)
 
 type endpointBuilder struct {
 	name    string
 	method  HTTPMethod
 	path    string
 	input   Input
-	actions []Action
+	actions []workflows.Action
 }
 
 func (b *endpointBuilder) Name(name string) EndpointBuilder {
@@ -34,7 +38,7 @@ func (b *endpointBuilder) Input(input Input) EndpointBuilder {
 	return b
 }
 
-func (b *endpointBuilder) AddAction(action Action) EndpointBuilder {
+func (b *endpointBuilder) AddAction(action workflows.Action) EndpointBuilder {
 	if action != nil {
 		b.actions = append(b.actions, action)
 	}
@@ -67,7 +71,7 @@ func (b *endpointBuilder) Build() (Endpoint, error) {
 		return nil, fmt.Errorf("endpoint %q input is required", b.name)
 	}
 
-	actions := make([]Action, len(b.actions))
+	actions := make([]workflows.Action, len(b.actions))
 	copy(actions, b.actions)
 
 	return &endpoint{

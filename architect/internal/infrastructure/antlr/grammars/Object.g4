@@ -1,5 +1,7 @@
 grammar Object;
 
+import Common;
+
 program
     : objectDecl EOF
     ;
@@ -15,26 +17,7 @@ objectModifier
     ;
 
 fieldDecl
-    : IDENT typeRef fieldModifier*
-    ;
-
-typeRef
-    : typeName numberConstraint? optionalMarker? defaultValue?
-    | LIST LT typeName GT optionalMarker? defaultValue?
-    ;
-
-typeName
-    : IDENT
-    ;
-
-numberConstraint
-    : PLUS
-    | STAR
-    | LBRACKET numberValue? COMMA numberValue? RBRACKET
-    ;
-
-optionalMarker
-    : QUESTION
+    : IDENT typeRef defaultValue? fieldModifier*
     ;
 
 defaultValue
@@ -48,59 +31,19 @@ fieldModifier
     | DEPRECATED
     ;
 
-value
-    : STRING
-    | INT
-    | FLOAT
-    | TRUE
-    | FALSE
-    ;
-
-numberValue
-    : INT
-    | FLOAT
-    ;
-
 // Keywords
+
 OBJECT       : 'object';
 HISTORY_OF   : 'history_of';
 PRIMARY      : 'primary';
 UNIQUE       : 'unique';
 RENAMED_FROM : 'renamed_from';
 DEPRECATED   : 'deprecated';
-LIST         : 'List';
-TRUE         : 'true';
-FALSE        : 'false';
 
 // Symbols
-LBRACE   : '{';
-RBRACE   : '}';
-LBRACKET : '[';
-RBRACKET : ']';
-LT       : '<';
-GT       : '>';
-COMMA    : ',';
-PLUS     : '+';
-STAR     : '*';
-QUESTION : '?';
 
-// Literals
-
-IDENT
-    : [a-zA-Z_][a-zA-Z0-9_]*
-    ;
-
-FLOAT
-    : [0-9]+ '.' [0-9]+
-    ;
-
-INT
-    : [0-9]+
-    ;
-
-STRING
-    : '"' (~["\\] | '\\' .)* '"'
-    ;
+LBRACE : '{';
+RBRACE : '}';
 
 // Comments / whitespace
 

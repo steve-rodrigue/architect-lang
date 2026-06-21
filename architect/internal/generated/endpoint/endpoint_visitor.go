@@ -31,6 +31,9 @@ type EndpointVisitor interface {
 	// Visit a parse tree produced by EndpointParser#inputSourceKind.
 	VisitInputSourceKind(ctx *InputSourceKindContext) interface{}
 
+	// Visit a parse tree produced by EndpointParser#httpMethod.
+	VisitHttpMethod(ctx *HttpMethodContext) interface{}
+
 	// Visit a parse tree produced by EndpointParser#action.
 	VisitAction(ctx *ActionContext) interface{}
 
@@ -48,6 +51,9 @@ type EndpointVisitor interface {
 
 	// Visit a parse tree produced by EndpointParser#emitAction.
 	VisitEmitAction(ctx *EmitActionContext) interface{}
+
+	// Visit a parse tree produced by EndpointParser#callAction.
+	VisitCallAction(ctx *CallActionContext) interface{}
 
 	// Visit a parse tree produced by EndpointParser#returnAction.
 	VisitReturnAction(ctx *ReturnActionContext) interface{}
@@ -79,9 +85,6 @@ type EndpointVisitor interface {
 	// Visit a parse tree produced by EndpointParser#selector.
 	VisitSelector(ctx *SelectorContext) interface{}
 
-	// Visit a parse tree produced by EndpointParser#identifier.
-	VisitIdentifier(ctx *IdentifierContext) interface{}
-
 	// Visit a parse tree produced by EndpointParser#typeRef.
 	VisitTypeRef(ctx *TypeRefContext) interface{}
 
@@ -100,6 +103,6 @@ type EndpointVisitor interface {
 	// Visit a parse tree produced by EndpointParser#numberValue.
 	VisitNumberValue(ctx *NumberValueContext) interface{}
 
-	// Visit a parse tree produced by EndpointParser#httpMethod.
-	VisitHttpMethod(ctx *HttpMethodContext) interface{}
+	// Visit a parse tree produced by EndpointParser#identifier.
+	VisitIdentifier(ctx *IdentifierContext) interface{}
 }

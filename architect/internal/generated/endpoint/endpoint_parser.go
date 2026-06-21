@@ -32,134 +32,140 @@ var EndpointParserStaticData struct {
 func endpointParserInit() {
 	staticData := &EndpointParserStaticData
 	staticData.LiteralNames = []string{
-		"", "'endpoint'", "'input'", "'fetch'", "'from'", "'where'", "'create'",
-		"'store'", "'to'", "'update'", "'emit'", "'return'", "'path'", "'query'",
-		"'body'", "'header'", "'cookie'", "'GET'", "'POST'", "'PUT'", "'PATCH'",
-		"'DELETE'", "'List'", "'true'", "'false'", "'{'", "'}'", "'('", "')'",
-		"'['", "']'", "'<'", "'>'", "'<='", "'>='", "'=='", "'!='", "'='", "':'",
-		"'.'", "','", "'|'", "'+'", "'*'", "'?'",
+		"", "'endpoint'", "'path'", "'query'", "'body'", "'header'", "'cookie'",
+		"'GET'", "'POST'", "'PUT'", "'PATCH'", "'DELETE'", "'fetch'", "'from'",
+		"'where'", "'create'", "'store'", "'to'", "'update'", "'emit'", "'call'",
+		"'return'", "'('", "')'", "'<='", "'>='", "'=='", "'!='", "'='", "':'",
+		"'.'", "'List'", "'input'", "'event'", "'result'", "'true'", "'false'",
+		"'{'", "'}'", "'['", "']'", "'<'", "'>'", "','", "'|'", "'+'", "'*'",
+		"'?'",
 	}
 	staticData.SymbolicNames = []string{
-		"", "ENDPOINT", "INPUT", "FETCH", "FROM", "WHERE", "CREATE", "STORE",
-		"TO", "UPDATE", "EMIT", "RETURN", "PATH", "QUERY", "BODY", "HEADER",
-		"COOKIE", "GET", "POST", "PUT", "PATCH", "DELETE", "LIST", "TRUE", "FALSE",
-		"LBRACE", "RBRACE", "LPAREN", "RPAREN", "LBRACKET", "RBRACKET", "LT",
-		"GT", "LTE", "GTE", "EQ", "NEQ", "ASSIGN", "COLON", "DOT", "COMMA",
-		"PIPE", "PLUS", "STAR", "QUESTION", "IDENT", "FLOAT", "INT", "STRING",
-		"LINE_COMMENT", "BLOCK_COMMENT", "WS",
+		"", "ENDPOINT", "PATH", "QUERY", "BODY", "HEADER", "COOKIE", "GET",
+		"POST", "PUT", "PATCH", "DELETE", "FETCH", "FROM", "WHERE", "CREATE",
+		"STORE", "TO", "UPDATE", "EMIT", "CALL", "RETURN", "LPAREN", "RPAREN",
+		"LTE", "GTE", "EQ", "NEQ", "ASSIGN", "COLON", "DOT", "LIST", "INPUT",
+		"EVENT", "RESULT", "TRUE", "FALSE", "LBRACE", "RBRACE", "LBRACKET",
+		"RBRACKET", "LT", "GT", "COMMA", "PIPE", "PLUS", "STAR", "QUESTION",
+		"IDENT", "FLOAT", "INT", "STRING", "LINE_COMMENT", "BLOCK_COMMENT",
+		"WS",
 	}
 	staticData.RuleNames = []string{
 		"program", "endpointDecl", "endpointBody", "inputBlock", "inputField",
-		"inputSourceRule", "inputSource", "inputSourceKind", "action", "fetchAction",
-		"createAction", "storeAction", "updateAction", "emitAction", "returnAction",
-		"typedVariable", "assignmentBlock", "assignment", "condition", "comparator",
-		"expression", "functionCall", "argumentList", "selector", "identifier",
-		"typeRef", "typeName", "numberConstraint", "optionalMarker", "value",
-		"numberValue", "httpMethod",
+		"inputSourceRule", "inputSource", "inputSourceKind", "httpMethod", "action",
+		"fetchAction", "createAction", "storeAction", "updateAction", "emitAction",
+		"callAction", "returnAction", "typedVariable", "assignmentBlock", "assignment",
+		"condition", "comparator", "expression", "functionCall", "argumentList",
+		"selector", "typeRef", "typeName", "numberConstraint", "optionalMarker",
+		"value", "numberValue", "identifier",
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 51, 246, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 54, 253, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
 		10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 2, 14, 7, 14, 2, 15, 7, 15,
 		2, 16, 7, 16, 2, 17, 7, 17, 2, 18, 7, 18, 2, 19, 7, 19, 2, 20, 7, 20, 2,
 		21, 7, 21, 2, 22, 7, 22, 2, 23, 7, 23, 2, 24, 7, 24, 2, 25, 7, 25, 2, 26,
 		7, 26, 2, 27, 7, 27, 2, 28, 7, 28, 2, 29, 7, 29, 2, 30, 7, 30, 2, 31, 7,
-		31, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 74, 8,
-		1, 10, 1, 12, 1, 77, 9, 1, 1, 1, 1, 1, 1, 2, 1, 2, 3, 2, 83, 8, 2, 1, 3,
-		1, 3, 1, 3, 5, 3, 88, 8, 3, 10, 3, 12, 3, 91, 9, 3, 1, 3, 1, 3, 1, 4, 1,
-		4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 5, 5, 104, 8, 5, 10, 5, 12,
-		5, 107, 9, 5, 1, 5, 1, 5, 3, 5, 111, 8, 5, 1, 6, 1, 6, 3, 6, 115, 8, 6,
-		1, 7, 1, 7, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 3, 8, 125, 8, 8, 1, 9,
-		1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 1, 10, 1, 10, 1, 10, 1, 10, 1, 11,
-		1, 11, 1, 11, 1, 11, 1, 11, 1, 12, 1, 12, 1, 12, 1, 12, 1, 13, 1, 13, 1,
-		13, 1, 13, 1, 14, 1, 14, 1, 14, 1, 15, 1, 15, 1, 15, 1, 15, 1, 16, 1, 16,
-		5, 16, 160, 8, 16, 10, 16, 12, 16, 163, 9, 16, 1, 16, 1, 16, 1, 17, 1,
-		17, 1, 17, 1, 17, 1, 18, 1, 18, 1, 18, 1, 18, 1, 19, 1, 19, 1, 20, 1, 20,
-		1, 20, 3, 20, 180, 8, 20, 1, 21, 1, 21, 1, 21, 3, 21, 185, 8, 21, 1, 21,
-		1, 21, 1, 22, 1, 22, 1, 22, 5, 22, 192, 8, 22, 10, 22, 12, 22, 195, 9,
-		22, 1, 23, 1, 23, 1, 23, 5, 23, 200, 8, 23, 10, 23, 12, 23, 203, 9, 23,
-		1, 24, 1, 24, 1, 25, 1, 25, 3, 25, 209, 8, 25, 1, 25, 3, 25, 212, 8, 25,
-		1, 25, 1, 25, 1, 25, 1, 25, 1, 25, 3, 25, 219, 8, 25, 3, 25, 221, 8, 25,
-		1, 26, 1, 26, 1, 27, 1, 27, 1, 27, 1, 27, 3, 27, 229, 8, 27, 1, 27, 1,
-		27, 3, 27, 233, 8, 27, 1, 27, 3, 27, 236, 8, 27, 1, 28, 1, 28, 1, 29, 1,
-		29, 1, 30, 1, 30, 1, 31, 1, 31, 1, 31, 0, 0, 32, 0, 2, 4, 6, 8, 10, 12,
-		14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48,
-		50, 52, 54, 56, 58, 60, 62, 0, 6, 1, 0, 12, 16, 1, 0, 31, 36, 2, 0, 2,
-		2, 45, 45, 2, 0, 23, 24, 46, 48, 1, 0, 46, 47, 1, 0, 17, 21, 238, 0, 64,
-		1, 0, 0, 0, 2, 67, 1, 0, 0, 0, 4, 82, 1, 0, 0, 0, 6, 84, 1, 0, 0, 0, 8,
-		94, 1, 0, 0, 0, 10, 110, 1, 0, 0, 0, 12, 112, 1, 0, 0, 0, 14, 116, 1, 0,
-		0, 0, 16, 124, 1, 0, 0, 0, 18, 126, 1, 0, 0, 0, 20, 133, 1, 0, 0, 0, 22,
-		137, 1, 0, 0, 0, 24, 142, 1, 0, 0, 0, 26, 146, 1, 0, 0, 0, 28, 150, 1,
-		0, 0, 0, 30, 153, 1, 0, 0, 0, 32, 157, 1, 0, 0, 0, 34, 166, 1, 0, 0, 0,
-		36, 170, 1, 0, 0, 0, 38, 174, 1, 0, 0, 0, 40, 179, 1, 0, 0, 0, 42, 181,
-		1, 0, 0, 0, 44, 188, 1, 0, 0, 0, 46, 196, 1, 0, 0, 0, 48, 204, 1, 0, 0,
-		0, 50, 220, 1, 0, 0, 0, 52, 222, 1, 0, 0, 0, 54, 235, 1, 0, 0, 0, 56, 237,
-		1, 0, 0, 0, 58, 239, 1, 0, 0, 0, 60, 241, 1, 0, 0, 0, 62, 243, 1, 0, 0,
-		0, 64, 65, 3, 2, 1, 0, 65, 66, 5, 0, 0, 1, 66, 1, 1, 0, 0, 0, 67, 68, 5,
-		1, 0, 0, 68, 69, 5, 45, 0, 0, 69, 70, 3, 62, 31, 0, 70, 71, 5, 48, 0, 0,
-		71, 75, 5, 25, 0, 0, 72, 74, 3, 4, 2, 0, 73, 72, 1, 0, 0, 0, 74, 77, 1,
-		0, 0, 0, 75, 73, 1, 0, 0, 0, 75, 76, 1, 0, 0, 0, 76, 78, 1, 0, 0, 0, 77,
-		75, 1, 0, 0, 0, 78, 79, 5, 26, 0, 0, 79, 3, 1, 0, 0, 0, 80, 83, 3, 6, 3,
-		0, 81, 83, 3, 16, 8, 0, 82, 80, 1, 0, 0, 0, 82, 81, 1, 0, 0, 0, 83, 5,
-		1, 0, 0, 0, 84, 85, 5, 2, 0, 0, 85, 89, 5, 25, 0, 0, 86, 88, 3, 8, 4, 0,
-		87, 86, 1, 0, 0, 0, 88, 91, 1, 0, 0, 0, 89, 87, 1, 0, 0, 0, 89, 90, 1,
-		0, 0, 0, 90, 92, 1, 0, 0, 0, 91, 89, 1, 0, 0, 0, 92, 93, 5, 26, 0, 0, 93,
-		7, 1, 0, 0, 0, 94, 95, 5, 45, 0, 0, 95, 96, 3, 50, 25, 0, 96, 97, 3, 10,
-		5, 0, 97, 9, 1, 0, 0, 0, 98, 111, 3, 12, 6, 0, 99, 100, 5, 27, 0, 0, 100,
-		105, 3, 12, 6, 0, 101, 102, 5, 41, 0, 0, 102, 104, 3, 12, 6, 0, 103, 101,
-		1, 0, 0, 0, 104, 107, 1, 0, 0, 0, 105, 103, 1, 0, 0, 0, 105, 106, 1, 0,
-		0, 0, 106, 108, 1, 0, 0, 0, 107, 105, 1, 0, 0, 0, 108, 109, 5, 28, 0, 0,
-		109, 111, 1, 0, 0, 0, 110, 98, 1, 0, 0, 0, 110, 99, 1, 0, 0, 0, 111, 11,
-		1, 0, 0, 0, 112, 114, 3, 14, 7, 0, 113, 115, 5, 44, 0, 0, 114, 113, 1,
-		0, 0, 0, 114, 115, 1, 0, 0, 0, 115, 13, 1, 0, 0, 0, 116, 117, 7, 0, 0,
-		0, 117, 15, 1, 0, 0, 0, 118, 125, 3, 18, 9, 0, 119, 125, 3, 20, 10, 0,
-		120, 125, 3, 22, 11, 0, 121, 125, 3, 24, 12, 0, 122, 125, 3, 26, 13, 0,
-		123, 125, 3, 28, 14, 0, 124, 118, 1, 0, 0, 0, 124, 119, 1, 0, 0, 0, 124,
-		120, 1, 0, 0, 0, 124, 121, 1, 0, 0, 0, 124, 122, 1, 0, 0, 0, 124, 123,
-		1, 0, 0, 0, 125, 17, 1, 0, 0, 0, 126, 127, 5, 3, 0, 0, 127, 128, 3, 30,
-		15, 0, 128, 129, 5, 4, 0, 0, 129, 130, 5, 45, 0, 0, 130, 131, 5, 5, 0,
-		0, 131, 132, 3, 36, 18, 0, 132, 19, 1, 0, 0, 0, 133, 134, 5, 6, 0, 0, 134,
-		135, 3, 30, 15, 0, 135, 136, 3, 32, 16, 0, 136, 21, 1, 0, 0, 0, 137, 138,
-		5, 7, 0, 0, 138, 139, 5, 45, 0, 0, 139, 140, 5, 8, 0, 0, 140, 141, 5, 45,
-		0, 0, 141, 23, 1, 0, 0, 0, 142, 143, 5, 9, 0, 0, 143, 144, 5, 45, 0, 0,
-		144, 145, 3, 32, 16, 0, 145, 25, 1, 0, 0, 0, 146, 147, 5, 10, 0, 0, 147,
-		148, 3, 30, 15, 0, 148, 149, 3, 32, 16, 0, 149, 27, 1, 0, 0, 0, 150, 151,
-		5, 11, 0, 0, 151, 152, 3, 40, 20, 0, 152, 29, 1, 0, 0, 0, 153, 154, 5,
-		45, 0, 0, 154, 155, 5, 38, 0, 0, 155, 156, 3, 50, 25, 0, 156, 31, 1, 0,
-		0, 0, 157, 161, 5, 25, 0, 0, 158, 160, 3, 34, 17, 0, 159, 158, 1, 0, 0,
-		0, 160, 163, 1, 0, 0, 0, 161, 159, 1, 0, 0, 0, 161, 162, 1, 0, 0, 0, 162,
-		164, 1, 0, 0, 0, 163, 161, 1, 0, 0, 0, 164, 165, 5, 26, 0, 0, 165, 33,
-		1, 0, 0, 0, 166, 167, 5, 45, 0, 0, 167, 168, 5, 37, 0, 0, 168, 169, 3,
-		40, 20, 0, 169, 35, 1, 0, 0, 0, 170, 171, 3, 40, 20, 0, 171, 172, 3, 38,
-		19, 0, 172, 173, 3, 40, 20, 0, 173, 37, 1, 0, 0, 0, 174, 175, 7, 1, 0,
-		0, 175, 39, 1, 0, 0, 0, 176, 180, 3, 42, 21, 0, 177, 180, 3, 46, 23, 0,
-		178, 180, 3, 58, 29, 0, 179, 176, 1, 0, 0, 0, 179, 177, 1, 0, 0, 0, 179,
-		178, 1, 0, 0, 0, 180, 41, 1, 0, 0, 0, 181, 182, 5, 45, 0, 0, 182, 184,
-		5, 27, 0, 0, 183, 185, 3, 44, 22, 0, 184, 183, 1, 0, 0, 0, 184, 185, 1,
-		0, 0, 0, 185, 186, 1, 0, 0, 0, 186, 187, 5, 28, 0, 0, 187, 43, 1, 0, 0,
-		0, 188, 193, 3, 40, 20, 0, 189, 190, 5, 40, 0, 0, 190, 192, 3, 40, 20,
-		0, 191, 189, 1, 0, 0, 0, 192, 195, 1, 0, 0, 0, 193, 191, 1, 0, 0, 0, 193,
-		194, 1, 0, 0, 0, 194, 45, 1, 0, 0, 0, 195, 193, 1, 0, 0, 0, 196, 201, 3,
-		48, 24, 0, 197, 198, 5, 39, 0, 0, 198, 200, 3, 48, 24, 0, 199, 197, 1,
-		0, 0, 0, 200, 203, 1, 0, 0, 0, 201, 199, 1, 0, 0, 0, 201, 202, 1, 0, 0,
-		0, 202, 47, 1, 0, 0, 0, 203, 201, 1, 0, 0, 0, 204, 205, 7, 2, 0, 0, 205,
-		49, 1, 0, 0, 0, 206, 208, 3, 52, 26, 0, 207, 209, 3, 54, 27, 0, 208, 207,
-		1, 0, 0, 0, 208, 209, 1, 0, 0, 0, 209, 211, 1, 0, 0, 0, 210, 212, 3, 56,
-		28, 0, 211, 210, 1, 0, 0, 0, 211, 212, 1, 0, 0, 0, 212, 221, 1, 0, 0, 0,
-		213, 214, 5, 22, 0, 0, 214, 215, 5, 31, 0, 0, 215, 216, 3, 52, 26, 0, 216,
-		218, 5, 32, 0, 0, 217, 219, 3, 56, 28, 0, 218, 217, 1, 0, 0, 0, 218, 219,
-		1, 0, 0, 0, 219, 221, 1, 0, 0, 0, 220, 206, 1, 0, 0, 0, 220, 213, 1, 0,
-		0, 0, 221, 51, 1, 0, 0, 0, 222, 223, 5, 45, 0, 0, 223, 53, 1, 0, 0, 0,
-		224, 236, 5, 42, 0, 0, 225, 236, 5, 43, 0, 0, 226, 228, 5, 29, 0, 0, 227,
-		229, 3, 60, 30, 0, 228, 227, 1, 0, 0, 0, 228, 229, 1, 0, 0, 0, 229, 230,
-		1, 0, 0, 0, 230, 232, 5, 40, 0, 0, 231, 233, 3, 60, 30, 0, 232, 231, 1,
-		0, 0, 0, 232, 233, 1, 0, 0, 0, 233, 234, 1, 0, 0, 0, 234, 236, 5, 30, 0,
-		0, 235, 224, 1, 0, 0, 0, 235, 225, 1, 0, 0, 0, 235, 226, 1, 0, 0, 0, 236,
-		55, 1, 0, 0, 0, 237, 238, 5, 44, 0, 0, 238, 57, 1, 0, 0, 0, 239, 240, 7,
-		3, 0, 0, 240, 59, 1, 0, 0, 0, 241, 242, 7, 4, 0, 0, 242, 61, 1, 0, 0, 0,
-		243, 244, 7, 5, 0, 0, 244, 63, 1, 0, 0, 0, 19, 75, 82, 89, 105, 110, 114,
-		124, 161, 179, 184, 193, 201, 208, 211, 218, 220, 228, 232, 235,
+		31, 2, 32, 7, 32, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		5, 1, 76, 8, 1, 10, 1, 12, 1, 79, 9, 1, 1, 1, 1, 1, 1, 2, 1, 2, 3, 2, 85,
+		8, 2, 1, 3, 1, 3, 1, 3, 5, 3, 90, 8, 3, 10, 3, 12, 3, 93, 9, 3, 1, 3, 1,
+		3, 1, 4, 1, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 5, 5, 106, 8,
+		5, 10, 5, 12, 5, 109, 9, 5, 1, 5, 1, 5, 3, 5, 113, 8, 5, 1, 6, 1, 6, 3,
+		6, 117, 8, 6, 1, 7, 1, 7, 1, 8, 1, 8, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 1,
+		9, 1, 9, 3, 9, 130, 8, 9, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1,
+		10, 1, 11, 1, 11, 1, 11, 1, 11, 1, 12, 1, 12, 1, 12, 1, 12, 1, 12, 1, 13,
+		1, 13, 1, 13, 1, 13, 1, 14, 1, 14, 1, 14, 1, 14, 1, 15, 1, 15, 1, 15, 1,
+		15, 1, 16, 1, 16, 1, 16, 1, 17, 1, 17, 1, 17, 1, 17, 1, 18, 1, 18, 5, 18,
+		169, 8, 18, 10, 18, 12, 18, 172, 9, 18, 1, 18, 1, 18, 1, 19, 1, 19, 1,
+		19, 1, 19, 1, 20, 1, 20, 1, 20, 1, 20, 1, 21, 1, 21, 1, 22, 1, 22, 1, 22,
+		3, 22, 189, 8, 22, 1, 23, 1, 23, 1, 23, 3, 23, 194, 8, 23, 1, 23, 1, 23,
+		1, 24, 1, 24, 1, 24, 5, 24, 201, 8, 24, 10, 24, 12, 24, 204, 9, 24, 1,
+		25, 1, 25, 1, 25, 5, 25, 209, 8, 25, 10, 25, 12, 25, 212, 9, 25, 1, 26,
+		1, 26, 3, 26, 216, 8, 26, 1, 26, 3, 26, 219, 8, 26, 1, 26, 1, 26, 1, 26,
+		1, 26, 1, 26, 3, 26, 226, 8, 26, 3, 26, 228, 8, 26, 1, 27, 1, 27, 1, 28,
+		1, 28, 1, 28, 1, 28, 3, 28, 236, 8, 28, 1, 28, 1, 28, 3, 28, 240, 8, 28,
+		1, 28, 3, 28, 243, 8, 28, 1, 29, 1, 29, 1, 30, 1, 30, 1, 31, 1, 31, 1,
+		32, 1, 32, 1, 32, 0, 0, 33, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22,
+		24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58,
+		60, 62, 64, 0, 6, 1, 0, 2, 6, 1, 0, 7, 11, 2, 0, 24, 27, 41, 42, 2, 0,
+		35, 36, 49, 51, 1, 0, 49, 50, 2, 0, 32, 34, 48, 48, 245, 0, 66, 1, 0, 0,
+		0, 2, 69, 1, 0, 0, 0, 4, 84, 1, 0, 0, 0, 6, 86, 1, 0, 0, 0, 8, 96, 1, 0,
+		0, 0, 10, 112, 1, 0, 0, 0, 12, 114, 1, 0, 0, 0, 14, 118, 1, 0, 0, 0, 16,
+		120, 1, 0, 0, 0, 18, 129, 1, 0, 0, 0, 20, 131, 1, 0, 0, 0, 22, 138, 1,
+		0, 0, 0, 24, 142, 1, 0, 0, 0, 26, 147, 1, 0, 0, 0, 28, 151, 1, 0, 0, 0,
+		30, 155, 1, 0, 0, 0, 32, 159, 1, 0, 0, 0, 34, 162, 1, 0, 0, 0, 36, 166,
+		1, 0, 0, 0, 38, 175, 1, 0, 0, 0, 40, 179, 1, 0, 0, 0, 42, 183, 1, 0, 0,
+		0, 44, 188, 1, 0, 0, 0, 46, 190, 1, 0, 0, 0, 48, 197, 1, 0, 0, 0, 50, 205,
+		1, 0, 0, 0, 52, 227, 1, 0, 0, 0, 54, 229, 1, 0, 0, 0, 56, 242, 1, 0, 0,
+		0, 58, 244, 1, 0, 0, 0, 60, 246, 1, 0, 0, 0, 62, 248, 1, 0, 0, 0, 64, 250,
+		1, 0, 0, 0, 66, 67, 3, 2, 1, 0, 67, 68, 5, 0, 0, 1, 68, 1, 1, 0, 0, 0,
+		69, 70, 5, 1, 0, 0, 70, 71, 5, 48, 0, 0, 71, 72, 3, 16, 8, 0, 72, 73, 5,
+		51, 0, 0, 73, 77, 5, 37, 0, 0, 74, 76, 3, 4, 2, 0, 75, 74, 1, 0, 0, 0,
+		76, 79, 1, 0, 0, 0, 77, 75, 1, 0, 0, 0, 77, 78, 1, 0, 0, 0, 78, 80, 1,
+		0, 0, 0, 79, 77, 1, 0, 0, 0, 80, 81, 5, 38, 0, 0, 81, 3, 1, 0, 0, 0, 82,
+		85, 3, 6, 3, 0, 83, 85, 3, 18, 9, 0, 84, 82, 1, 0, 0, 0, 84, 83, 1, 0,
+		0, 0, 85, 5, 1, 0, 0, 0, 86, 87, 5, 32, 0, 0, 87, 91, 5, 37, 0, 0, 88,
+		90, 3, 8, 4, 0, 89, 88, 1, 0, 0, 0, 90, 93, 1, 0, 0, 0, 91, 89, 1, 0, 0,
+		0, 91, 92, 1, 0, 0, 0, 92, 94, 1, 0, 0, 0, 93, 91, 1, 0, 0, 0, 94, 95,
+		5, 38, 0, 0, 95, 7, 1, 0, 0, 0, 96, 97, 5, 48, 0, 0, 97, 98, 3, 52, 26,
+		0, 98, 99, 3, 10, 5, 0, 99, 9, 1, 0, 0, 0, 100, 113, 3, 12, 6, 0, 101,
+		102, 5, 22, 0, 0, 102, 107, 3, 12, 6, 0, 103, 104, 5, 44, 0, 0, 104, 106,
+		3, 12, 6, 0, 105, 103, 1, 0, 0, 0, 106, 109, 1, 0, 0, 0, 107, 105, 1, 0,
+		0, 0, 107, 108, 1, 0, 0, 0, 108, 110, 1, 0, 0, 0, 109, 107, 1, 0, 0, 0,
+		110, 111, 5, 23, 0, 0, 111, 113, 1, 0, 0, 0, 112, 100, 1, 0, 0, 0, 112,
+		101, 1, 0, 0, 0, 113, 11, 1, 0, 0, 0, 114, 116, 3, 14, 7, 0, 115, 117,
+		5, 47, 0, 0, 116, 115, 1, 0, 0, 0, 116, 117, 1, 0, 0, 0, 117, 13, 1, 0,
+		0, 0, 118, 119, 7, 0, 0, 0, 119, 15, 1, 0, 0, 0, 120, 121, 7, 1, 0, 0,
+		121, 17, 1, 0, 0, 0, 122, 130, 3, 20, 10, 0, 123, 130, 3, 22, 11, 0, 124,
+		130, 3, 24, 12, 0, 125, 130, 3, 26, 13, 0, 126, 130, 3, 28, 14, 0, 127,
+		130, 3, 30, 15, 0, 128, 130, 3, 32, 16, 0, 129, 122, 1, 0, 0, 0, 129, 123,
+		1, 0, 0, 0, 129, 124, 1, 0, 0, 0, 129, 125, 1, 0, 0, 0, 129, 126, 1, 0,
+		0, 0, 129, 127, 1, 0, 0, 0, 129, 128, 1, 0, 0, 0, 130, 19, 1, 0, 0, 0,
+		131, 132, 5, 12, 0, 0, 132, 133, 3, 34, 17, 0, 133, 134, 5, 13, 0, 0, 134,
+		135, 5, 48, 0, 0, 135, 136, 5, 14, 0, 0, 136, 137, 3, 40, 20, 0, 137, 21,
+		1, 0, 0, 0, 138, 139, 5, 15, 0, 0, 139, 140, 3, 34, 17, 0, 140, 141, 3,
+		36, 18, 0, 141, 23, 1, 0, 0, 0, 142, 143, 5, 16, 0, 0, 143, 144, 5, 48,
+		0, 0, 144, 145, 5, 17, 0, 0, 145, 146, 5, 48, 0, 0, 146, 25, 1, 0, 0, 0,
+		147, 148, 5, 18, 0, 0, 148, 149, 5, 48, 0, 0, 149, 150, 3, 36, 18, 0, 150,
+		27, 1, 0, 0, 0, 151, 152, 5, 19, 0, 0, 152, 153, 3, 34, 17, 0, 153, 154,
+		3, 36, 18, 0, 154, 29, 1, 0, 0, 0, 155, 156, 5, 20, 0, 0, 156, 157, 3,
+		50, 25, 0, 157, 158, 3, 36, 18, 0, 158, 31, 1, 0, 0, 0, 159, 160, 5, 21,
+		0, 0, 160, 161, 3, 44, 22, 0, 161, 33, 1, 0, 0, 0, 162, 163, 3, 64, 32,
+		0, 163, 164, 5, 29, 0, 0, 164, 165, 3, 52, 26, 0, 165, 35, 1, 0, 0, 0,
+		166, 170, 5, 37, 0, 0, 167, 169, 3, 38, 19, 0, 168, 167, 1, 0, 0, 0, 169,
+		172, 1, 0, 0, 0, 170, 168, 1, 0, 0, 0, 170, 171, 1, 0, 0, 0, 171, 173,
+		1, 0, 0, 0, 172, 170, 1, 0, 0, 0, 173, 174, 5, 38, 0, 0, 174, 37, 1, 0,
+		0, 0, 175, 176, 3, 64, 32, 0, 176, 177, 5, 28, 0, 0, 177, 178, 3, 44, 22,
+		0, 178, 39, 1, 0, 0, 0, 179, 180, 3, 44, 22, 0, 180, 181, 3, 42, 21, 0,
+		181, 182, 3, 44, 22, 0, 182, 41, 1, 0, 0, 0, 183, 184, 7, 2, 0, 0, 184,
+		43, 1, 0, 0, 0, 185, 189, 3, 46, 23, 0, 186, 189, 3, 50, 25, 0, 187, 189,
+		3, 60, 30, 0, 188, 185, 1, 0, 0, 0, 188, 186, 1, 0, 0, 0, 188, 187, 1,
+		0, 0, 0, 189, 45, 1, 0, 0, 0, 190, 191, 5, 48, 0, 0, 191, 193, 5, 22, 0,
+		0, 192, 194, 3, 48, 24, 0, 193, 192, 1, 0, 0, 0, 193, 194, 1, 0, 0, 0,
+		194, 195, 1, 0, 0, 0, 195, 196, 5, 23, 0, 0, 196, 47, 1, 0, 0, 0, 197,
+		202, 3, 44, 22, 0, 198, 199, 5, 43, 0, 0, 199, 201, 3, 44, 22, 0, 200,
+		198, 1, 0, 0, 0, 201, 204, 1, 0, 0, 0, 202, 200, 1, 0, 0, 0, 202, 203,
+		1, 0, 0, 0, 203, 49, 1, 0, 0, 0, 204, 202, 1, 0, 0, 0, 205, 210, 3, 64,
+		32, 0, 206, 207, 5, 30, 0, 0, 207, 209, 3, 64, 32, 0, 208, 206, 1, 0, 0,
+		0, 209, 212, 1, 0, 0, 0, 210, 208, 1, 0, 0, 0, 210, 211, 1, 0, 0, 0, 211,
+		51, 1, 0, 0, 0, 212, 210, 1, 0, 0, 0, 213, 215, 3, 54, 27, 0, 214, 216,
+		3, 56, 28, 0, 215, 214, 1, 0, 0, 0, 215, 216, 1, 0, 0, 0, 216, 218, 1,
+		0, 0, 0, 217, 219, 3, 58, 29, 0, 218, 217, 1, 0, 0, 0, 218, 219, 1, 0,
+		0, 0, 219, 228, 1, 0, 0, 0, 220, 221, 5, 31, 0, 0, 221, 222, 5, 41, 0,
+		0, 222, 223, 3, 54, 27, 0, 223, 225, 5, 42, 0, 0, 224, 226, 3, 58, 29,
+		0, 225, 224, 1, 0, 0, 0, 225, 226, 1, 0, 0, 0, 226, 228, 1, 0, 0, 0, 227,
+		213, 1, 0, 0, 0, 227, 220, 1, 0, 0, 0, 228, 53, 1, 0, 0, 0, 229, 230, 5,
+		48, 0, 0, 230, 55, 1, 0, 0, 0, 231, 243, 5, 45, 0, 0, 232, 243, 5, 46,
+		0, 0, 233, 235, 5, 39, 0, 0, 234, 236, 3, 62, 31, 0, 235, 234, 1, 0, 0,
+		0, 235, 236, 1, 0, 0, 0, 236, 237, 1, 0, 0, 0, 237, 239, 5, 43, 0, 0, 238,
+		240, 3, 62, 31, 0, 239, 238, 1, 0, 0, 0, 239, 240, 1, 0, 0, 0, 240, 241,
+		1, 0, 0, 0, 241, 243, 5, 40, 0, 0, 242, 231, 1, 0, 0, 0, 242, 232, 1, 0,
+		0, 0, 242, 233, 1, 0, 0, 0, 243, 57, 1, 0, 0, 0, 244, 245, 5, 47, 0, 0,
+		245, 59, 1, 0, 0, 0, 246, 247, 7, 3, 0, 0, 247, 61, 1, 0, 0, 0, 248, 249,
+		7, 4, 0, 0, 249, 63, 1, 0, 0, 0, 250, 251, 7, 5, 0, 0, 251, 65, 1, 0, 0,
+		0, 19, 77, 84, 91, 107, 112, 116, 129, 170, 188, 193, 202, 210, 215, 218,
+		225, 227, 235, 239, 242,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -199,56 +205,59 @@ func NewEndpointParser(input antlr.TokenStream) *EndpointParser {
 const (
 	EndpointParserEOF           = antlr.TokenEOF
 	EndpointParserENDPOINT      = 1
-	EndpointParserINPUT         = 2
-	EndpointParserFETCH         = 3
-	EndpointParserFROM          = 4
-	EndpointParserWHERE         = 5
-	EndpointParserCREATE        = 6
-	EndpointParserSTORE         = 7
-	EndpointParserTO            = 8
-	EndpointParserUPDATE        = 9
-	EndpointParserEMIT          = 10
-	EndpointParserRETURN        = 11
-	EndpointParserPATH          = 12
-	EndpointParserQUERY         = 13
-	EndpointParserBODY          = 14
-	EndpointParserHEADER        = 15
-	EndpointParserCOOKIE        = 16
-	EndpointParserGET           = 17
-	EndpointParserPOST          = 18
-	EndpointParserPUT           = 19
-	EndpointParserPATCH         = 20
-	EndpointParserDELETE        = 21
-	EndpointParserLIST          = 22
-	EndpointParserTRUE          = 23
-	EndpointParserFALSE         = 24
-	EndpointParserLBRACE        = 25
-	EndpointParserRBRACE        = 26
-	EndpointParserLPAREN        = 27
-	EndpointParserRPAREN        = 28
-	EndpointParserLBRACKET      = 29
-	EndpointParserRBRACKET      = 30
-	EndpointParserLT            = 31
-	EndpointParserGT            = 32
-	EndpointParserLTE           = 33
-	EndpointParserGTE           = 34
-	EndpointParserEQ            = 35
-	EndpointParserNEQ           = 36
-	EndpointParserASSIGN        = 37
-	EndpointParserCOLON         = 38
-	EndpointParserDOT           = 39
-	EndpointParserCOMMA         = 40
-	EndpointParserPIPE          = 41
-	EndpointParserPLUS          = 42
-	EndpointParserSTAR          = 43
-	EndpointParserQUESTION      = 44
-	EndpointParserIDENT         = 45
-	EndpointParserFLOAT         = 46
-	EndpointParserINT           = 47
-	EndpointParserSTRING        = 48
-	EndpointParserLINE_COMMENT  = 49
-	EndpointParserBLOCK_COMMENT = 50
-	EndpointParserWS            = 51
+	EndpointParserPATH          = 2
+	EndpointParserQUERY         = 3
+	EndpointParserBODY          = 4
+	EndpointParserHEADER        = 5
+	EndpointParserCOOKIE        = 6
+	EndpointParserGET           = 7
+	EndpointParserPOST          = 8
+	EndpointParserPUT           = 9
+	EndpointParserPATCH         = 10
+	EndpointParserDELETE        = 11
+	EndpointParserFETCH         = 12
+	EndpointParserFROM          = 13
+	EndpointParserWHERE         = 14
+	EndpointParserCREATE        = 15
+	EndpointParserSTORE         = 16
+	EndpointParserTO            = 17
+	EndpointParserUPDATE        = 18
+	EndpointParserEMIT          = 19
+	EndpointParserCALL          = 20
+	EndpointParserRETURN        = 21
+	EndpointParserLPAREN        = 22
+	EndpointParserRPAREN        = 23
+	EndpointParserLTE           = 24
+	EndpointParserGTE           = 25
+	EndpointParserEQ            = 26
+	EndpointParserNEQ           = 27
+	EndpointParserASSIGN        = 28
+	EndpointParserCOLON         = 29
+	EndpointParserDOT           = 30
+	EndpointParserLIST          = 31
+	EndpointParserINPUT         = 32
+	EndpointParserEVENT         = 33
+	EndpointParserRESULT        = 34
+	EndpointParserTRUE          = 35
+	EndpointParserFALSE         = 36
+	EndpointParserLBRACE        = 37
+	EndpointParserRBRACE        = 38
+	EndpointParserLBRACKET      = 39
+	EndpointParserRBRACKET      = 40
+	EndpointParserLT            = 41
+	EndpointParserGT            = 42
+	EndpointParserCOMMA         = 43
+	EndpointParserPIPE          = 44
+	EndpointParserPLUS          = 45
+	EndpointParserSTAR          = 46
+	EndpointParserQUESTION      = 47
+	EndpointParserIDENT         = 48
+	EndpointParserFLOAT         = 49
+	EndpointParserINT           = 50
+	EndpointParserSTRING        = 51
+	EndpointParserLINE_COMMENT  = 52
+	EndpointParserBLOCK_COMMENT = 53
+	EndpointParserWS            = 54
 )
 
 // EndpointParser rules.
@@ -261,30 +270,31 @@ const (
 	EndpointParserRULE_inputSourceRule  = 5
 	EndpointParserRULE_inputSource      = 6
 	EndpointParserRULE_inputSourceKind  = 7
-	EndpointParserRULE_action           = 8
-	EndpointParserRULE_fetchAction      = 9
-	EndpointParserRULE_createAction     = 10
-	EndpointParserRULE_storeAction      = 11
-	EndpointParserRULE_updateAction     = 12
-	EndpointParserRULE_emitAction       = 13
-	EndpointParserRULE_returnAction     = 14
-	EndpointParserRULE_typedVariable    = 15
-	EndpointParserRULE_assignmentBlock  = 16
-	EndpointParserRULE_assignment       = 17
-	EndpointParserRULE_condition        = 18
-	EndpointParserRULE_comparator       = 19
-	EndpointParserRULE_expression       = 20
-	EndpointParserRULE_functionCall     = 21
-	EndpointParserRULE_argumentList     = 22
-	EndpointParserRULE_selector         = 23
-	EndpointParserRULE_identifier       = 24
-	EndpointParserRULE_typeRef          = 25
-	EndpointParserRULE_typeName         = 26
-	EndpointParserRULE_numberConstraint = 27
-	EndpointParserRULE_optionalMarker   = 28
-	EndpointParserRULE_value            = 29
-	EndpointParserRULE_numberValue      = 30
-	EndpointParserRULE_httpMethod       = 31
+	EndpointParserRULE_httpMethod       = 8
+	EndpointParserRULE_action           = 9
+	EndpointParserRULE_fetchAction      = 10
+	EndpointParserRULE_createAction     = 11
+	EndpointParserRULE_storeAction      = 12
+	EndpointParserRULE_updateAction     = 13
+	EndpointParserRULE_emitAction       = 14
+	EndpointParserRULE_callAction       = 15
+	EndpointParserRULE_returnAction     = 16
+	EndpointParserRULE_typedVariable    = 17
+	EndpointParserRULE_assignmentBlock  = 18
+	EndpointParserRULE_assignment       = 19
+	EndpointParserRULE_condition        = 20
+	EndpointParserRULE_comparator       = 21
+	EndpointParserRULE_expression       = 22
+	EndpointParserRULE_functionCall     = 23
+	EndpointParserRULE_argumentList     = 24
+	EndpointParserRULE_selector         = 25
+	EndpointParserRULE_typeRef          = 26
+	EndpointParserRULE_typeName         = 27
+	EndpointParserRULE_numberConstraint = 28
+	EndpointParserRULE_optionalMarker   = 29
+	EndpointParserRULE_value            = 30
+	EndpointParserRULE_numberValue      = 31
+	EndpointParserRULE_identifier       = 32
 )
 
 // IProgramContext is an interface to support dynamic dispatch.
@@ -377,11 +387,11 @@ func (p *EndpointParser) Program() (localctx IProgramContext) {
 	p.EnterRule(localctx, 0, EndpointParserRULE_program)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(64)
+		p.SetState(66)
 		p.EndpointDecl()
 	}
 	{
-		p.SetState(65)
+		p.SetState(67)
 		p.Match(EndpointParserEOF)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -557,7 +567,7 @@ func (p *EndpointParser) EndpointDecl() (localctx IEndpointDeclContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(67)
+		p.SetState(69)
 		p.Match(EndpointParserENDPOINT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -565,7 +575,7 @@ func (p *EndpointParser) EndpointDecl() (localctx IEndpointDeclContext) {
 		}
 	}
 	{
-		p.SetState(68)
+		p.SetState(70)
 		p.Match(EndpointParserIDENT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -573,11 +583,11 @@ func (p *EndpointParser) EndpointDecl() (localctx IEndpointDeclContext) {
 		}
 	}
 	{
-		p.SetState(69)
+		p.SetState(71)
 		p.HttpMethod()
 	}
 	{
-		p.SetState(70)
+		p.SetState(72)
 		p.Match(EndpointParserSTRING)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -585,27 +595,27 @@ func (p *EndpointParser) EndpointDecl() (localctx IEndpointDeclContext) {
 		}
 	}
 	{
-		p.SetState(71)
+		p.SetState(73)
 		p.Match(EndpointParserLBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(75)
+	p.SetState(77)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&3788) != 0 {
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&4299001856) != 0 {
 		{
-			p.SetState(72)
+			p.SetState(74)
 			p.EndpointBody()
 		}
 
-		p.SetState(77)
+		p.SetState(79)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -613,7 +623,7 @@ func (p *EndpointParser) EndpointDecl() (localctx IEndpointDeclContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(78)
+		p.SetState(80)
 		p.Match(EndpointParserRBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -734,7 +744,7 @@ func (s *EndpointBodyContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 func (p *EndpointParser) EndpointBody() (localctx IEndpointBodyContext) {
 	localctx = NewEndpointBodyContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 4, EndpointParserRULE_endpointBody)
-	p.SetState(82)
+	p.SetState(84)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -744,14 +754,14 @@ func (p *EndpointParser) EndpointBody() (localctx IEndpointBodyContext) {
 	case EndpointParserINPUT:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(80)
+			p.SetState(82)
 			p.InputBlock()
 		}
 
-	case EndpointParserFETCH, EndpointParserCREATE, EndpointParserSTORE, EndpointParserUPDATE, EndpointParserEMIT, EndpointParserRETURN:
+	case EndpointParserFETCH, EndpointParserCREATE, EndpointParserSTORE, EndpointParserUPDATE, EndpointParserEMIT, EndpointParserCALL, EndpointParserRETURN:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(81)
+			p.SetState(83)
 			p.Action_()
 		}
 
@@ -901,7 +911,7 @@ func (p *EndpointParser) InputBlock() (localctx IInputBlockContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(84)
+		p.SetState(86)
 		p.Match(EndpointParserINPUT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -909,14 +919,14 @@ func (p *EndpointParser) InputBlock() (localctx IInputBlockContext) {
 		}
 	}
 	{
-		p.SetState(85)
+		p.SetState(87)
 		p.Match(EndpointParserLBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(89)
+	p.SetState(91)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -925,11 +935,11 @@ func (p *EndpointParser) InputBlock() (localctx IInputBlockContext) {
 
 	for _la == EndpointParserIDENT {
 		{
-			p.SetState(86)
+			p.SetState(88)
 			p.InputField()
 		}
 
-		p.SetState(91)
+		p.SetState(93)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -937,7 +947,7 @@ func (p *EndpointParser) InputBlock() (localctx IInputBlockContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(92)
+		p.SetState(94)
 		p.Match(EndpointParserRBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1065,7 +1075,7 @@ func (p *EndpointParser) InputField() (localctx IInputFieldContext) {
 	p.EnterRule(localctx, 8, EndpointParserRULE_inputField)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(94)
+		p.SetState(96)
 		p.Match(EndpointParserIDENT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1073,11 +1083,11 @@ func (p *EndpointParser) InputField() (localctx IInputFieldContext) {
 		}
 	}
 	{
-		p.SetState(95)
+		p.SetState(97)
 		p.TypeRef()
 	}
 	{
-		p.SetState(96)
+		p.SetState(98)
 		p.InputSourceRule()
 	}
 
@@ -1225,7 +1235,7 @@ func (p *EndpointParser) InputSourceRule() (localctx IInputSourceRuleContext) {
 	p.EnterRule(localctx, 10, EndpointParserRULE_inputSourceRule)
 	var _la int
 
-	p.SetState(110)
+	p.SetState(112)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1235,14 +1245,14 @@ func (p *EndpointParser) InputSourceRule() (localctx IInputSourceRuleContext) {
 	case EndpointParserPATH, EndpointParserQUERY, EndpointParserBODY, EndpointParserHEADER, EndpointParserCOOKIE:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(98)
+			p.SetState(100)
 			p.InputSource()
 		}
 
 	case EndpointParserLPAREN:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(99)
+			p.SetState(101)
 			p.Match(EndpointParserLPAREN)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1250,10 +1260,10 @@ func (p *EndpointParser) InputSourceRule() (localctx IInputSourceRuleContext) {
 			}
 		}
 		{
-			p.SetState(100)
+			p.SetState(102)
 			p.InputSource()
 		}
-		p.SetState(105)
+		p.SetState(107)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1262,7 +1272,7 @@ func (p *EndpointParser) InputSourceRule() (localctx IInputSourceRuleContext) {
 
 		for _la == EndpointParserPIPE {
 			{
-				p.SetState(101)
+				p.SetState(103)
 				p.Match(EndpointParserPIPE)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -1270,11 +1280,11 @@ func (p *EndpointParser) InputSourceRule() (localctx IInputSourceRuleContext) {
 				}
 			}
 			{
-				p.SetState(102)
+				p.SetState(104)
 				p.InputSource()
 			}
 
-			p.SetState(107)
+			p.SetState(109)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
@@ -1282,7 +1292,7 @@ func (p *EndpointParser) InputSourceRule() (localctx IInputSourceRuleContext) {
 			_la = p.GetTokenStream().LA(1)
 		}
 		{
-			p.SetState(108)
+			p.SetState(110)
 			p.Match(EndpointParserRPAREN)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1400,10 +1410,10 @@ func (p *EndpointParser) InputSource() (localctx IInputSourceContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(112)
+		p.SetState(114)
 		p.InputSourceKind()
 	}
-	p.SetState(114)
+	p.SetState(116)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1412,7 +1422,7 @@ func (p *EndpointParser) InputSource() (localctx IInputSourceContext) {
 
 	if _la == EndpointParserQUESTION {
 		{
-			p.SetState(113)
+			p.SetState(115)
 			p.Match(EndpointParserQUESTION)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1530,10 +1540,129 @@ func (p *EndpointParser) InputSourceKind() (localctx IInputSourceKindContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(116)
+		p.SetState(118)
 		_la = p.GetTokenStream().LA(1)
 
-		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&126976) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&124) != 0) {
+			p.GetErrorHandler().RecoverInline(p)
+		} else {
+			p.GetErrorHandler().ReportMatch(p)
+			p.Consume()
+		}
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// IHttpMethodContext is an interface to support dynamic dispatch.
+type IHttpMethodContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	GET() antlr.TerminalNode
+	POST() antlr.TerminalNode
+	PUT() antlr.TerminalNode
+	PATCH() antlr.TerminalNode
+	DELETE() antlr.TerminalNode
+
+	// IsHttpMethodContext differentiates from other interfaces.
+	IsHttpMethodContext()
+}
+
+type HttpMethodContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyHttpMethodContext() *HttpMethodContext {
+	var p = new(HttpMethodContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = EndpointParserRULE_httpMethod
+	return p
+}
+
+func InitEmptyHttpMethodContext(p *HttpMethodContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = EndpointParserRULE_httpMethod
+}
+
+func (*HttpMethodContext) IsHttpMethodContext() {}
+
+func NewHttpMethodContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *HttpMethodContext {
+	var p = new(HttpMethodContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = EndpointParserRULE_httpMethod
+
+	return p
+}
+
+func (s *HttpMethodContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *HttpMethodContext) GET() antlr.TerminalNode {
+	return s.GetToken(EndpointParserGET, 0)
+}
+
+func (s *HttpMethodContext) POST() antlr.TerminalNode {
+	return s.GetToken(EndpointParserPOST, 0)
+}
+
+func (s *HttpMethodContext) PUT() antlr.TerminalNode {
+	return s.GetToken(EndpointParserPUT, 0)
+}
+
+func (s *HttpMethodContext) PATCH() antlr.TerminalNode {
+	return s.GetToken(EndpointParserPATCH, 0)
+}
+
+func (s *HttpMethodContext) DELETE() antlr.TerminalNode {
+	return s.GetToken(EndpointParserDELETE, 0)
+}
+
+func (s *HttpMethodContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *HttpMethodContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *HttpMethodContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case EndpointVisitor:
+		return t.VisitHttpMethod(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *EndpointParser) HttpMethod() (localctx IHttpMethodContext) {
+	localctx = NewHttpMethodContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 16, EndpointParserRULE_httpMethod)
+	var _la int
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(120)
+		_la = p.GetTokenStream().LA(1)
+
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&3968) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -1567,6 +1696,7 @@ type IActionContext interface {
 	StoreAction() IStoreActionContext
 	UpdateAction() IUpdateActionContext
 	EmitAction() IEmitActionContext
+	CallAction() ICallActionContext
 	ReturnAction() IReturnActionContext
 
 	// IsActionContext differentiates from other interfaces.
@@ -1685,6 +1815,22 @@ func (s *ActionContext) EmitAction() IEmitActionContext {
 	return t.(IEmitActionContext)
 }
 
+func (s *ActionContext) CallAction() ICallActionContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ICallActionContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ICallActionContext)
+}
+
 func (s *ActionContext) ReturnAction() IReturnActionContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
@@ -1721,8 +1867,8 @@ func (s *ActionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *EndpointParser) Action_() (localctx IActionContext) {
 	localctx = NewActionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, EndpointParserRULE_action)
-	p.SetState(124)
+	p.EnterRule(localctx, 18, EndpointParserRULE_action)
+	p.SetState(129)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1732,42 +1878,49 @@ func (p *EndpointParser) Action_() (localctx IActionContext) {
 	case EndpointParserFETCH:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(118)
+			p.SetState(122)
 			p.FetchAction()
 		}
 
 	case EndpointParserCREATE:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(119)
+			p.SetState(123)
 			p.CreateAction()
 		}
 
 	case EndpointParserSTORE:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(120)
+			p.SetState(124)
 			p.StoreAction()
 		}
 
 	case EndpointParserUPDATE:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(121)
+			p.SetState(125)
 			p.UpdateAction()
 		}
 
 	case EndpointParserEMIT:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(122)
+			p.SetState(126)
 			p.EmitAction()
 		}
 
-	case EndpointParserRETURN:
+	case EndpointParserCALL:
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(123)
+			p.SetState(127)
+			p.CallAction()
+		}
+
+	case EndpointParserRETURN:
+		p.EnterOuterAlt(localctx, 7)
+		{
+			p.SetState(128)
 			p.ReturnAction()
 		}
 
@@ -1908,10 +2061,10 @@ func (s *FetchActionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} 
 
 func (p *EndpointParser) FetchAction() (localctx IFetchActionContext) {
 	localctx = NewFetchActionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 18, EndpointParserRULE_fetchAction)
+	p.EnterRule(localctx, 20, EndpointParserRULE_fetchAction)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(126)
+		p.SetState(131)
 		p.Match(EndpointParserFETCH)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1919,11 +2072,11 @@ func (p *EndpointParser) FetchAction() (localctx IFetchActionContext) {
 		}
 	}
 	{
-		p.SetState(127)
+		p.SetState(132)
 		p.TypedVariable()
 	}
 	{
-		p.SetState(128)
+		p.SetState(133)
 		p.Match(EndpointParserFROM)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1931,7 +2084,7 @@ func (p *EndpointParser) FetchAction() (localctx IFetchActionContext) {
 		}
 	}
 	{
-		p.SetState(129)
+		p.SetState(134)
 		p.Match(EndpointParserIDENT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1939,7 +2092,7 @@ func (p *EndpointParser) FetchAction() (localctx IFetchActionContext) {
 		}
 	}
 	{
-		p.SetState(130)
+		p.SetState(135)
 		p.Match(EndpointParserWHERE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1947,7 +2100,7 @@ func (p *EndpointParser) FetchAction() (localctx IFetchActionContext) {
 		}
 	}
 	{
-		p.SetState(131)
+		p.SetState(136)
 		p.Condition()
 	}
 
@@ -2068,10 +2221,10 @@ func (s *CreateActionContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 
 func (p *EndpointParser) CreateAction() (localctx ICreateActionContext) {
 	localctx = NewCreateActionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 20, EndpointParserRULE_createAction)
+	p.EnterRule(localctx, 22, EndpointParserRULE_createAction)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(133)
+		p.SetState(138)
 		p.Match(EndpointParserCREATE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2079,11 +2232,11 @@ func (p *EndpointParser) CreateAction() (localctx ICreateActionContext) {
 		}
 	}
 	{
-		p.SetState(134)
+		p.SetState(139)
 		p.TypedVariable()
 	}
 	{
-		p.SetState(135)
+		p.SetState(140)
 		p.AssignmentBlock()
 	}
 
@@ -2185,10 +2338,10 @@ func (s *StoreActionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} 
 
 func (p *EndpointParser) StoreAction() (localctx IStoreActionContext) {
 	localctx = NewStoreActionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 22, EndpointParserRULE_storeAction)
+	p.EnterRule(localctx, 24, EndpointParserRULE_storeAction)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(137)
+		p.SetState(142)
 		p.Match(EndpointParserSTORE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2196,7 +2349,7 @@ func (p *EndpointParser) StoreAction() (localctx IStoreActionContext) {
 		}
 	}
 	{
-		p.SetState(138)
+		p.SetState(143)
 		p.Match(EndpointParserIDENT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2204,7 +2357,7 @@ func (p *EndpointParser) StoreAction() (localctx IStoreActionContext) {
 		}
 	}
 	{
-		p.SetState(139)
+		p.SetState(144)
 		p.Match(EndpointParserTO)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2212,7 +2365,7 @@ func (p *EndpointParser) StoreAction() (localctx IStoreActionContext) {
 		}
 	}
 	{
-		p.SetState(140)
+		p.SetState(145)
 		p.Match(EndpointParserIDENT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2325,10 +2478,10 @@ func (s *UpdateActionContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 
 func (p *EndpointParser) UpdateAction() (localctx IUpdateActionContext) {
 	localctx = NewUpdateActionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 24, EndpointParserRULE_updateAction)
+	p.EnterRule(localctx, 26, EndpointParserRULE_updateAction)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(142)
+		p.SetState(147)
 		p.Match(EndpointParserUPDATE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2336,7 +2489,7 @@ func (p *EndpointParser) UpdateAction() (localctx IUpdateActionContext) {
 		}
 	}
 	{
-		p.SetState(143)
+		p.SetState(148)
 		p.Match(EndpointParserIDENT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2344,7 +2497,7 @@ func (p *EndpointParser) UpdateAction() (localctx IUpdateActionContext) {
 		}
 	}
 	{
-		p.SetState(144)
+		p.SetState(149)
 		p.AssignmentBlock()
 	}
 
@@ -2465,10 +2618,10 @@ func (s *EmitActionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *EndpointParser) EmitAction() (localctx IEmitActionContext) {
 	localctx = NewEmitActionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 26, EndpointParserRULE_emitAction)
+	p.EnterRule(localctx, 28, EndpointParserRULE_emitAction)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(146)
+		p.SetState(151)
 		p.Match(EndpointParserEMIT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2476,11 +2629,147 @@ func (p *EndpointParser) EmitAction() (localctx IEmitActionContext) {
 		}
 	}
 	{
-		p.SetState(147)
+		p.SetState(152)
 		p.TypedVariable()
 	}
 	{
-		p.SetState(148)
+		p.SetState(153)
+		p.AssignmentBlock()
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// ICallActionContext is an interface to support dynamic dispatch.
+type ICallActionContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	CALL() antlr.TerminalNode
+	Selector() ISelectorContext
+	AssignmentBlock() IAssignmentBlockContext
+
+	// IsCallActionContext differentiates from other interfaces.
+	IsCallActionContext()
+}
+
+type CallActionContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyCallActionContext() *CallActionContext {
+	var p = new(CallActionContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = EndpointParserRULE_callAction
+	return p
+}
+
+func InitEmptyCallActionContext(p *CallActionContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = EndpointParserRULE_callAction
+}
+
+func (*CallActionContext) IsCallActionContext() {}
+
+func NewCallActionContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *CallActionContext {
+	var p = new(CallActionContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = EndpointParserRULE_callAction
+
+	return p
+}
+
+func (s *CallActionContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *CallActionContext) CALL() antlr.TerminalNode {
+	return s.GetToken(EndpointParserCALL, 0)
+}
+
+func (s *CallActionContext) Selector() ISelectorContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ISelectorContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ISelectorContext)
+}
+
+func (s *CallActionContext) AssignmentBlock() IAssignmentBlockContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IAssignmentBlockContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IAssignmentBlockContext)
+}
+
+func (s *CallActionContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *CallActionContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *CallActionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case EndpointVisitor:
+		return t.VisitCallAction(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *EndpointParser) CallAction() (localctx ICallActionContext) {
+	localctx = NewCallActionContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 30, EndpointParserRULE_callAction)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(155)
+		p.Match(EndpointParserCALL)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
+	}
+	{
+		p.SetState(156)
+		p.Selector()
+	}
+	{
+		p.SetState(157)
 		p.AssignmentBlock()
 	}
 
@@ -2584,10 +2873,10 @@ func (s *ReturnActionContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 
 func (p *EndpointParser) ReturnAction() (localctx IReturnActionContext) {
 	localctx = NewReturnActionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 28, EndpointParserRULE_returnAction)
+	p.EnterRule(localctx, 32, EndpointParserRULE_returnAction)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(150)
+		p.SetState(159)
 		p.Match(EndpointParserRETURN)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2595,7 +2884,7 @@ func (p *EndpointParser) ReturnAction() (localctx IReturnActionContext) {
 		}
 	}
 	{
-		p.SetState(151)
+		p.SetState(160)
 		p.Expression()
 	}
 
@@ -2620,7 +2909,7 @@ type ITypedVariableContext interface {
 	GetParser() antlr.Parser
 
 	// Getter signatures
-	IDENT() antlr.TerminalNode
+	Identifier() IIdentifierContext
 	COLON() antlr.TerminalNode
 	TypeRef() ITypeRefContext
 
@@ -2660,8 +2949,20 @@ func NewTypedVariableContext(parser antlr.Parser, parent antlr.ParserRuleContext
 
 func (s *TypedVariableContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *TypedVariableContext) IDENT() antlr.TerminalNode {
-	return s.GetToken(EndpointParserIDENT, 0)
+func (s *TypedVariableContext) Identifier() IIdentifierContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IIdentifierContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IIdentifierContext)
 }
 
 func (s *TypedVariableContext) COLON() antlr.TerminalNode {
@@ -2704,18 +3005,14 @@ func (s *TypedVariableContext) Accept(visitor antlr.ParseTreeVisitor) interface{
 
 func (p *EndpointParser) TypedVariable() (localctx ITypedVariableContext) {
 	localctx = NewTypedVariableContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 30, EndpointParserRULE_typedVariable)
+	p.EnterRule(localctx, 34, EndpointParserRULE_typedVariable)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(153)
-		p.Match(EndpointParserIDENT)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
+		p.SetState(162)
+		p.Identifier()
 	}
 	{
-		p.SetState(154)
+		p.SetState(163)
 		p.Match(EndpointParserCOLON)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2723,7 +3020,7 @@ func (p *EndpointParser) TypedVariable() (localctx ITypedVariableContext) {
 		}
 	}
 	{
-		p.SetState(155)
+		p.SetState(164)
 		p.TypeRef()
 	}
 
@@ -2858,32 +3155,32 @@ func (s *AssignmentBlockContext) Accept(visitor antlr.ParseTreeVisitor) interfac
 
 func (p *EndpointParser) AssignmentBlock() (localctx IAssignmentBlockContext) {
 	localctx = NewAssignmentBlockContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 32, EndpointParserRULE_assignmentBlock)
+	p.EnterRule(localctx, 36, EndpointParserRULE_assignmentBlock)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(157)
+		p.SetState(166)
 		p.Match(EndpointParserLBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(161)
+	p.SetState(170)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for _la == EndpointParserIDENT {
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&281505041481728) != 0 {
 		{
-			p.SetState(158)
+			p.SetState(167)
 			p.Assignment()
 		}
 
-		p.SetState(163)
+		p.SetState(172)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -2891,7 +3188,7 @@ func (p *EndpointParser) AssignmentBlock() (localctx IAssignmentBlockContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(164)
+		p.SetState(173)
 		p.Match(EndpointParserRBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2920,7 +3217,7 @@ type IAssignmentContext interface {
 	GetParser() antlr.Parser
 
 	// Getter signatures
-	IDENT() antlr.TerminalNode
+	Identifier() IIdentifierContext
 	ASSIGN() antlr.TerminalNode
 	Expression() IExpressionContext
 
@@ -2960,8 +3257,20 @@ func NewAssignmentContext(parser antlr.Parser, parent antlr.ParserRuleContext, i
 
 func (s *AssignmentContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *AssignmentContext) IDENT() antlr.TerminalNode {
-	return s.GetToken(EndpointParserIDENT, 0)
+func (s *AssignmentContext) Identifier() IIdentifierContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IIdentifierContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IIdentifierContext)
 }
 
 func (s *AssignmentContext) ASSIGN() antlr.TerminalNode {
@@ -3004,18 +3313,14 @@ func (s *AssignmentContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *EndpointParser) Assignment() (localctx IAssignmentContext) {
 	localctx = NewAssignmentContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 34, EndpointParserRULE_assignment)
+	p.EnterRule(localctx, 38, EndpointParserRULE_assignment)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(166)
-		p.Match(EndpointParserIDENT)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
+		p.SetState(175)
+		p.Identifier()
 	}
 	{
-		p.SetState(167)
+		p.SetState(176)
 		p.Match(EndpointParserASSIGN)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -3023,7 +3328,7 @@ func (p *EndpointParser) Assignment() (localctx IAssignmentContext) {
 		}
 	}
 	{
-		p.SetState(168)
+		p.SetState(177)
 		p.Expression()
 	}
 
@@ -3165,18 +3470,18 @@ func (s *ConditionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *EndpointParser) Condition() (localctx IConditionContext) {
 	localctx = NewConditionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 36, EndpointParserRULE_condition)
+	p.EnterRule(localctx, 40, EndpointParserRULE_condition)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(170)
+		p.SetState(179)
 		p.Expression()
 	}
 	{
-		p.SetState(171)
+		p.SetState(180)
 		p.Comparator()
 	}
 	{
-		p.SetState(172)
+		p.SetState(181)
 		p.Expression()
 	}
 
@@ -3288,15 +3593,15 @@ func (s *ComparatorContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *EndpointParser) Comparator() (localctx IComparatorContext) {
 	localctx = NewComparatorContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 38, EndpointParserRULE_comparator)
+	p.EnterRule(localctx, 42, EndpointParserRULE_comparator)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(174)
+		p.SetState(183)
 		_la = p.GetTokenStream().LA(1)
 
-		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&135291469824) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&6597321424896) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -3433,8 +3738,8 @@ func (s *ExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *EndpointParser) Expression() (localctx IExpressionContext) {
 	localctx = NewExpressionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 40, EndpointParserRULE_expression)
-	p.SetState(179)
+	p.EnterRule(localctx, 44, EndpointParserRULE_expression)
+	p.SetState(188)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -3444,21 +3749,21 @@ func (p *EndpointParser) Expression() (localctx IExpressionContext) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(176)
+			p.SetState(185)
 			p.FunctionCall()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(177)
+			p.SetState(186)
 			p.Selector()
 		}
 
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(178)
+			p.SetState(187)
 			p.Value()
 		}
 
@@ -3576,12 +3881,12 @@ func (s *FunctionCallContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 
 func (p *EndpointParser) FunctionCall() (localctx IFunctionCallContext) {
 	localctx = NewFunctionCallContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 42, EndpointParserRULE_functionCall)
+	p.EnterRule(localctx, 46, EndpointParserRULE_functionCall)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(181)
+		p.SetState(190)
 		p.Match(EndpointParserIDENT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -3589,29 +3894,29 @@ func (p *EndpointParser) FunctionCall() (localctx IFunctionCallContext) {
 		}
 	}
 	{
-		p.SetState(182)
+		p.SetState(191)
 		p.Match(EndpointParserLPAREN)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(184)
+	p.SetState(193)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&527765606498308) != 0 {
+	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&4222257794646016) != 0 {
 		{
-			p.SetState(183)
+			p.SetState(192)
 			p.ArgumentList()
 		}
 
 	}
 	{
-		p.SetState(186)
+		p.SetState(195)
 		p.Match(EndpointParserRPAREN)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -3750,15 +4055,15 @@ func (s *ArgumentListContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 
 func (p *EndpointParser) ArgumentList() (localctx IArgumentListContext) {
 	localctx = NewArgumentListContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 44, EndpointParserRULE_argumentList)
+	p.EnterRule(localctx, 48, EndpointParserRULE_argumentList)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(188)
+		p.SetState(197)
 		p.Expression()
 	}
-	p.SetState(193)
+	p.SetState(202)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -3767,7 +4072,7 @@ func (p *EndpointParser) ArgumentList() (localctx IArgumentListContext) {
 
 	for _la == EndpointParserCOMMA {
 		{
-			p.SetState(189)
+			p.SetState(198)
 			p.Match(EndpointParserCOMMA)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3775,11 +4080,11 @@ func (p *EndpointParser) ArgumentList() (localctx IArgumentListContext) {
 			}
 		}
 		{
-			p.SetState(190)
+			p.SetState(199)
 			p.Expression()
 		}
 
-		p.SetState(195)
+		p.SetState(204)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -3918,15 +4223,15 @@ func (s *SelectorContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *EndpointParser) Selector() (localctx ISelectorContext) {
 	localctx = NewSelectorContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 46, EndpointParserRULE_selector)
+	p.EnterRule(localctx, 50, EndpointParserRULE_selector)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(196)
+		p.SetState(205)
 		p.Identifier()
 	}
-	p.SetState(201)
+	p.SetState(210)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -3935,7 +4240,7 @@ func (p *EndpointParser) Selector() (localctx ISelectorContext) {
 
 	for _la == EndpointParserDOT {
 		{
-			p.SetState(197)
+			p.SetState(206)
 			p.Match(EndpointParserDOT)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3943,120 +4248,16 @@ func (p *EndpointParser) Selector() (localctx ISelectorContext) {
 			}
 		}
 		{
-			p.SetState(198)
+			p.SetState(207)
 			p.Identifier()
 		}
 
-		p.SetState(203)
+		p.SetState(212)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
-	}
-
-errorExit:
-	if p.HasError() {
-		v := p.GetError()
-		localctx.SetException(v)
-		p.GetErrorHandler().ReportError(p, v)
-		p.GetErrorHandler().Recover(p, v)
-		p.SetError(nil)
-	}
-	p.ExitRule()
-	return localctx
-	goto errorExit // Trick to prevent compiler error if the label is not used
-}
-
-// IIdentifierContext is an interface to support dynamic dispatch.
-type IIdentifierContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
-
-	// Getter signatures
-	IDENT() antlr.TerminalNode
-	INPUT() antlr.TerminalNode
-
-	// IsIdentifierContext differentiates from other interfaces.
-	IsIdentifierContext()
-}
-
-type IdentifierContext struct {
-	antlr.BaseParserRuleContext
-	parser antlr.Parser
-}
-
-func NewEmptyIdentifierContext() *IdentifierContext {
-	var p = new(IdentifierContext)
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = EndpointParserRULE_identifier
-	return p
-}
-
-func InitEmptyIdentifierContext(p *IdentifierContext) {
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = EndpointParserRULE_identifier
-}
-
-func (*IdentifierContext) IsIdentifierContext() {}
-
-func NewIdentifierContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *IdentifierContext {
-	var p = new(IdentifierContext)
-
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
-
-	p.parser = parser
-	p.RuleIndex = EndpointParserRULE_identifier
-
-	return p
-}
-
-func (s *IdentifierContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *IdentifierContext) IDENT() antlr.TerminalNode {
-	return s.GetToken(EndpointParserIDENT, 0)
-}
-
-func (s *IdentifierContext) INPUT() antlr.TerminalNode {
-	return s.GetToken(EndpointParserINPUT, 0)
-}
-
-func (s *IdentifierContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *IdentifierContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-func (s *IdentifierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case EndpointVisitor:
-		return t.VisitIdentifier(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-func (p *EndpointParser) Identifier() (localctx IIdentifierContext) {
-	localctx = NewIdentifierContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 48, EndpointParserRULE_identifier)
-	var _la int
-
-	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(204)
-		_la = p.GetTokenStream().LA(1)
-
-		if !(_la == EndpointParserINPUT || _la == EndpointParserIDENT) {
-			p.GetErrorHandler().RecoverInline(p)
-		} else {
-			p.GetErrorHandler().ReportMatch(p)
-			p.Consume()
-		}
 	}
 
 errorExit:
@@ -4203,10 +4404,10 @@ func (s *TypeRefContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *EndpointParser) TypeRef() (localctx ITypeRefContext) {
 	localctx = NewTypeRefContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 50, EndpointParserRULE_typeRef)
+	p.EnterRule(localctx, 52, EndpointParserRULE_typeRef)
 	var _la int
 
-	p.SetState(220)
+	p.SetState(227)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -4216,67 +4417,22 @@ func (p *EndpointParser) TypeRef() (localctx ITypeRefContext) {
 	case EndpointParserIDENT:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(206)
+			p.SetState(213)
 			p.TypeName()
 		}
-		p.SetState(208)
+		p.SetState(215)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&13194676404224) != 0 {
+		if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&106102872080384) != 0 {
 			{
-				p.SetState(207)
+				p.SetState(214)
 				p.NumberConstraint()
 			}
 
-		}
-		p.SetState(211)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
-
-		if _la == EndpointParserQUESTION {
-			{
-				p.SetState(210)
-				p.OptionalMarker()
-			}
-
-		}
-
-	case EndpointParserLIST:
-		p.EnterOuterAlt(localctx, 2)
-		{
-			p.SetState(213)
-			p.Match(EndpointParserLIST)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(214)
-			p.Match(EndpointParserLT)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(215)
-			p.TypeName()
-		}
-		{
-			p.SetState(216)
-			p.Match(EndpointParserGT)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
 		}
 		p.SetState(218)
 		p.GetErrorHandler().Sync(p)
@@ -4288,6 +4444,51 @@ func (p *EndpointParser) TypeRef() (localctx ITypeRefContext) {
 		if _la == EndpointParserQUESTION {
 			{
 				p.SetState(217)
+				p.OptionalMarker()
+			}
+
+		}
+
+	case EndpointParserLIST:
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(220)
+			p.Match(EndpointParserLIST)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(221)
+			p.Match(EndpointParserLT)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(222)
+			p.TypeName()
+		}
+		{
+			p.SetState(223)
+			p.Match(EndpointParserGT)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		p.SetState(225)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		if _la == EndpointParserQUESTION {
+			{
+				p.SetState(224)
 				p.OptionalMarker()
 			}
 
@@ -4381,10 +4582,10 @@ func (s *TypeNameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *EndpointParser) TypeName() (localctx ITypeNameContext) {
 	localctx = NewTypeNameContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 52, EndpointParserRULE_typeName)
+	p.EnterRule(localctx, 54, EndpointParserRULE_typeName)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(222)
+		p.SetState(229)
 		p.Match(EndpointParserIDENT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -4538,10 +4739,10 @@ func (s *NumberConstraintContext) Accept(visitor antlr.ParseTreeVisitor) interfa
 
 func (p *EndpointParser) NumberConstraint() (localctx INumberConstraintContext) {
 	localctx = NewNumberConstraintContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 54, EndpointParserRULE_numberConstraint)
+	p.EnterRule(localctx, 56, EndpointParserRULE_numberConstraint)
 	var _la int
 
-	p.SetState(235)
+	p.SetState(242)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -4551,7 +4752,7 @@ func (p *EndpointParser) NumberConstraint() (localctx INumberConstraintContext) 
 	case EndpointParserPLUS:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(224)
+			p.SetState(231)
 			p.Match(EndpointParserPLUS)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4562,7 +4763,7 @@ func (p *EndpointParser) NumberConstraint() (localctx INumberConstraintContext) 
 	case EndpointParserSTAR:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(225)
+			p.SetState(232)
 			p.Match(EndpointParserSTAR)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4573,14 +4774,14 @@ func (p *EndpointParser) NumberConstraint() (localctx INumberConstraintContext) 
 	case EndpointParserLBRACKET:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(226)
+			p.SetState(233)
 			p.Match(EndpointParserLBRACKET)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(228)
+		p.SetState(235)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -4589,20 +4790,20 @@ func (p *EndpointParser) NumberConstraint() (localctx INumberConstraintContext) 
 
 		if _la == EndpointParserFLOAT || _la == EndpointParserINT {
 			{
-				p.SetState(227)
+				p.SetState(234)
 				p.NumberValue()
 			}
 
 		}
 		{
-			p.SetState(230)
+			p.SetState(237)
 			p.Match(EndpointParserCOMMA)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(232)
+		p.SetState(239)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -4611,13 +4812,13 @@ func (p *EndpointParser) NumberConstraint() (localctx INumberConstraintContext) 
 
 		if _la == EndpointParserFLOAT || _la == EndpointParserINT {
 			{
-				p.SetState(231)
+				p.SetState(238)
 				p.NumberValue()
 			}
 
 		}
 		{
-			p.SetState(234)
+			p.SetState(241)
 			p.Match(EndpointParserRBRACKET)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4713,10 +4914,10 @@ func (s *OptionalMarkerContext) Accept(visitor antlr.ParseTreeVisitor) interface
 
 func (p *EndpointParser) OptionalMarker() (localctx IOptionalMarkerContext) {
 	localctx = NewOptionalMarkerContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 56, EndpointParserRULE_optionalMarker)
+	p.EnterRule(localctx, 58, EndpointParserRULE_optionalMarker)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(237)
+		p.SetState(244)
 		p.Match(EndpointParserQUESTION)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -4827,15 +5028,15 @@ func (s *ValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *EndpointParser) Value() (localctx IValueContext) {
 	localctx = NewValueContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 58, EndpointParserRULE_value)
+	p.EnterRule(localctx, 60, EndpointParserRULE_value)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(239)
+		p.SetState(246)
 		_la = p.GetTokenStream().LA(1)
 
-		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&492581234409472) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&3940752753164288) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -4931,12 +5132,12 @@ func (s *NumberValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} 
 
 func (p *EndpointParser) NumberValue() (localctx INumberValueContext) {
 	localctx = NewNumberValueContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 60, EndpointParserRULE_numberValue)
+	p.EnterRule(localctx, 62, EndpointParserRULE_numberValue)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(241)
+		p.SetState(248)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(_la == EndpointParserFLOAT || _la == EndpointParserINT) {
@@ -4960,105 +5161,100 @@ errorExit:
 	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
-// IHttpMethodContext is an interface to support dynamic dispatch.
-type IHttpMethodContext interface {
+// IIdentifierContext is an interface to support dynamic dispatch.
+type IIdentifierContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
 	// Getter signatures
-	GET() antlr.TerminalNode
-	POST() antlr.TerminalNode
-	PUT() antlr.TerminalNode
-	PATCH() antlr.TerminalNode
-	DELETE() antlr.TerminalNode
+	IDENT() antlr.TerminalNode
+	INPUT() antlr.TerminalNode
+	EVENT() antlr.TerminalNode
+	RESULT() antlr.TerminalNode
 
-	// IsHttpMethodContext differentiates from other interfaces.
-	IsHttpMethodContext()
+	// IsIdentifierContext differentiates from other interfaces.
+	IsIdentifierContext()
 }
 
-type HttpMethodContext struct {
+type IdentifierContext struct {
 	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptyHttpMethodContext() *HttpMethodContext {
-	var p = new(HttpMethodContext)
+func NewEmptyIdentifierContext() *IdentifierContext {
+	var p = new(IdentifierContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = EndpointParserRULE_httpMethod
+	p.RuleIndex = EndpointParserRULE_identifier
 	return p
 }
 
-func InitEmptyHttpMethodContext(p *HttpMethodContext) {
+func InitEmptyIdentifierContext(p *IdentifierContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = EndpointParserRULE_httpMethod
+	p.RuleIndex = EndpointParserRULE_identifier
 }
 
-func (*HttpMethodContext) IsHttpMethodContext() {}
+func (*IdentifierContext) IsIdentifierContext() {}
 
-func NewHttpMethodContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *HttpMethodContext {
-	var p = new(HttpMethodContext)
+func NewIdentifierContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *IdentifierContext {
+	var p = new(IdentifierContext)
 
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = EndpointParserRULE_httpMethod
+	p.RuleIndex = EndpointParserRULE_identifier
 
 	return p
 }
 
-func (s *HttpMethodContext) GetParser() antlr.Parser { return s.parser }
+func (s *IdentifierContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *HttpMethodContext) GET() antlr.TerminalNode {
-	return s.GetToken(EndpointParserGET, 0)
+func (s *IdentifierContext) IDENT() antlr.TerminalNode {
+	return s.GetToken(EndpointParserIDENT, 0)
 }
 
-func (s *HttpMethodContext) POST() antlr.TerminalNode {
-	return s.GetToken(EndpointParserPOST, 0)
+func (s *IdentifierContext) INPUT() antlr.TerminalNode {
+	return s.GetToken(EndpointParserINPUT, 0)
 }
 
-func (s *HttpMethodContext) PUT() antlr.TerminalNode {
-	return s.GetToken(EndpointParserPUT, 0)
+func (s *IdentifierContext) EVENT() antlr.TerminalNode {
+	return s.GetToken(EndpointParserEVENT, 0)
 }
 
-func (s *HttpMethodContext) PATCH() antlr.TerminalNode {
-	return s.GetToken(EndpointParserPATCH, 0)
+func (s *IdentifierContext) RESULT() antlr.TerminalNode {
+	return s.GetToken(EndpointParserRESULT, 0)
 }
 
-func (s *HttpMethodContext) DELETE() antlr.TerminalNode {
-	return s.GetToken(EndpointParserDELETE, 0)
-}
-
-func (s *HttpMethodContext) GetRuleContext() antlr.RuleContext {
+func (s *IdentifierContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *HttpMethodContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+func (s *IdentifierContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *HttpMethodContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+func (s *IdentifierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
 	case EndpointVisitor:
-		return t.VisitHttpMethod(s)
+		return t.VisitIdentifier(s)
 
 	default:
 		return t.VisitChildren(s)
 	}
 }
 
-func (p *EndpointParser) HttpMethod() (localctx IHttpMethodContext) {
-	localctx = NewHttpMethodContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 62, EndpointParserRULE_httpMethod)
+func (p *EndpointParser) Identifier() (localctx IIdentifierContext) {
+	localctx = NewIdentifierContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 64, EndpointParserRULE_identifier)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(243)
+		p.SetState(250)
 		_la = p.GetTokenStream().LA(1)
 
-		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&4063232) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&281505041481728) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)

@@ -33,69 +33,71 @@ func objectParserInit() {
 	staticData := &ObjectParserStaticData
 	staticData.LiteralNames = []string{
 		"", "'object'", "'history_of'", "'primary'", "'unique'", "'renamed_from'",
-		"'deprecated'", "'List'", "'true'", "'false'", "'{'", "'}'", "'['",
-		"']'", "'<'", "'>'", "','", "'+'", "'*'", "'?'",
+		"'deprecated'", "'{'", "'}'", "", "", "", "'List'", "'input'", "'event'",
+		"'result'", "'true'", "'false'", "'('", "')'", "'['", "']'", "'<'",
+		"'>'", "','", "'|'", "'+'", "'*'", "'?'",
 	}
 	staticData.SymbolicNames = []string{
 		"", "OBJECT", "HISTORY_OF", "PRIMARY", "UNIQUE", "RENAMED_FROM", "DEPRECATED",
-		"LIST", "TRUE", "FALSE", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET",
-		"LT", "GT", "COMMA", "PLUS", "STAR", "QUESTION", "IDENT", "FLOAT", "INT",
-		"STRING", "LINE_COMMENT", "BLOCK_COMMENT", "WS",
+		"LBRACE", "RBRACE", "LINE_COMMENT", "BLOCK_COMMENT", "WS", "LIST", "INPUT",
+		"EVENT", "RESULT", "TRUE", "FALSE", "LPAREN", "RPAREN", "LBRACKET",
+		"RBRACKET", "LT", "GT", "COMMA", "PIPE", "PLUS", "STAR", "QUESTION",
+		"IDENT", "FLOAT", "INT", "STRING",
 	}
 	staticData.RuleNames = []string{
-		"program", "objectDecl", "objectModifier", "fieldDecl", "typeRef", "typeName",
-		"numberConstraint", "optionalMarker", "defaultValue", "fieldModifier",
-		"value", "numberValue",
+		"program", "objectDecl", "objectModifier", "fieldDecl", "defaultValue",
+		"fieldModifier", "typeRef", "typeName", "numberConstraint", "optionalMarker",
+		"value", "numberValue", "identifier",
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 26, 112, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 32, 113, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
-		10, 2, 11, 7, 11, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 5, 1, 31, 8, 1, 10,
-		1, 12, 1, 34, 9, 1, 1, 1, 1, 1, 5, 1, 38, 8, 1, 10, 1, 12, 1, 41, 9, 1,
-		1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 3, 2, 50, 8, 2, 1, 3, 1, 3, 1,
-		3, 5, 3, 55, 8, 3, 10, 3, 12, 3, 58, 9, 3, 1, 4, 1, 4, 3, 4, 62, 8, 4,
-		1, 4, 3, 4, 65, 8, 4, 1, 4, 3, 4, 68, 8, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1,
-		4, 3, 4, 75, 8, 4, 1, 4, 3, 4, 78, 8, 4, 3, 4, 80, 8, 4, 1, 5, 1, 5, 1,
-		6, 1, 6, 1, 6, 1, 6, 3, 6, 88, 8, 6, 1, 6, 1, 6, 3, 6, 92, 8, 6, 1, 6,
-		3, 6, 95, 8, 6, 1, 7, 1, 7, 1, 8, 1, 8, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 3,
-		9, 106, 8, 9, 1, 10, 1, 10, 1, 11, 1, 11, 1, 11, 0, 0, 12, 0, 2, 4, 6,
-		8, 10, 12, 14, 16, 18, 20, 22, 0, 2, 2, 0, 8, 9, 21, 23, 1, 0, 21, 22,
-		117, 0, 24, 1, 0, 0, 0, 2, 27, 1, 0, 0, 0, 4, 49, 1, 0, 0, 0, 6, 51, 1,
-		0, 0, 0, 8, 79, 1, 0, 0, 0, 10, 81, 1, 0, 0, 0, 12, 94, 1, 0, 0, 0, 14,
-		96, 1, 0, 0, 0, 16, 98, 1, 0, 0, 0, 18, 105, 1, 0, 0, 0, 20, 107, 1, 0,
-		0, 0, 22, 109, 1, 0, 0, 0, 24, 25, 3, 2, 1, 0, 25, 26, 5, 0, 0, 1, 26,
-		1, 1, 0, 0, 0, 27, 28, 5, 1, 0, 0, 28, 32, 5, 20, 0, 0, 29, 31, 3, 4, 2,
-		0, 30, 29, 1, 0, 0, 0, 31, 34, 1, 0, 0, 0, 32, 30, 1, 0, 0, 0, 32, 33,
-		1, 0, 0, 0, 33, 35, 1, 0, 0, 0, 34, 32, 1, 0, 0, 0, 35, 39, 5, 10, 0, 0,
-		36, 38, 3, 6, 3, 0, 37, 36, 1, 0, 0, 0, 38, 41, 1, 0, 0, 0, 39, 37, 1,
-		0, 0, 0, 39, 40, 1, 0, 0, 0, 40, 42, 1, 0, 0, 0, 41, 39, 1, 0, 0, 0, 42,
-		43, 5, 11, 0, 0, 43, 3, 1, 0, 0, 0, 44, 45, 5, 2, 0, 0, 45, 50, 5, 20,
-		0, 0, 46, 47, 5, 5, 0, 0, 47, 50, 5, 20, 0, 0, 48, 50, 5, 6, 0, 0, 49,
-		44, 1, 0, 0, 0, 49, 46, 1, 0, 0, 0, 49, 48, 1, 0, 0, 0, 50, 5, 1, 0, 0,
-		0, 51, 52, 5, 20, 0, 0, 52, 56, 3, 8, 4, 0, 53, 55, 3, 18, 9, 0, 54, 53,
-		1, 0, 0, 0, 55, 58, 1, 0, 0, 0, 56, 54, 1, 0, 0, 0, 56, 57, 1, 0, 0, 0,
-		57, 7, 1, 0, 0, 0, 58, 56, 1, 0, 0, 0, 59, 61, 3, 10, 5, 0, 60, 62, 3,
-		12, 6, 0, 61, 60, 1, 0, 0, 0, 61, 62, 1, 0, 0, 0, 62, 64, 1, 0, 0, 0, 63,
-		65, 3, 14, 7, 0, 64, 63, 1, 0, 0, 0, 64, 65, 1, 0, 0, 0, 65, 67, 1, 0,
-		0, 0, 66, 68, 3, 16, 8, 0, 67, 66, 1, 0, 0, 0, 67, 68, 1, 0, 0, 0, 68,
-		80, 1, 0, 0, 0, 69, 70, 5, 7, 0, 0, 70, 71, 5, 14, 0, 0, 71, 72, 3, 10,
-		5, 0, 72, 74, 5, 15, 0, 0, 73, 75, 3, 14, 7, 0, 74, 73, 1, 0, 0, 0, 74,
-		75, 1, 0, 0, 0, 75, 77, 1, 0, 0, 0, 76, 78, 3, 16, 8, 0, 77, 76, 1, 0,
-		0, 0, 77, 78, 1, 0, 0, 0, 78, 80, 1, 0, 0, 0, 79, 59, 1, 0, 0, 0, 79, 69,
-		1, 0, 0, 0, 80, 9, 1, 0, 0, 0, 81, 82, 5, 20, 0, 0, 82, 11, 1, 0, 0, 0,
-		83, 95, 5, 17, 0, 0, 84, 95, 5, 18, 0, 0, 85, 87, 5, 12, 0, 0, 86, 88,
-		3, 22, 11, 0, 87, 86, 1, 0, 0, 0, 87, 88, 1, 0, 0, 0, 88, 89, 1, 0, 0,
-		0, 89, 91, 5, 16, 0, 0, 90, 92, 3, 22, 11, 0, 91, 90, 1, 0, 0, 0, 91, 92,
-		1, 0, 0, 0, 92, 93, 1, 0, 0, 0, 93, 95, 5, 13, 0, 0, 94, 83, 1, 0, 0, 0,
-		94, 84, 1, 0, 0, 0, 94, 85, 1, 0, 0, 0, 95, 13, 1, 0, 0, 0, 96, 97, 5,
-		19, 0, 0, 97, 15, 1, 0, 0, 0, 98, 99, 3, 20, 10, 0, 99, 17, 1, 0, 0, 0,
-		100, 106, 5, 3, 0, 0, 101, 106, 5, 4, 0, 0, 102, 103, 5, 5, 0, 0, 103,
-		106, 5, 20, 0, 0, 104, 106, 5, 6, 0, 0, 105, 100, 1, 0, 0, 0, 105, 101,
-		1, 0, 0, 0, 105, 102, 1, 0, 0, 0, 105, 104, 1, 0, 0, 0, 106, 19, 1, 0,
-		0, 0, 107, 108, 7, 0, 0, 0, 108, 21, 1, 0, 0, 0, 109, 110, 7, 1, 0, 0,
-		110, 23, 1, 0, 0, 0, 14, 32, 39, 49, 56, 61, 64, 67, 74, 77, 79, 87, 91,
-		94, 105,
+		10, 2, 11, 7, 11, 2, 12, 7, 12, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 5,
+		1, 33, 8, 1, 10, 1, 12, 1, 36, 9, 1, 1, 1, 1, 1, 5, 1, 40, 8, 1, 10, 1,
+		12, 1, 43, 9, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 3, 2, 52, 8,
+		2, 1, 3, 1, 3, 1, 3, 3, 3, 57, 8, 3, 1, 3, 5, 3, 60, 8, 3, 10, 3, 12, 3,
+		63, 9, 3, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 3, 5, 72, 8, 5, 1,
+		6, 1, 6, 3, 6, 76, 8, 6, 1, 6, 3, 6, 79, 8, 6, 1, 6, 1, 6, 1, 6, 1, 6,
+		1, 6, 3, 6, 86, 8, 6, 3, 6, 88, 8, 6, 1, 7, 1, 7, 1, 8, 1, 8, 1, 8, 1,
+		8, 3, 8, 96, 8, 8, 1, 8, 1, 8, 3, 8, 100, 8, 8, 1, 8, 3, 8, 103, 8, 8,
+		1, 9, 1, 9, 1, 10, 1, 10, 1, 11, 1, 11, 1, 12, 1, 12, 1, 12, 0, 0, 13,
+		0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 0, 3, 2, 0, 16, 17, 30,
+		32, 1, 0, 30, 31, 2, 0, 13, 15, 29, 29, 116, 0, 26, 1, 0, 0, 0, 2, 29,
+		1, 0, 0, 0, 4, 51, 1, 0, 0, 0, 6, 53, 1, 0, 0, 0, 8, 64, 1, 0, 0, 0, 10,
+		71, 1, 0, 0, 0, 12, 87, 1, 0, 0, 0, 14, 89, 1, 0, 0, 0, 16, 102, 1, 0,
+		0, 0, 18, 104, 1, 0, 0, 0, 20, 106, 1, 0, 0, 0, 22, 108, 1, 0, 0, 0, 24,
+		110, 1, 0, 0, 0, 26, 27, 3, 2, 1, 0, 27, 28, 5, 0, 0, 1, 28, 1, 1, 0, 0,
+		0, 29, 30, 5, 1, 0, 0, 30, 34, 5, 29, 0, 0, 31, 33, 3, 4, 2, 0, 32, 31,
+		1, 0, 0, 0, 33, 36, 1, 0, 0, 0, 34, 32, 1, 0, 0, 0, 34, 35, 1, 0, 0, 0,
+		35, 37, 1, 0, 0, 0, 36, 34, 1, 0, 0, 0, 37, 41, 5, 7, 0, 0, 38, 40, 3,
+		6, 3, 0, 39, 38, 1, 0, 0, 0, 40, 43, 1, 0, 0, 0, 41, 39, 1, 0, 0, 0, 41,
+		42, 1, 0, 0, 0, 42, 44, 1, 0, 0, 0, 43, 41, 1, 0, 0, 0, 44, 45, 5, 8, 0,
+		0, 45, 3, 1, 0, 0, 0, 46, 47, 5, 2, 0, 0, 47, 52, 5, 29, 0, 0, 48, 49,
+		5, 5, 0, 0, 49, 52, 5, 29, 0, 0, 50, 52, 5, 6, 0, 0, 51, 46, 1, 0, 0, 0,
+		51, 48, 1, 0, 0, 0, 51, 50, 1, 0, 0, 0, 52, 5, 1, 0, 0, 0, 53, 54, 5, 29,
+		0, 0, 54, 56, 3, 12, 6, 0, 55, 57, 3, 8, 4, 0, 56, 55, 1, 0, 0, 0, 56,
+		57, 1, 0, 0, 0, 57, 61, 1, 0, 0, 0, 58, 60, 3, 10, 5, 0, 59, 58, 1, 0,
+		0, 0, 60, 63, 1, 0, 0, 0, 61, 59, 1, 0, 0, 0, 61, 62, 1, 0, 0, 0, 62, 7,
+		1, 0, 0, 0, 63, 61, 1, 0, 0, 0, 64, 65, 3, 20, 10, 0, 65, 9, 1, 0, 0, 0,
+		66, 72, 5, 3, 0, 0, 67, 72, 5, 4, 0, 0, 68, 69, 5, 5, 0, 0, 69, 72, 5,
+		29, 0, 0, 70, 72, 5, 6, 0, 0, 71, 66, 1, 0, 0, 0, 71, 67, 1, 0, 0, 0, 71,
+		68, 1, 0, 0, 0, 71, 70, 1, 0, 0, 0, 72, 11, 1, 0, 0, 0, 73, 75, 3, 14,
+		7, 0, 74, 76, 3, 16, 8, 0, 75, 74, 1, 0, 0, 0, 75, 76, 1, 0, 0, 0, 76,
+		78, 1, 0, 0, 0, 77, 79, 3, 18, 9, 0, 78, 77, 1, 0, 0, 0, 78, 79, 1, 0,
+		0, 0, 79, 88, 1, 0, 0, 0, 80, 81, 5, 12, 0, 0, 81, 82, 5, 22, 0, 0, 82,
+		83, 3, 14, 7, 0, 83, 85, 5, 23, 0, 0, 84, 86, 3, 18, 9, 0, 85, 84, 1, 0,
+		0, 0, 85, 86, 1, 0, 0, 0, 86, 88, 1, 0, 0, 0, 87, 73, 1, 0, 0, 0, 87, 80,
+		1, 0, 0, 0, 88, 13, 1, 0, 0, 0, 89, 90, 5, 29, 0, 0, 90, 15, 1, 0, 0, 0,
+		91, 103, 5, 26, 0, 0, 92, 103, 5, 27, 0, 0, 93, 95, 5, 20, 0, 0, 94, 96,
+		3, 22, 11, 0, 95, 94, 1, 0, 0, 0, 95, 96, 1, 0, 0, 0, 96, 97, 1, 0, 0,
+		0, 97, 99, 5, 24, 0, 0, 98, 100, 3, 22, 11, 0, 99, 98, 1, 0, 0, 0, 99,
+		100, 1, 0, 0, 0, 100, 101, 1, 0, 0, 0, 101, 103, 5, 21, 0, 0, 102, 91,
+		1, 0, 0, 0, 102, 92, 1, 0, 0, 0, 102, 93, 1, 0, 0, 0, 103, 17, 1, 0, 0,
+		0, 104, 105, 5, 28, 0, 0, 105, 19, 1, 0, 0, 0, 106, 107, 7, 0, 0, 0, 107,
+		21, 1, 0, 0, 0, 108, 109, 7, 1, 0, 0, 109, 23, 1, 0, 0, 0, 110, 111, 7,
+		2, 0, 0, 111, 25, 1, 0, 0, 0, 13, 34, 41, 51, 56, 61, 71, 75, 78, 85, 87,
+		95, 99, 102,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -140,26 +142,32 @@ const (
 	ObjectParserUNIQUE        = 4
 	ObjectParserRENAMED_FROM  = 5
 	ObjectParserDEPRECATED    = 6
-	ObjectParserLIST          = 7
-	ObjectParserTRUE          = 8
-	ObjectParserFALSE         = 9
-	ObjectParserLBRACE        = 10
-	ObjectParserRBRACE        = 11
-	ObjectParserLBRACKET      = 12
-	ObjectParserRBRACKET      = 13
-	ObjectParserLT            = 14
-	ObjectParserGT            = 15
-	ObjectParserCOMMA         = 16
-	ObjectParserPLUS          = 17
-	ObjectParserSTAR          = 18
-	ObjectParserQUESTION      = 19
-	ObjectParserIDENT         = 20
-	ObjectParserFLOAT         = 21
-	ObjectParserINT           = 22
-	ObjectParserSTRING        = 23
-	ObjectParserLINE_COMMENT  = 24
-	ObjectParserBLOCK_COMMENT = 25
-	ObjectParserWS            = 26
+	ObjectParserLBRACE        = 7
+	ObjectParserRBRACE        = 8
+	ObjectParserLINE_COMMENT  = 9
+	ObjectParserBLOCK_COMMENT = 10
+	ObjectParserWS            = 11
+	ObjectParserLIST          = 12
+	ObjectParserINPUT         = 13
+	ObjectParserEVENT         = 14
+	ObjectParserRESULT        = 15
+	ObjectParserTRUE          = 16
+	ObjectParserFALSE         = 17
+	ObjectParserLPAREN        = 18
+	ObjectParserRPAREN        = 19
+	ObjectParserLBRACKET      = 20
+	ObjectParserRBRACKET      = 21
+	ObjectParserLT            = 22
+	ObjectParserGT            = 23
+	ObjectParserCOMMA         = 24
+	ObjectParserPIPE          = 25
+	ObjectParserPLUS          = 26
+	ObjectParserSTAR          = 27
+	ObjectParserQUESTION      = 28
+	ObjectParserIDENT         = 29
+	ObjectParserFLOAT         = 30
+	ObjectParserINT           = 31
+	ObjectParserSTRING        = 32
 )
 
 // ObjectParser rules.
@@ -168,14 +176,15 @@ const (
 	ObjectParserRULE_objectDecl       = 1
 	ObjectParserRULE_objectModifier   = 2
 	ObjectParserRULE_fieldDecl        = 3
-	ObjectParserRULE_typeRef          = 4
-	ObjectParserRULE_typeName         = 5
-	ObjectParserRULE_numberConstraint = 6
-	ObjectParserRULE_optionalMarker   = 7
-	ObjectParserRULE_defaultValue     = 8
-	ObjectParserRULE_fieldModifier    = 9
+	ObjectParserRULE_defaultValue     = 4
+	ObjectParserRULE_fieldModifier    = 5
+	ObjectParserRULE_typeRef          = 6
+	ObjectParserRULE_typeName         = 7
+	ObjectParserRULE_numberConstraint = 8
+	ObjectParserRULE_optionalMarker   = 9
 	ObjectParserRULE_value            = 10
 	ObjectParserRULE_numberValue      = 11
+	ObjectParserRULE_identifier       = 12
 )
 
 // IProgramContext is an interface to support dynamic dispatch.
@@ -268,11 +277,11 @@ func (p *ObjectParser) Program() (localctx IProgramContext) {
 	p.EnterRule(localctx, 0, ObjectParserRULE_program)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(24)
+		p.SetState(26)
 		p.ObjectDecl()
 	}
 	{
-		p.SetState(25)
+		p.SetState(27)
 		p.Match(ObjectParserEOF)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -469,7 +478,7 @@ func (p *ObjectParser) ObjectDecl() (localctx IObjectDeclContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(27)
+		p.SetState(29)
 		p.Match(ObjectParserOBJECT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -477,14 +486,14 @@ func (p *ObjectParser) ObjectDecl() (localctx IObjectDeclContext) {
 		}
 	}
 	{
-		p.SetState(28)
+		p.SetState(30)
 		p.Match(ObjectParserIDENT)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(32)
+	p.SetState(34)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -493,11 +502,11 @@ func (p *ObjectParser) ObjectDecl() (localctx IObjectDeclContext) {
 
 	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&100) != 0 {
 		{
-			p.SetState(29)
+			p.SetState(31)
 			p.ObjectModifier()
 		}
 
-		p.SetState(34)
+		p.SetState(36)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -505,14 +514,14 @@ func (p *ObjectParser) ObjectDecl() (localctx IObjectDeclContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(35)
+		p.SetState(37)
 		p.Match(ObjectParserLBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(39)
+	p.SetState(41)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -521,11 +530,11 @@ func (p *ObjectParser) ObjectDecl() (localctx IObjectDeclContext) {
 
 	for _la == ObjectParserIDENT {
 		{
-			p.SetState(36)
+			p.SetState(38)
 			p.FieldDecl()
 		}
 
-		p.SetState(41)
+		p.SetState(43)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -533,7 +542,7 @@ func (p *ObjectParser) ObjectDecl() (localctx IObjectDeclContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(42)
+		p.SetState(44)
 		p.Match(ObjectParserRBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -640,7 +649,7 @@ func (s *ObjectModifierContext) Accept(visitor antlr.ParseTreeVisitor) interface
 func (p *ObjectParser) ObjectModifier() (localctx IObjectModifierContext) {
 	localctx = NewObjectModifierContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 4, ObjectParserRULE_objectModifier)
-	p.SetState(49)
+	p.SetState(51)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -650,27 +659,8 @@ func (p *ObjectParser) ObjectModifier() (localctx IObjectModifierContext) {
 	case ObjectParserHISTORY_OF:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(44)
-			p.Match(ObjectParserHISTORY_OF)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(45)
-			p.Match(ObjectParserIDENT)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-
-	case ObjectParserRENAMED_FROM:
-		p.EnterOuterAlt(localctx, 2)
-		{
 			p.SetState(46)
-			p.Match(ObjectParserRENAMED_FROM)
+			p.Match(ObjectParserHISTORY_OF)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -685,10 +675,29 @@ func (p *ObjectParser) ObjectModifier() (localctx IObjectModifierContext) {
 			}
 		}
 
+	case ObjectParserRENAMED_FROM:
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(48)
+			p.Match(ObjectParserRENAMED_FROM)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(49)
+			p.Match(ObjectParserIDENT)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
 	case ObjectParserDEPRECATED:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(48)
+			p.SetState(50)
 			p.Match(ObjectParserDEPRECATED)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -724,6 +733,7 @@ type IFieldDeclContext interface {
 	// Getter signatures
 	IDENT() antlr.TerminalNode
 	TypeRef() ITypeRefContext
+	DefaultValue() IDefaultValueContext
 	AllFieldModifier() []IFieldModifierContext
 	FieldModifier(i int) IFieldModifierContext
 
@@ -781,6 +791,22 @@ func (s *FieldDeclContext) TypeRef() ITypeRefContext {
 	}
 
 	return t.(ITypeRefContext)
+}
+
+func (s *FieldDeclContext) DefaultValue() IDefaultValueContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IDefaultValueContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IDefaultValueContext)
 }
 
 func (s *FieldDeclContext) AllFieldModifier() []IFieldModifierContext {
@@ -849,7 +875,7 @@ func (p *ObjectParser) FieldDecl() (localctx IFieldDeclContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(51)
+		p.SetState(53)
 		p.Match(ObjectParserIDENT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -857,7 +883,7 @@ func (p *ObjectParser) FieldDecl() (localctx IFieldDeclContext) {
 		}
 	}
 	{
-		p.SetState(52)
+		p.SetState(54)
 		p.TypeRef()
 	}
 	p.SetState(56)
@@ -867,18 +893,302 @@ func (p *ObjectParser) FieldDecl() (localctx IFieldDeclContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
+	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&7516389376) != 0 {
+		{
+			p.SetState(55)
+			p.DefaultValue()
+		}
+
+	}
+	p.SetState(61)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+	_la = p.GetTokenStream().LA(1)
+
 	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&120) != 0 {
 		{
-			p.SetState(53)
+			p.SetState(58)
 			p.FieldModifier()
 		}
 
-		p.SetState(58)
+		p.SetState(63)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// IDefaultValueContext is an interface to support dynamic dispatch.
+type IDefaultValueContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	Value() IValueContext
+
+	// IsDefaultValueContext differentiates from other interfaces.
+	IsDefaultValueContext()
+}
+
+type DefaultValueContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyDefaultValueContext() *DefaultValueContext {
+	var p = new(DefaultValueContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = ObjectParserRULE_defaultValue
+	return p
+}
+
+func InitEmptyDefaultValueContext(p *DefaultValueContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = ObjectParserRULE_defaultValue
+}
+
+func (*DefaultValueContext) IsDefaultValueContext() {}
+
+func NewDefaultValueContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *DefaultValueContext {
+	var p = new(DefaultValueContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ObjectParserRULE_defaultValue
+
+	return p
+}
+
+func (s *DefaultValueContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *DefaultValueContext) Value() IValueContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IValueContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IValueContext)
+}
+
+func (s *DefaultValueContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *DefaultValueContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *DefaultValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ObjectVisitor:
+		return t.VisitDefaultValue(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *ObjectParser) DefaultValue() (localctx IDefaultValueContext) {
+	localctx = NewDefaultValueContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 8, ObjectParserRULE_defaultValue)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(64)
+		p.Value()
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// IFieldModifierContext is an interface to support dynamic dispatch.
+type IFieldModifierContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	PRIMARY() antlr.TerminalNode
+	UNIQUE() antlr.TerminalNode
+	RENAMED_FROM() antlr.TerminalNode
+	IDENT() antlr.TerminalNode
+	DEPRECATED() antlr.TerminalNode
+
+	// IsFieldModifierContext differentiates from other interfaces.
+	IsFieldModifierContext()
+}
+
+type FieldModifierContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyFieldModifierContext() *FieldModifierContext {
+	var p = new(FieldModifierContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = ObjectParserRULE_fieldModifier
+	return p
+}
+
+func InitEmptyFieldModifierContext(p *FieldModifierContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = ObjectParserRULE_fieldModifier
+}
+
+func (*FieldModifierContext) IsFieldModifierContext() {}
+
+func NewFieldModifierContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *FieldModifierContext {
+	var p = new(FieldModifierContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ObjectParserRULE_fieldModifier
+
+	return p
+}
+
+func (s *FieldModifierContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *FieldModifierContext) PRIMARY() antlr.TerminalNode {
+	return s.GetToken(ObjectParserPRIMARY, 0)
+}
+
+func (s *FieldModifierContext) UNIQUE() antlr.TerminalNode {
+	return s.GetToken(ObjectParserUNIQUE, 0)
+}
+
+func (s *FieldModifierContext) RENAMED_FROM() antlr.TerminalNode {
+	return s.GetToken(ObjectParserRENAMED_FROM, 0)
+}
+
+func (s *FieldModifierContext) IDENT() antlr.TerminalNode {
+	return s.GetToken(ObjectParserIDENT, 0)
+}
+
+func (s *FieldModifierContext) DEPRECATED() antlr.TerminalNode {
+	return s.GetToken(ObjectParserDEPRECATED, 0)
+}
+
+func (s *FieldModifierContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *FieldModifierContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *FieldModifierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ObjectVisitor:
+		return t.VisitFieldModifier(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *ObjectParser) FieldModifier() (localctx IFieldModifierContext) {
+	localctx = NewFieldModifierContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 10, ObjectParserRULE_fieldModifier)
+	p.SetState(71)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+
+	switch p.GetTokenStream().LA(1) {
+	case ObjectParserPRIMARY:
+		p.EnterOuterAlt(localctx, 1)
+		{
+			p.SetState(66)
+			p.Match(ObjectParserPRIMARY)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case ObjectParserUNIQUE:
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(67)
+			p.Match(ObjectParserUNIQUE)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case ObjectParserRENAMED_FROM:
+		p.EnterOuterAlt(localctx, 3)
+		{
+			p.SetState(68)
+			p.Match(ObjectParserRENAMED_FROM)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(69)
+			p.Match(ObjectParserIDENT)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case ObjectParserDEPRECATED:
+		p.EnterOuterAlt(localctx, 4)
+		{
+			p.SetState(70)
+			p.Match(ObjectParserDEPRECATED)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	default:
+		p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+		goto errorExit
 	}
 
 errorExit:
@@ -905,7 +1215,6 @@ type ITypeRefContext interface {
 	TypeName() ITypeNameContext
 	NumberConstraint() INumberConstraintContext
 	OptionalMarker() IOptionalMarkerContext
-	DefaultValue() IDefaultValueContext
 	LIST() antlr.TerminalNode
 	LT() antlr.TerminalNode
 	GT() antlr.TerminalNode
@@ -994,22 +1303,6 @@ func (s *TypeRefContext) OptionalMarker() IOptionalMarkerContext {
 	return t.(IOptionalMarkerContext)
 }
 
-func (s *TypeRefContext) DefaultValue() IDefaultValueContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IDefaultValueContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IDefaultValueContext)
-}
-
 func (s *TypeRefContext) LIST() antlr.TerminalNode {
 	return s.GetToken(ObjectParserLIST, 0)
 }
@@ -1042,10 +1335,10 @@ func (s *TypeRefContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *ObjectParser) TypeRef() (localctx ITypeRefContext) {
 	localctx = NewTypeRefContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, ObjectParserRULE_typeRef)
+	p.EnterRule(localctx, 12, ObjectParserRULE_typeRef)
 	var _la int
 
-	p.SetState(79)
+	p.SetState(87)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1055,24 +1348,24 @@ func (p *ObjectParser) TypeRef() (localctx ITypeRefContext) {
 	case ObjectParserIDENT:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(59)
+			p.SetState(73)
 			p.TypeName()
 		}
-		p.SetState(61)
+		p.SetState(75)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&397312) != 0 {
+		if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&202375168) != 0 {
 			{
-				p.SetState(60)
+				p.SetState(74)
 				p.NumberConstraint()
 			}
 
 		}
-		p.SetState(64)
+		p.SetState(78)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1081,22 +1374,8 @@ func (p *ObjectParser) TypeRef() (localctx ITypeRefContext) {
 
 		if _la == ObjectParserQUESTION {
 			{
-				p.SetState(63)
+				p.SetState(77)
 				p.OptionalMarker()
-			}
-
-		}
-		p.SetState(67)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
-
-		if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&14680832) != 0 {
-			{
-				p.SetState(66)
-				p.DefaultValue()
 			}
 
 		}
@@ -1104,7 +1383,7 @@ func (p *ObjectParser) TypeRef() (localctx ITypeRefContext) {
 	case ObjectParserLIST:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(69)
+			p.SetState(80)
 			p.Match(ObjectParserLIST)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1112,7 +1391,7 @@ func (p *ObjectParser) TypeRef() (localctx ITypeRefContext) {
 			}
 		}
 		{
-			p.SetState(70)
+			p.SetState(81)
 			p.Match(ObjectParserLT)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1120,18 +1399,18 @@ func (p *ObjectParser) TypeRef() (localctx ITypeRefContext) {
 			}
 		}
 		{
-			p.SetState(71)
+			p.SetState(82)
 			p.TypeName()
 		}
 		{
-			p.SetState(72)
+			p.SetState(83)
 			p.Match(ObjectParserGT)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(74)
+		p.SetState(85)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1140,22 +1419,8 @@ func (p *ObjectParser) TypeRef() (localctx ITypeRefContext) {
 
 		if _la == ObjectParserQUESTION {
 			{
-				p.SetState(73)
+				p.SetState(84)
 				p.OptionalMarker()
-			}
-
-		}
-		p.SetState(77)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
-
-		if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&14680832) != 0 {
-			{
-				p.SetState(76)
-				p.DefaultValue()
 			}
 
 		}
@@ -1248,10 +1513,10 @@ func (s *TypeNameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *ObjectParser) TypeName() (localctx ITypeNameContext) {
 	localctx = NewTypeNameContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 10, ObjectParserRULE_typeName)
+	p.EnterRule(localctx, 14, ObjectParserRULE_typeName)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(81)
+		p.SetState(89)
 		p.Match(ObjectParserIDENT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1405,10 +1670,10 @@ func (s *NumberConstraintContext) Accept(visitor antlr.ParseTreeVisitor) interfa
 
 func (p *ObjectParser) NumberConstraint() (localctx INumberConstraintContext) {
 	localctx = NewNumberConstraintContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 12, ObjectParserRULE_numberConstraint)
+	p.EnterRule(localctx, 16, ObjectParserRULE_numberConstraint)
 	var _la int
 
-	p.SetState(94)
+	p.SetState(102)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1418,7 +1683,7 @@ func (p *ObjectParser) NumberConstraint() (localctx INumberConstraintContext) {
 	case ObjectParserPLUS:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(83)
+			p.SetState(91)
 			p.Match(ObjectParserPLUS)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1429,7 +1694,7 @@ func (p *ObjectParser) NumberConstraint() (localctx INumberConstraintContext) {
 	case ObjectParserSTAR:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(84)
+			p.SetState(92)
 			p.Match(ObjectParserSTAR)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1440,14 +1705,14 @@ func (p *ObjectParser) NumberConstraint() (localctx INumberConstraintContext) {
 	case ObjectParserLBRACKET:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(85)
+			p.SetState(93)
 			p.Match(ObjectParserLBRACKET)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(87)
+		p.SetState(95)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1456,20 +1721,20 @@ func (p *ObjectParser) NumberConstraint() (localctx INumberConstraintContext) {
 
 		if _la == ObjectParserFLOAT || _la == ObjectParserINT {
 			{
-				p.SetState(86)
+				p.SetState(94)
 				p.NumberValue()
 			}
 
 		}
 		{
-			p.SetState(89)
+			p.SetState(97)
 			p.Match(ObjectParserCOMMA)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(91)
+		p.SetState(99)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1478,13 +1743,13 @@ func (p *ObjectParser) NumberConstraint() (localctx INumberConstraintContext) {
 
 		if _la == ObjectParserFLOAT || _la == ObjectParserINT {
 			{
-				p.SetState(90)
+				p.SetState(98)
 				p.NumberValue()
 			}
 
 		}
 		{
-			p.SetState(93)
+			p.SetState(101)
 			p.Match(ObjectParserRBRACKET)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1580,285 +1845,15 @@ func (s *OptionalMarkerContext) Accept(visitor antlr.ParseTreeVisitor) interface
 
 func (p *ObjectParser) OptionalMarker() (localctx IOptionalMarkerContext) {
 	localctx = NewOptionalMarkerContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, ObjectParserRULE_optionalMarker)
+	p.EnterRule(localctx, 18, ObjectParserRULE_optionalMarker)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(96)
+		p.SetState(104)
 		p.Match(ObjectParserQUESTION)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
-	}
-
-errorExit:
-	if p.HasError() {
-		v := p.GetError()
-		localctx.SetException(v)
-		p.GetErrorHandler().ReportError(p, v)
-		p.GetErrorHandler().Recover(p, v)
-		p.SetError(nil)
-	}
-	p.ExitRule()
-	return localctx
-	goto errorExit // Trick to prevent compiler error if the label is not used
-}
-
-// IDefaultValueContext is an interface to support dynamic dispatch.
-type IDefaultValueContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
-
-	// Getter signatures
-	Value() IValueContext
-
-	// IsDefaultValueContext differentiates from other interfaces.
-	IsDefaultValueContext()
-}
-
-type DefaultValueContext struct {
-	antlr.BaseParserRuleContext
-	parser antlr.Parser
-}
-
-func NewEmptyDefaultValueContext() *DefaultValueContext {
-	var p = new(DefaultValueContext)
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ObjectParserRULE_defaultValue
-	return p
-}
-
-func InitEmptyDefaultValueContext(p *DefaultValueContext) {
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ObjectParserRULE_defaultValue
-}
-
-func (*DefaultValueContext) IsDefaultValueContext() {}
-
-func NewDefaultValueContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *DefaultValueContext {
-	var p = new(DefaultValueContext)
-
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
-
-	p.parser = parser
-	p.RuleIndex = ObjectParserRULE_defaultValue
-
-	return p
-}
-
-func (s *DefaultValueContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *DefaultValueContext) Value() IValueContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IValueContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IValueContext)
-}
-
-func (s *DefaultValueContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *DefaultValueContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-func (s *DefaultValueContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case ObjectVisitor:
-		return t.VisitDefaultValue(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-func (p *ObjectParser) DefaultValue() (localctx IDefaultValueContext) {
-	localctx = NewDefaultValueContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, ObjectParserRULE_defaultValue)
-	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(98)
-		p.Value()
-	}
-
-errorExit:
-	if p.HasError() {
-		v := p.GetError()
-		localctx.SetException(v)
-		p.GetErrorHandler().ReportError(p, v)
-		p.GetErrorHandler().Recover(p, v)
-		p.SetError(nil)
-	}
-	p.ExitRule()
-	return localctx
-	goto errorExit // Trick to prevent compiler error if the label is not used
-}
-
-// IFieldModifierContext is an interface to support dynamic dispatch.
-type IFieldModifierContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
-
-	// Getter signatures
-	PRIMARY() antlr.TerminalNode
-	UNIQUE() antlr.TerminalNode
-	RENAMED_FROM() antlr.TerminalNode
-	IDENT() antlr.TerminalNode
-	DEPRECATED() antlr.TerminalNode
-
-	// IsFieldModifierContext differentiates from other interfaces.
-	IsFieldModifierContext()
-}
-
-type FieldModifierContext struct {
-	antlr.BaseParserRuleContext
-	parser antlr.Parser
-}
-
-func NewEmptyFieldModifierContext() *FieldModifierContext {
-	var p = new(FieldModifierContext)
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ObjectParserRULE_fieldModifier
-	return p
-}
-
-func InitEmptyFieldModifierContext(p *FieldModifierContext) {
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ObjectParserRULE_fieldModifier
-}
-
-func (*FieldModifierContext) IsFieldModifierContext() {}
-
-func NewFieldModifierContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *FieldModifierContext {
-	var p = new(FieldModifierContext)
-
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
-
-	p.parser = parser
-	p.RuleIndex = ObjectParserRULE_fieldModifier
-
-	return p
-}
-
-func (s *FieldModifierContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *FieldModifierContext) PRIMARY() antlr.TerminalNode {
-	return s.GetToken(ObjectParserPRIMARY, 0)
-}
-
-func (s *FieldModifierContext) UNIQUE() antlr.TerminalNode {
-	return s.GetToken(ObjectParserUNIQUE, 0)
-}
-
-func (s *FieldModifierContext) RENAMED_FROM() antlr.TerminalNode {
-	return s.GetToken(ObjectParserRENAMED_FROM, 0)
-}
-
-func (s *FieldModifierContext) IDENT() antlr.TerminalNode {
-	return s.GetToken(ObjectParserIDENT, 0)
-}
-
-func (s *FieldModifierContext) DEPRECATED() antlr.TerminalNode {
-	return s.GetToken(ObjectParserDEPRECATED, 0)
-}
-
-func (s *FieldModifierContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *FieldModifierContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-func (s *FieldModifierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case ObjectVisitor:
-		return t.VisitFieldModifier(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-func (p *ObjectParser) FieldModifier() (localctx IFieldModifierContext) {
-	localctx = NewFieldModifierContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 18, ObjectParserRULE_fieldModifier)
-	p.SetState(105)
-	p.GetErrorHandler().Sync(p)
-	if p.HasError() {
-		goto errorExit
-	}
-
-	switch p.GetTokenStream().LA(1) {
-	case ObjectParserPRIMARY:
-		p.EnterOuterAlt(localctx, 1)
-		{
-			p.SetState(100)
-			p.Match(ObjectParserPRIMARY)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-
-	case ObjectParserUNIQUE:
-		p.EnterOuterAlt(localctx, 2)
-		{
-			p.SetState(101)
-			p.Match(ObjectParserUNIQUE)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-
-	case ObjectParserRENAMED_FROM:
-		p.EnterOuterAlt(localctx, 3)
-		{
-			p.SetState(102)
-			p.Match(ObjectParserRENAMED_FROM)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(103)
-			p.Match(ObjectParserIDENT)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-
-	case ObjectParserDEPRECATED:
-		p.EnterOuterAlt(localctx, 4)
-		{
-			p.SetState(104)
-			p.Match(ObjectParserDEPRECATED)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-
-	default:
-		p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
-		goto errorExit
 	}
 
 errorExit:
@@ -1969,10 +1964,10 @@ func (p *ObjectParser) Value() (localctx IValueContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(107)
+		p.SetState(106)
 		_la = p.GetTokenStream().LA(1)
 
-		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&14680832) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&7516389376) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -2073,10 +2068,124 @@ func (p *ObjectParser) NumberValue() (localctx INumberValueContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(109)
+		p.SetState(108)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(_la == ObjectParserFLOAT || _la == ObjectParserINT) {
+			p.GetErrorHandler().RecoverInline(p)
+		} else {
+			p.GetErrorHandler().ReportMatch(p)
+			p.Consume()
+		}
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// IIdentifierContext is an interface to support dynamic dispatch.
+type IIdentifierContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	IDENT() antlr.TerminalNode
+	INPUT() antlr.TerminalNode
+	EVENT() antlr.TerminalNode
+	RESULT() antlr.TerminalNode
+
+	// IsIdentifierContext differentiates from other interfaces.
+	IsIdentifierContext()
+}
+
+type IdentifierContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyIdentifierContext() *IdentifierContext {
+	var p = new(IdentifierContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = ObjectParserRULE_identifier
+	return p
+}
+
+func InitEmptyIdentifierContext(p *IdentifierContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = ObjectParserRULE_identifier
+}
+
+func (*IdentifierContext) IsIdentifierContext() {}
+
+func NewIdentifierContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *IdentifierContext {
+	var p = new(IdentifierContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ObjectParserRULE_identifier
+
+	return p
+}
+
+func (s *IdentifierContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *IdentifierContext) IDENT() antlr.TerminalNode {
+	return s.GetToken(ObjectParserIDENT, 0)
+}
+
+func (s *IdentifierContext) INPUT() antlr.TerminalNode {
+	return s.GetToken(ObjectParserINPUT, 0)
+}
+
+func (s *IdentifierContext) EVENT() antlr.TerminalNode {
+	return s.GetToken(ObjectParserEVENT, 0)
+}
+
+func (s *IdentifierContext) RESULT() antlr.TerminalNode {
+	return s.GetToken(ObjectParserRESULT, 0)
+}
+
+func (s *IdentifierContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *IdentifierContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *IdentifierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case ObjectVisitor:
+		return t.VisitIdentifier(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *ObjectParser) Identifier() (localctx IIdentifierContext) {
+	localctx = NewIdentifierContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 24, ObjectParserRULE_identifier)
+	var _la int
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(110)
+		_la = p.GetTokenStream().LA(1)
+
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&536928256) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)

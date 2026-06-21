@@ -39,6 +39,10 @@ func (v *BaseEndpointVisitor) VisitInputSourceKind(ctx *InputSourceKindContext) 
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseEndpointVisitor) VisitHttpMethod(ctx *HttpMethodContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseEndpointVisitor) VisitAction(ctx *ActionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -60,6 +64,10 @@ func (v *BaseEndpointVisitor) VisitUpdateAction(ctx *UpdateActionContext) interf
 }
 
 func (v *BaseEndpointVisitor) VisitEmitAction(ctx *EmitActionContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseEndpointVisitor) VisitCallAction(ctx *CallActionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -103,10 +111,6 @@ func (v *BaseEndpointVisitor) VisitSelector(ctx *SelectorContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseEndpointVisitor) VisitIdentifier(ctx *IdentifierContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BaseEndpointVisitor) VisitTypeRef(ctx *TypeRefContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -131,6 +135,6 @@ func (v *BaseEndpointVisitor) VisitNumberValue(ctx *NumberValueContext) interfac
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseEndpointVisitor) VisitHttpMethod(ctx *HttpMethodContext) interface{} {
+func (v *BaseEndpointVisitor) VisitIdentifier(ctx *IdentifierContext) interface{} {
 	return v.VisitChildren(ctx)
 }

@@ -3,8 +3,10 @@ package antlr
 import (
 	"testing"
 
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/common"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/endpoints"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/workflows"
 )
 
 func TestParserApplicationObjectParsesSimpleObject(t *testing.T) {
@@ -106,7 +108,7 @@ object User {
 		t.Fatalf("expected default value")
 	}
 
-	if field.Type().DefaultValue().Kind() != objects.ValueString {
+	if field.Type().DefaultValue().Kind() != common.ValueString {
 		t.Fatalf("expected string default")
 	}
 
@@ -145,11 +147,11 @@ object User {
 		t.Fatalf("expected no error, got %v", err)
 	}
 
-	assertNumberConstraint(t, obj.Fields()[0], objects.NumberConstraintOneOrMore, false, "", false, "")
-	assertNumberConstraint(t, obj.Fields()[1], objects.NumberConstraintZeroOrMore, false, "", false, "")
-	assertNumberConstraint(t, obj.Fields()[2], objects.NumberConstraintRange, true, "0", true, "23")
-	assertNumberConstraint(t, obj.Fields()[3], objects.NumberConstraintRange, true, "3", false, "")
-	assertNumberConstraint(t, obj.Fields()[4], objects.NumberConstraintRange, true, "34", true, "38")
+	assertNumberConstraint(t, obj.Fields()[0], common.NumberConstraintOneOrMore, false, "", false, "")
+	assertNumberConstraint(t, obj.Fields()[1], common.NumberConstraintZeroOrMore, false, "", false, "")
+	assertNumberConstraint(t, obj.Fields()[2], common.NumberConstraintRange, true, "0", true, "23")
+	assertNumberConstraint(t, obj.Fields()[3], common.NumberConstraintRange, true, "3", false, "")
+	assertNumberConstraint(t, obj.Fields()[4], common.NumberConstraintRange, true, "34", true, "38")
 
 	optionalDefault := obj.Fields()[5]
 	if !optionalDefault.Type().IsOptional() {
@@ -160,7 +162,7 @@ object User {
 		t.Fatalf("expected optionalDefault to have default")
 	}
 
-	if optionalDefault.Type().DefaultValue().Kind() != objects.ValueInt {
+	if optionalDefault.Type().DefaultValue().Kind() != common.ValueInt {
 		t.Fatalf("expected optionalDefault default kind int")
 	}
 
@@ -195,94 +197,6 @@ object User {
 	oldField := obj.Fields()[1]
 	if !hasModifier(oldField, objects.FieldModifierDeprecated) {
 		t.Fatalf("expected deprecated modifier")
-	}
-}
-
-func hasModifier(field objects.Field, kind objects.FieldModifierKind) bool {
-	for _, modifier := range field.Modifiers() {
-		switch kind {
-		case objects.FieldModifierPrimary:
-			if modifier.IsPrimary() {
-				return true
-			}
-		case objects.FieldModifierUnique:
-			if modifier.IsUnique() {
-				return true
-			}
-		case objects.FieldModifierRenamedFrom:
-			if modifier.IsRenameFrom() {
-				return true
-			}
-		case objects.FieldModifierDeprecated:
-			if modifier.IsDeprecated() {
-				return true
-			}
-		default:
-			if modifier.Kind() == kind {
-				return true
-			}
-		}
-	}
-
-	return false
-}
-
-func renamedFromModifier(field objects.Field) objects.RenamedFromFieldModifier {
-	for _, modifier := range field.Modifiers() {
-		if renamed, ok := modifier.(objects.RenamedFromFieldModifier); ok {
-			return renamed
-		}
-	}
-
-	return nil
-}
-
-func assertNumberConstraint(
-	t *testing.T,
-	field objects.Field,
-	expectedKind objects.NumberConstraintKind,
-	expectMin bool,
-	expectedMin string,
-	expectMax bool,
-	expectedMax string,
-) {
-	t.Helper()
-
-	constraint := field.Type().NumberConstraint()
-	if constraint == nil {
-		t.Fatalf("expected number constraint")
-	}
-
-	if constraint.Kind() != expectedKind {
-		t.Fatalf("expected constraint kind %s, got %s", expectedKind, constraint.Kind())
-	}
-
-	if constraint.HasMin() != expectMin {
-		t.Fatalf("expected HasMin %v, got %v", expectMin, constraint.HasMin())
-	}
-
-	if expectMin {
-		if constraint.Min() == nil {
-			t.Fatalf("expected min %s, got nil", expectedMin)
-		}
-
-		if constraint.Min().Raw() != expectedMin {
-			t.Fatalf("expected min %s, got %s", expectedMin, constraint.Min().Raw())
-		}
-	}
-
-	if constraint.HasMax() != expectMax {
-		t.Fatalf("expected HasMax %v, got %v", expectMax, constraint.HasMax())
-	}
-
-	if expectMax {
-		if constraint.Max() == nil {
-			t.Fatalf("expected max %s, got nil", expectedMax)
-		}
-
-		if constraint.Max().Raw() != expectedMax {
-			t.Fatalf("expected max %s, got %s", expectedMax, constraint.Max().Raw())
-		}
 	}
 }
 
@@ -345,10 +259,6 @@ endpoint UpdatePost PATCH "/posts/{id}" {
 		t.Fatalf("expected /posts/{id}, got %s", endpoint.Path())
 	}
 
-	if endpoint.Input() == nil {
-		t.Fatalf("expected input")
-	}
-
 	fields := endpoint.Input().Fields()
 	if len(fields) != 4 {
 		t.Fatalf("expected 4 input fields, got %d", len(fields))
@@ -371,20 +281,12 @@ endpoint UpdatePost PATCH "/posts/{id}" {
 		t.Fatalf("expected 2 id sources, got %d", len(id.Sources().Sources()))
 	}
 
-	if id.Sources().Sources()[0].Kind() != endpoints.InputSourcePath {
-		t.Fatalf("expected first id source path")
+	if id.Sources().Sources()[0].Kind() != endpoints.InputSourcePath || !id.Sources().Sources()[0].IsOptional() {
+		t.Fatalf("expected first id source path?")
 	}
 
-	if !id.Sources().Sources()[0].IsOptional() {
-		t.Fatalf("expected path source to be optional")
-	}
-
-	if id.Sources().Sources()[1].Kind() != endpoints.InputSourceBody {
-		t.Fatalf("expected second id source body")
-	}
-
-	if !id.Sources().Sources()[1].IsOptional() {
-		t.Fatalf("expected body source to be optional")
+	if id.Sources().Sources()[1].Kind() != endpoints.InputSourceBody || !id.Sources().Sources()[1].IsOptional() {
+		t.Fatalf("expected second id source body?")
 	}
 
 	if fields[1].Name() != "title" || fields[1].Sources().Sources()[0].Kind() != endpoints.InputSourceBody || !fields[1].Sources().Sources()[0].IsOptional() {
@@ -400,84 +302,56 @@ endpoint UpdatePost PATCH "/posts/{id}" {
 		t.Fatalf("expected 8 actions, got %d", len(actions))
 	}
 
-	if actions[0].Kind() != endpoints.ActionKindFetch {
+	fetch := actions[0].(workflows.FetchAction)
+	if fetch.Kind() != workflows.ActionKindFetch {
 		t.Fatalf("expected action 0 fetch")
 	}
-
-	fetch := actions[0].(endpoints.FetchAction)
-	if fetch.Variable().Name() != "post" {
-		t.Fatalf("expected fetch variable post")
+	if fetch.Variable().Name() != "post" || fetch.Variable().Type().Name() != "Post" {
+		t.Fatalf("expected fetch variable post:Post")
 	}
-
-	if fetch.Variable().Type().Name() != "Post" {
-		t.Fatalf("expected fetch variable type Post")
-	}
-
 	if fetch.Source() != "MainDB" {
 		t.Fatalf("expected fetch source MainDB")
 	}
-
-	if fetch.Condition().Operator() != endpoints.ComparatorEqual {
+	if fetch.Condition().Operator() != workflows.ComparatorEqual {
 		t.Fatalf("expected fetch condition ==")
 	}
 
-	if actions[1].Kind() != endpoints.ActionKindCreate {
+	create := actions[1].(workflows.CreateAction)
+	if create.Kind() != workflows.ActionKindCreate {
 		t.Fatalf("expected action 1 create")
 	}
-
-	create := actions[1].(endpoints.CreateAction)
-	if create.Variable().Name() != "history" {
-		t.Fatalf("expected create variable history")
+	if create.Variable().Name() != "history" || create.Variable().Type().Name() != "PostHistory" {
+		t.Fatalf("expected create history:PostHistory")
 	}
-
-	if create.Variable().Type().Name() != "PostHistory" {
-		t.Fatalf("expected create type PostHistory")
-	}
-
 	if len(create.Assignments()) != 7 {
 		t.Fatalf("expected 7 history assignments, got %d", len(create.Assignments()))
 	}
 
-	if actions[2].Kind() != endpoints.ActionKindStore {
-		t.Fatalf("expected action 2 store")
-	}
-
-	storeHistory := actions[2].(endpoints.StoreAction)
+	storeHistory := actions[2].(workflows.StoreAction)
 	if storeHistory.VariableName() != "history" || storeHistory.Destination() != "MainDB" {
 		t.Fatalf("expected store history to MainDB")
 	}
 
-	if actions[3].Kind() != endpoints.ActionKindUpdate {
-		t.Fatalf("expected action 3 update")
-	}
-
-	update := actions[3].(endpoints.UpdateAction)
+	update := actions[3].(workflows.UpdateAction)
 	if update.VariableName() != "post" {
 		t.Fatalf("expected update post")
 	}
-
 	if len(update.Assignments()) != 3 {
 		t.Fatalf("expected 3 update assignments, got %d", len(update.Assignments()))
 	}
 
-	if actions[6].Kind() != endpoints.ActionKindEmit {
+	emit := actions[6].(workflows.EmitAction)
+	if emit.Kind() != workflows.ActionKindEmit {
 		t.Fatalf("expected action 6 emit")
 	}
-
-	emit := actions[6].(endpoints.EmitAction)
-	if emit.Variable().Name() != "event" {
-		t.Fatalf("expected emit variable event")
+	if emit.Variable().Name() != "event" || emit.Variable().Type().Name() != "PostUpdated" {
+		t.Fatalf("expected emit event:PostUpdated")
 	}
-
-	if emit.Variable().Type().Name() != "PostUpdated" {
-		t.Fatalf("expected emit type PostUpdated")
-	}
-
 	if len(emit.Assignments()) != 2 {
 		t.Fatalf("expected 2 emit assignments")
 	}
 
-	if actions[7].Kind() != endpoints.ActionKindReturn {
+	if actions[7].Kind() != workflows.ActionKindReturn {
 		t.Fatalf("expected action 7 return")
 	}
 }
@@ -525,7 +399,7 @@ endpoint CreatePost POST "/posts" {
 		t.Fatalf("expected 5 actions, got %d", len(actions))
 	}
 
-	create := actions[0].(endpoints.CreateAction)
+	create := actions[0].(workflows.CreateAction)
 	assignments := create.Assignments()
 
 	assertAssignmentSelector(t, assignments[0], "title", []string{"input", "title"})
@@ -534,29 +408,29 @@ endpoint CreatePost POST "/posts" {
 	assertAssignmentFunctionCall(t, assignments[4], "slug", "slugify", 1)
 	assertAssignmentFunctionCall(t, assignments[5], "score", "calculateScore", 5)
 
-	scoreCall := assignments[5].Value().(endpoints.FunctionCallExpression)
-	assertLiteral(t, scoreCall.Arguments()[1], objects.ValueInt, "12")
-	assertLiteral(t, scoreCall.Arguments()[2], objects.ValueFloat, "12.5")
-	assertLiteral(t, scoreCall.Arguments()[3], objects.ValueBool, "true")
-	assertLiteral(t, scoreCall.Arguments()[4], objects.ValueBool, "false")
+	scoreCall := assignments[5].Value().(workflows.FunctionCallExpression)
+	assertLiteral(t, scoreCall.Arguments()[1], common.ValueInt, "12")
+	assertLiteral(t, scoreCall.Arguments()[2], common.ValueFloat, "12.5")
+	assertLiteral(t, scoreCall.Arguments()[3], common.ValueBool, "true")
+	assertLiteral(t, scoreCall.Arguments()[4], common.ValueBool, "false")
 
-	storeOne := actions[1].(endpoints.StoreAction)
+	storeOne := actions[1].(workflows.StoreAction)
 	if storeOne.VariableName() != "post" || storeOne.Destination() != "MainDB" {
 		t.Fatalf("expected store post to MainDB")
 	}
 
-	storeTwo := actions[2].(endpoints.StoreAction)
+	storeTwo := actions[2].(workflows.StoreAction)
 	if storeTwo.VariableName() != "post" || storeTwo.Destination() != "GraphDB" {
 		t.Fatalf("expected store post to GraphDB")
 	}
 
-	emit := actions[3].(endpoints.EmitAction)
+	emit := actions[3].(workflows.EmitAction)
 	if emit.Variable().Name() != "event" || emit.Variable().Type().Name() != "PostCreated" {
 		t.Fatalf("expected emit event:PostCreated")
 	}
 
-	ret := actions[4].(endpoints.ReturnAction)
-	if ret.Expression().Kind() != endpoints.ExpressionKindIdentifier {
+	ret := actions[4].(workflows.ReturnAction)
+	if ret.Expression().Kind() != workflows.ExpressionKindIdentifier {
 		t.Fatalf("expected identifier return expression")
 	}
 }
@@ -634,14 +508,14 @@ func TestParserApplicationEndpointParsesComparators(t *testing.T) {
 	tests := []struct {
 		name     string
 		operator string
-		expected endpoints.Comparator
+		expected workflows.Comparator
 	}{
-		{"EqEndpoint", "==", endpoints.ComparatorEqual},
-		{"NeqEndpoint", "!=", endpoints.ComparatorNotEqual},
-		{"LtEndpoint", "<", endpoints.ComparatorLessThan},
-		{"LteEndpoint", "<=", endpoints.ComparatorLessThanOrEqual},
-		{"GtEndpoint", ">", endpoints.ComparatorGreaterThan},
-		{"GteEndpoint", ">=", endpoints.ComparatorGreaterThanOrEqual},
+		{"EqEndpoint", "==", workflows.ComparatorEqual},
+		{"NeqEndpoint", "!=", workflows.ComparatorNotEqual},
+		{"LtEndpoint", "<", workflows.ComparatorLessThan},
+		{"LteEndpoint", "<=", workflows.ComparatorLessThanOrEqual},
+		{"GtEndpoint", ">", workflows.ComparatorGreaterThan},
+		{"GteEndpoint", ">=", workflows.ComparatorGreaterThanOrEqual},
 	}
 
 	for _, test := range tests {
@@ -663,7 +537,7 @@ endpoint ` + test.name + ` GET "/test" {
 				t.Fatalf("expected no error, got %v", err)
 			}
 
-			fetch := endpoint.Actions()[0].(endpoints.FetchAction)
+			fetch := endpoint.Actions()[0].(workflows.FetchAction)
 			if fetch.Condition().Operator() != test.expected {
 				t.Fatalf("expected comparator %s, got %s", test.expected, fetch.Condition().Operator())
 			}
@@ -694,7 +568,7 @@ endpoint SearchPosts GET "/posts" {
 	fields := endpoint.Input().Fields()
 
 	limitConstraint := fields[0].Type().NumberConstraint()
-	if limitConstraint.Kind() != objects.NumberConstraintRange {
+	if limitConstraint.Kind() != common.NumberConstraintRange {
 		t.Fatalf("expected range constraint")
 	}
 	if !limitConstraint.HasMin() || limitConstraint.Min().Raw() != "1" {
@@ -705,7 +579,7 @@ endpoint SearchPosts GET "/posts" {
 	}
 
 	offsetConstraint := fields[1].Type().NumberConstraint()
-	if offsetConstraint.Kind() != objects.NumberConstraintZeroOrMore {
+	if offsetConstraint.Kind() != common.NumberConstraintZeroOrMore {
 		t.Fatalf("expected zero_or_more constraint")
 	}
 
@@ -719,7 +593,7 @@ endpoint SearchPosts GET "/posts" {
 		t.Fatalf("expected scores optional")
 	}
 
-	fetch := endpoint.Actions()[0].(endpoints.FetchAction)
+	fetch := endpoint.Actions()[0].(workflows.FetchAction)
 	if !fetch.Variable().Type().IsList() {
 		t.Fatalf("expected fetched posts to be list")
 	}
@@ -737,6 +611,276 @@ endpoint Bad GET "/bad" {
     id UUID path
   }
 
+  return
+}
+`)
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func hasModifier(field objects.Field, kind objects.FieldModifierKind) bool {
+	for _, modifier := range field.Modifiers() {
+		switch kind {
+		case objects.FieldModifierPrimary:
+			if modifier.IsPrimary() {
+				return true
+			}
+		case objects.FieldModifierUnique:
+			if modifier.IsUnique() {
+				return true
+			}
+		case objects.FieldModifierRenamedFrom:
+			if modifier.IsRenameFrom() {
+				return true
+			}
+		case objects.FieldModifierDeprecated:
+			if modifier.IsDeprecated() {
+				return true
+			}
+		default:
+			if modifier.Kind() == kind {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func renamedFromModifier(field objects.Field) objects.RenamedFromFieldModifier {
+	for _, modifier := range field.Modifiers() {
+		if renamed, ok := modifier.(objects.RenamedFromFieldModifier); ok {
+			return renamed
+		}
+	}
+
+	return nil
+}
+
+func assertNumberConstraint(
+	t *testing.T,
+	field objects.Field,
+	expectedKind common.NumberConstraintKind,
+	expectMin bool,
+	expectedMin string,
+	expectMax bool,
+	expectedMax string,
+) {
+	t.Helper()
+
+	constraint := field.Type().NumberConstraint()
+	if constraint == nil {
+		t.Fatalf("expected number constraint")
+	}
+
+	if constraint.Kind() != expectedKind {
+		t.Fatalf("expected constraint kind %s, got %s", expectedKind, constraint.Kind())
+	}
+
+	if constraint.HasMin() != expectMin {
+		t.Fatalf("expected HasMin %v, got %v", expectMin, constraint.HasMin())
+	}
+
+	if expectMin {
+		if constraint.Min() == nil {
+			t.Fatalf("expected min %s, got nil", expectedMin)
+		}
+
+		if constraint.Min().Raw() != expectedMin {
+			t.Fatalf("expected min %s, got %s", expectedMin, constraint.Min().Raw())
+		}
+	}
+
+	if constraint.HasMax() != expectMax {
+		t.Fatalf("expected HasMax %v, got %v", expectMax, constraint.HasMax())
+	}
+
+	if expectMax {
+		if constraint.Max() == nil {
+			t.Fatalf("expected max %s, got nil", expectedMax)
+		}
+
+		if constraint.Max().Raw() != expectedMax {
+			t.Fatalf("expected max %s, got %s", expectedMax, constraint.Max().Raw())
+		}
+	}
+}
+
+func TestParserApplicationConsumerParsesPostCreated(t *testing.T) {
+	app := NewParserApplication()
+
+	consumer, err := app.Consumer(`
+consumes PostCreated {
+  fetch post:Post from GraphDB where id == event.post.id
+
+  call EmbeddingService.Generate {
+    text = post.content
+    dimensions = 1024
+    normalize = true
+  }
+
+  create embedding:PostEmbedding {
+    post = post
+    vector = result.vector
+    score = 0.98
+    createdAt = now()
+  }
+
+  store embedding to VectorDB
+
+  update post {
+    embedding = embedding
+    scoredAt = now()
+  }
+
+  emit event:PostScored {
+    post = post
+    embedding = embedding
+  }
+
+  return embedding
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if consumer.EventName() != "PostCreated" {
+		t.Fatalf("expected PostCreated, got %s", consumer.EventName())
+	}
+
+	actions := consumer.Actions()
+	if len(actions) != 7 {
+		t.Fatalf("expected 7 actions, got %d", len(actions))
+	}
+
+	fetch := actions[0].(workflows.FetchAction)
+	if fetch.Variable().Name() != "post" || fetch.Variable().Type().Name() != "Post" {
+		t.Fatalf("expected fetch post:Post")
+	}
+	if fetch.Source() != "GraphDB" {
+		t.Fatalf("expected GraphDB")
+	}
+	if fetch.Condition().Operator() != workflows.ComparatorEqual {
+		t.Fatalf("expected ==")
+	}
+
+	call := actions[1].(workflows.CallAction)
+	if call.Target() != "EmbeddingService.Generate" {
+		t.Fatalf("expected EmbeddingService.Generate, got %s", call.Target())
+	}
+	if len(call.Assignments()) != 3 {
+		t.Fatalf("expected 3 call assignments")
+	}
+	assertAssignmentSelector(t, call.Assignments()[0], "text", []string{"post", "content"})
+	assertLiteral(t, call.Assignments()[1].Value(), common.ValueInt, "1024")
+	assertLiteral(t, call.Assignments()[2].Value(), common.ValueBool, "true")
+
+	create := actions[2].(workflows.CreateAction)
+	if create.Variable().Name() != "embedding" || create.Variable().Type().Name() != "PostEmbedding" {
+		t.Fatalf("expected create embedding:PostEmbedding")
+	}
+	if len(create.Assignments()) != 4 {
+		t.Fatalf("expected 4 create assignments")
+	}
+	assertAssignmentSelector(t, create.Assignments()[1], "vector", []string{"result", "vector"})
+	assertLiteral(t, create.Assignments()[2].Value(), common.ValueFloat, "0.98")
+	assertAssignmentFunctionCall(t, create.Assignments()[3], "createdAt", "now", 0)
+
+	store := actions[3].(workflows.StoreAction)
+	if store.VariableName() != "embedding" || store.Destination() != "VectorDB" {
+		t.Fatalf("expected store embedding to VectorDB")
+	}
+
+	update := actions[4].(workflows.UpdateAction)
+	if update.VariableName() != "post" {
+		t.Fatalf("expected update post")
+	}
+	if len(update.Assignments()) != 2 {
+		t.Fatalf("expected 2 update assignments")
+	}
+
+	emit := actions[5].(workflows.EmitAction)
+	if emit.Variable().Name() != "event" || emit.Variable().Type().Name() != "PostScored" {
+		t.Fatalf("expected emit event:PostScored")
+	}
+
+	ret := actions[6].(workflows.ReturnAction)
+	if ret.Expression().Kind() != workflows.ExpressionKindIdentifier {
+		t.Fatalf("expected identifier return")
+	}
+}
+
+func TestParserApplicationConsumerParsesComparators(t *testing.T) {
+	tests := []struct {
+		name     string
+		operator string
+		expected workflows.Comparator
+	}{
+		{"Equal", "==", workflows.ComparatorEqual},
+		{"NotEqual", "!=", workflows.ComparatorNotEqual},
+		{"LessThan", "<", workflows.ComparatorLessThan},
+		{"LessThanOrEqual", "<=", workflows.ComparatorLessThanOrEqual},
+		{"GreaterThan", ">", workflows.ComparatorGreaterThan},
+		{"GreaterThanOrEqual", ">=", workflows.ComparatorGreaterThanOrEqual},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			app := NewParserApplication()
+
+			consumer, err := app.Consumer(`
+consumes ScoreRequested {
+  fetch post:Post from GraphDB where post.score ` + test.operator + ` 10
+}
+`)
+			if err != nil {
+				t.Fatalf("expected no error, got %v", err)
+			}
+
+			fetch := consumer.Actions()[0].(workflows.FetchAction)
+			if fetch.Condition().Operator() != test.expected {
+				t.Fatalf("expected %s, got %s", test.expected, fetch.Condition().Operator())
+			}
+		})
+	}
+}
+
+func TestParserApplicationConsumerParsesTypeReferences(t *testing.T) {
+	app := NewParserApplication()
+
+	consumer, err := app.Consumer(`
+consumes BatchRequested {
+  fetch posts:List<Post> from MainDB where limit <= 100
+
+  create batch:Batch {
+    posts = posts
+    min = 1
+    max = 100
+  }
+
+  return posts
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	fetch := consumer.Actions()[0].(workflows.FetchAction)
+	if !fetch.Variable().Type().IsList() {
+		t.Fatalf("expected posts to be list")
+	}
+	if fetch.Variable().Type().Name() != "Post" {
+		t.Fatalf("expected Post, got %s", fetch.Variable().Type().Name())
+	}
+}
+
+func TestParserApplicationConsumerRejectsInvalidSyntax(t *testing.T) {
+	app := NewParserApplication()
+
+	_, err := app.Consumer(`
+consumes BadConsumer {
   return
 }
 `)
