@@ -23,10 +23,6 @@ func (v *BaseApplicationVisitor) VisitPortDecl(ctx *PortDeclContext) interface{}
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseApplicationVisitor) VisitObjectsBlock(ctx *ObjectsBlockContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BaseApplicationVisitor) VisitEndpointsBlock(ctx *EndpointsBlockContext) interface{} {
 	return v.VisitChildren(ctx)
 }

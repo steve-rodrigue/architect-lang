@@ -73,4 +73,13 @@ antlr4 \
   -Xexact-output-dir \
   -o internal/generated/deployment \
   internal/infrastructure/antlr/grammars/Deployment.g4
+
+antlr4 \
+  -Dlanguage=Go \
+  -package project \
+  -visitor \
+  -no-listener \
+  -Xexact-output-dir \
+  -o internal/generated/project \
+  internal/infrastructure/antlr/grammars/Project.g4
 ```

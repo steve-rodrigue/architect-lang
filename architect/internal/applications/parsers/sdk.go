@@ -6,6 +6,7 @@ import (
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/deployments"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/endpoints"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/projects"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/services"
 )
 
@@ -17,4 +18,5 @@ type Application interface {
 	Application(script string) (applications.Application, error)
 	Service(script string) (services.Service, error)
 	Deployment(script string) (deployments.Deployment, error)
+	Project(script string) (projects.Project, error)
 }

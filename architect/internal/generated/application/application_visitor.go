@@ -19,9 +19,6 @@ type ApplicationVisitor interface {
 	// Visit a parse tree produced by ApplicationParser#portDecl.
 	VisitPortDecl(ctx *PortDeclContext) interface{}
 
-	// Visit a parse tree produced by ApplicationParser#objectsBlock.
-	VisitObjectsBlock(ctx *ObjectsBlockContext) interface{}
-
 	// Visit a parse tree produced by ApplicationParser#endpointsBlock.
 	VisitEndpointsBlock(ctx *EndpointsBlockContext) interface{}
 

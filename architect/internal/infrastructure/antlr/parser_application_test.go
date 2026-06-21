@@ -8,6 +8,7 @@ import (
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/deployments"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/endpoints"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/projects"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/services"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/workflows"
 )
@@ -900,12 +901,6 @@ application PostService {
   emits rest on 8080
   listens events on 9090
 
-  objects {
-    "Post.arch"
-    "PostHistory.arch"
-    "PostEmbedding.arch"
-  }
-
   endpoints {
     "CreatePost.arch"
     "UpdatePost.arch"
@@ -954,12 +949,6 @@ application PostService {
 		t.Fatalf("expected second port 9090, got %d", ports[1].Number())
 	}
 
-	assertStringSlice(t, application.ObjectFiles(), []string{
-		"Post.arch",
-		"PostHistory.arch",
-		"PostEmbedding.arch",
-	})
-
 	assertStringSlice(t, application.EndpointFiles(), []string{
 		"CreatePost.arch",
 		"UpdatePost.arch",
@@ -976,9 +965,6 @@ func TestParserApplicationApplicationParsesEmptyBlocks(t *testing.T) {
 
 	application, err := app.Application(`
 application EmptyService {
-  objects {
-  }
-
   endpoints {
   }
 
@@ -996,10 +982,6 @@ application EmptyService {
 
 	if len(application.Ports()) != 0 {
 		t.Fatalf("expected 0 ports, got %d", len(application.Ports()))
-	}
-
-	if len(application.ObjectFiles()) != 0 {
-		t.Fatalf("expected 0 object files, got %d", len(application.ObjectFiles()))
 	}
 
 	if len(application.EndpointFiles()) != 0 {
@@ -1405,6 +1387,244 @@ func TestParserApplicationDeploymentRejectsNegativeReplicas(t *testing.T) {
 		Replicas(-1)
 
 	_, err := builder.Build()
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestParserApplicationProjectParsesFullProject(t *testing.T) {
+	app := NewParserApplication()
+
+	project, err := app.Project(`
+project Stadan {
+  version "0.1.0" {
+    services {
+      "maindb.arch"
+      "graphdb.arch"
+      "vectordb.arch"
+      "eventbus.arch"
+      "blog_api.arch"
+      "detector_worker.arch"
+      "embedding_service.arch"
+    }
+
+    objects {
+      "first.arch"
+      "second.arch"
+    }
+
+    deployments {
+      "dev.arch"
+      "stage.arch"
+      "prod.arch"
+    }
+
+    next_version "0.1.1" {
+      services {
+        "maindb.arch"
+      }
+
+      deployments {
+        "prod.arch"
+      }
+    }
+  }
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if project.Name() != "Stadan" {
+		t.Fatalf("expected Stadan, got %s", project.Name())
+	}
+
+	versions := project.Versions()
+	if len(versions) != 1 {
+		t.Fatalf("expected 1 version, got %d", len(versions))
+	}
+
+	version := versions[0]
+	if version.Number() != "0.1.0" {
+		t.Fatalf("expected 0.1.0, got %s", version.Number())
+	}
+
+	assertStringSlice(t, version.ServiceFiles(), []string{
+		"maindb.arch",
+		"graphdb.arch",
+		"vectordb.arch",
+		"eventbus.arch",
+		"blog_api.arch",
+		"detector_worker.arch",
+		"embedding_service.arch",
+	})
+
+	assertStringSlice(t, version.ObjectFiles(), []string{
+		"first.arch",
+		"second.arch",
+	})
+
+	assertStringSlice(t, version.DeploymentFiles(), []string{
+		"dev.arch",
+		"stage.arch",
+		"prod.arch",
+	})
+
+	nextVersions := version.NextVersions()
+	if len(nextVersions) != 1 {
+		t.Fatalf("expected 1 next version, got %d", len(nextVersions))
+	}
+
+	next := nextVersions[0]
+	if next.Number() != "0.1.1" {
+		t.Fatalf("expected 0.1.1, got %s", next.Number())
+	}
+
+	assertStringSlice(t, next.ServiceFiles(), []string{
+		"maindb.arch",
+	})
+
+	assertStringSlice(t, next.ObjectFiles(), []string{})
+
+	assertStringSlice(t, next.DeploymentFiles(), []string{
+		"prod.arch",
+	})
+
+	if len(next.NextVersions()) != 0 {
+		t.Fatalf("expected no nested next versions, got %d", len(next.NextVersions()))
+	}
+}
+
+func TestParserApplicationProjectParsesMultipleVersions(t *testing.T) {
+	app := NewParserApplication()
+
+	project, err := app.Project(`
+project Stadan {
+  version "0.1.0" {
+    services {
+      "maindb.arch"
+    }
+  }
+
+  version "0.2.0" {
+    objects {
+      "post.arch"
+    }
+
+    deployments {
+      "prod.arch"
+    }
+  }
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if project.Name() != "Stadan" {
+		t.Fatalf("expected Stadan, got %s", project.Name())
+	}
+
+	versions := project.Versions()
+	if len(versions) != 2 {
+		t.Fatalf("expected 2 versions, got %d", len(versions))
+	}
+
+	if versions[0].Number() != "0.1.0" {
+		t.Fatalf("expected first version 0.1.0, got %s", versions[0].Number())
+	}
+
+	assertStringSlice(t, versions[0].ServiceFiles(), []string{"maindb.arch"})
+
+	if versions[1].Number() != "0.2.0" {
+		t.Fatalf("expected second version 0.2.0, got %s", versions[1].Number())
+	}
+
+	assertStringSlice(t, versions[1].ObjectFiles(), []string{"post.arch"})
+	assertStringSlice(t, versions[1].DeploymentFiles(), []string{"prod.arch"})
+}
+
+func TestParserApplicationProjectParsesEmptyBlocks(t *testing.T) {
+	app := NewParserApplication()
+
+	project, err := app.Project(`
+project EmptyProject {
+  version "0.1.0" {
+    services {
+    }
+
+    objects {
+    }
+
+    deployments {
+    }
+  }
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if project.Name() != "EmptyProject" {
+		t.Fatalf("expected EmptyProject, got %s", project.Name())
+	}
+
+	version := project.Versions()[0]
+
+	assertStringSlice(t, version.ServiceFiles(), []string{})
+	assertStringSlice(t, version.ObjectFiles(), []string{})
+	assertStringSlice(t, version.DeploymentFiles(), []string{})
+
+	if len(version.NextVersions()) != 0 {
+		t.Fatalf("expected no next versions")
+	}
+}
+
+func TestParserApplicationProjectRejectsInvalidSyntax(t *testing.T) {
+	app := NewParserApplication()
+
+	_, err := app.Project(`
+project BadProject {
+  version
+}
+`)
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestParserApplicationProjectRejectsMissingVersion(t *testing.T) {
+	app := NewParserApplication()
+
+	_, err := app.Project(`
+project BadProject {
+}
+`)
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestProjectBuilderRejectsMissingName(t *testing.T) {
+	version, err := projects.NewVersionBuilder().
+		Number("0.1.0").
+		Build()
+	if err != nil {
+		t.Fatalf("expected version build to succeed, got %v", err)
+	}
+
+	_, err = projects.NewProjectBuilder().
+		AddVersion(version).
+		Build()
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestVersionBuilderRejectsMissingNumber(t *testing.T) {
+	_, err := projects.NewVersionBuilder().
+		AddServiceFile("maindb.arch").
+		Build()
 	if err == nil {
 		t.Fatalf("expected error")
 	}

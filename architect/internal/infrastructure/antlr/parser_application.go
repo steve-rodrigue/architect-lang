@@ -9,12 +9,14 @@ import (
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/deployments"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/endpoints"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/projects"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/services"
 	application_generated "github.com/steve-rodrigue/architect-lang/architect/internal/generated/application"
 	consumer_generated "github.com/steve-rodrigue/architect-lang/architect/internal/generated/consumer"
 	deployment_generated "github.com/steve-rodrigue/architect-lang/architect/internal/generated/deployment"
 	endpoint_generated "github.com/steve-rodrigue/architect-lang/architect/internal/generated/endpoint"
 	object_generated "github.com/steve-rodrigue/architect-lang/architect/internal/generated/object"
+	project_generated "github.com/steve-rodrigue/architect-lang/architect/internal/generated/project"
 	service_generated "github.com/steve-rodrigue/architect-lang/architect/internal/generated/service"
 )
 
@@ -312,4 +314,53 @@ func (p *parserApplication) Deployment(script string) (deployments.Deployment, e
 	}
 
 	return deployment, nil
+}
+
+// Project parses a project script
+func (p *parserApplication) Project(script string) (projects.Project, error) {
+	input := antlr4.NewInputStream(script)
+
+	lexer := project_generated.NewProjectLexer(input)
+	lexer.RemoveErrorListeners()
+
+	lexerErrors := &syntaxErrorListener{
+		DefaultErrorListener: antlr4.NewDefaultErrorListener(),
+	}
+	lexer.AddErrorListener(lexerErrors)
+
+	tokens := antlr4.NewCommonTokenStream(lexer, antlr4.TokenDefaultChannel)
+
+	parser := project_generated.NewProjectParser(tokens)
+	parser.BuildParseTrees = true
+	parser.RemoveErrorListeners()
+
+	parserErrors := &syntaxErrorListener{
+		DefaultErrorListener: antlr4.NewDefaultErrorListener(),
+	}
+	parser.AddErrorListener(parserErrors)
+
+	tree := parser.Program()
+
+	if lexerErrors.err != nil {
+		return nil, lexerErrors.err
+	}
+
+	if parserErrors.err != nil {
+		return nil, parserErrors.err
+	}
+
+	visitor := newProjectVisitor()
+
+	result := tree.Accept(visitor)
+
+	if visitor.err != nil {
+		return nil, visitor.err
+	}
+
+	project, ok := result.(projects.Project)
+	if !ok || project == nil {
+		return nil, fmt.Errorf("failed to parse project")
+	}
+
+	return project, nil
 }

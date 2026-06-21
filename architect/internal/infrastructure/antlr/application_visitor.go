@@ -47,11 +47,6 @@ func (v *applicationVisitor) VisitApplicationDecl(ctx *application_generated.App
 		case applications.Port:
 			builder.AddPort(value)
 
-		case objectFiles:
-			for _, file := range value {
-				builder.AddObjectFile(file)
-			}
-
 		case endpointFiles:
 			for _, file := range value {
 				builder.AddEndpointFile(file)
@@ -77,9 +72,6 @@ func (v *applicationVisitor) VisitApplicationBody(ctx *application_generated.App
 	switch {
 	case ctx.PortDecl() != nil:
 		return ctx.PortDecl().Accept(v)
-
-	case ctx.ObjectsBlock() != nil:
-		return ctx.ObjectsBlock().Accept(v)
 
 	case ctx.EndpointsBlock() != nil:
 		return ctx.EndpointsBlock().Accept(v)
@@ -115,16 +107,6 @@ func (v *applicationVisitor) VisitPortDecl(ctx *application_generated.PortDeclCo
 	}
 
 	return port
-}
-
-func (v *applicationVisitor) VisitObjectsBlock(ctx *application_generated.ObjectsBlockContext) interface{} {
-	files := make(objectFiles, 0)
-
-	for _, fileRefCtx := range ctx.AllFileRef() {
-		files = append(files, unquote(fileRefCtx.STRING().GetText()))
-	}
-
-	return files
 }
 
 func (v *applicationVisitor) VisitEndpointsBlock(ctx *application_generated.EndpointsBlockContext) interface{} {

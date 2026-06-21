@@ -10,7 +10,6 @@ applicationDecl
 
 applicationBody
     : portDecl
-    | objectsBlock
     | endpointsBlock
     | consumersBlock
     ;
@@ -18,10 +17,6 @@ applicationBody
 portDecl
     : EMITS IDENT ON INT
     | LISTENS IDENT ON INT
-    ;
-
-objectsBlock
-    : OBJECTS LBRACE fileRef* RBRACE
     ;
 
 endpointsBlock
@@ -42,7 +37,6 @@ EMITS   : 'emits';
 LISTENS : 'listens';
 ON      : 'on';
 
-OBJECTS   : 'objects';
 ENDPOINTS : 'endpoints';
 CONSUMERS : 'consumers';
 

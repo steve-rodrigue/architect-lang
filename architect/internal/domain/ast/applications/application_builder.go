@@ -5,7 +5,6 @@ import "fmt"
 type applicationBuilder struct {
 	name          string
 	ports         []Port
-	objectFiles   []string
 	endpointFiles []string
 	consumerFiles []string
 }
@@ -18,14 +17,6 @@ func (b *applicationBuilder) Name(name string) ApplicationBuilder {
 func (b *applicationBuilder) AddPort(port Port) ApplicationBuilder {
 	if port != nil {
 		b.ports = append(b.ports, port)
-	}
-
-	return b
-}
-
-func (b *applicationBuilder) AddObjectFile(file string) ApplicationBuilder {
-	if file != "" {
-		b.objectFiles = append(b.objectFiles, file)
 	}
 
 	return b
@@ -55,7 +46,6 @@ func (b *applicationBuilder) Build() (Application, error) {
 	return &application{
 		name:          b.name,
 		ports:         b.ports,
-		objectFiles:   b.objectFiles,
 		endpointFiles: b.endpointFiles,
 		consumerFiles: b.consumerFiles,
 	}, nil

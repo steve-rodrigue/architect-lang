@@ -18,7 +18,6 @@ const (
 func NewApplicationBuilder() ApplicationBuilder {
 	return &applicationBuilder{
 		ports:         make([]Port, 0),
-		objectFiles:   make([]string, 0),
 		endpointFiles: make([]string, 0),
 		consumerFiles: make([]string, 0),
 	}
@@ -33,7 +32,6 @@ func NewPortBuilder() PortBuilder {
 type ApplicationBuilder interface {
 	Name(name string) ApplicationBuilder
 	AddPort(port Port) ApplicationBuilder
-	AddObjectFile(file string) ApplicationBuilder
 	AddEndpointFile(file string) ApplicationBuilder
 	AddConsumerFile(file string) ApplicationBuilder
 	Build() (Application, error)
@@ -43,7 +41,6 @@ type ApplicationBuilder interface {
 type Application interface {
 	Name() string
 	Ports() []Port
-	ObjectFiles() []string
 	EndpointFiles() []string
 	ConsumerFiles() []string
 }

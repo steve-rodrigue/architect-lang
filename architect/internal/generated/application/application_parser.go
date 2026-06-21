@@ -32,51 +32,45 @@ var ApplicationParserStaticData struct {
 func applicationParserInit() {
 	staticData := &ApplicationParserStaticData
 	staticData.LiteralNames = []string{
-		"", "'application'", "'emits'", "'listens'", "'on'", "'objects'", "'endpoints'",
+		"", "'application'", "'emits'", "'listens'", "'on'", "'endpoints'",
 		"'consumers'", "'{'", "'}'",
 	}
 	staticData.SymbolicNames = []string{
-		"", "APPLICATION", "EMITS", "LISTENS", "ON", "OBJECTS", "ENDPOINTS",
-		"CONSUMERS", "LBRACE", "RBRACE", "IDENT", "INT", "STRING", "LINE_COMMENT",
-		"BLOCK_COMMENT", "WS",
+		"", "APPLICATION", "EMITS", "LISTENS", "ON", "ENDPOINTS", "CONSUMERS",
+		"LBRACE", "RBRACE", "IDENT", "INT", "STRING", "LINE_COMMENT", "BLOCK_COMMENT",
+		"WS",
 	}
 	staticData.RuleNames = []string{
-		"program", "applicationDecl", "applicationBody", "portDecl", "objectsBlock",
-		"endpointsBlock", "consumersBlock", "fileRef",
+		"program", "applicationDecl", "applicationBody", "portDecl", "endpointsBlock",
+		"consumersBlock", "fileRef",
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 15, 79, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
-		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1,
-		1, 1, 1, 5, 1, 24, 8, 1, 10, 1, 12, 1, 27, 9, 1, 1, 1, 1, 1, 1, 2, 1, 2,
-		1, 2, 1, 2, 3, 2, 35, 8, 2, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1,
-		3, 3, 3, 45, 8, 3, 1, 4, 1, 4, 1, 4, 5, 4, 50, 8, 4, 10, 4, 12, 4, 53,
-		9, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 5, 5, 60, 8, 5, 10, 5, 12, 5, 63, 9,
-		5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 6, 5, 6, 70, 8, 6, 10, 6, 12, 6, 73, 9, 6,
-		1, 6, 1, 6, 1, 7, 1, 7, 1, 7, 0, 0, 8, 0, 2, 4, 6, 8, 10, 12, 14, 0, 0,
-		78, 0, 16, 1, 0, 0, 0, 2, 19, 1, 0, 0, 0, 4, 34, 1, 0, 0, 0, 6, 44, 1,
-		0, 0, 0, 8, 46, 1, 0, 0, 0, 10, 56, 1, 0, 0, 0, 12, 66, 1, 0, 0, 0, 14,
-		76, 1, 0, 0, 0, 16, 17, 3, 2, 1, 0, 17, 18, 5, 0, 0, 1, 18, 1, 1, 0, 0,
-		0, 19, 20, 5, 1, 0, 0, 20, 21, 5, 10, 0, 0, 21, 25, 5, 8, 0, 0, 22, 24,
-		3, 4, 2, 0, 23, 22, 1, 0, 0, 0, 24, 27, 1, 0, 0, 0, 25, 23, 1, 0, 0, 0,
-		25, 26, 1, 0, 0, 0, 26, 28, 1, 0, 0, 0, 27, 25, 1, 0, 0, 0, 28, 29, 5,
-		9, 0, 0, 29, 3, 1, 0, 0, 0, 30, 35, 3, 6, 3, 0, 31, 35, 3, 8, 4, 0, 32,
-		35, 3, 10, 5, 0, 33, 35, 3, 12, 6, 0, 34, 30, 1, 0, 0, 0, 34, 31, 1, 0,
-		0, 0, 34, 32, 1, 0, 0, 0, 34, 33, 1, 0, 0, 0, 35, 5, 1, 0, 0, 0, 36, 37,
-		5, 2, 0, 0, 37, 38, 5, 10, 0, 0, 38, 39, 5, 4, 0, 0, 39, 45, 5, 11, 0,
-		0, 40, 41, 5, 3, 0, 0, 41, 42, 5, 10, 0, 0, 42, 43, 5, 4, 0, 0, 43, 45,
-		5, 11, 0, 0, 44, 36, 1, 0, 0, 0, 44, 40, 1, 0, 0, 0, 45, 7, 1, 0, 0, 0,
-		46, 47, 5, 5, 0, 0, 47, 51, 5, 8, 0, 0, 48, 50, 3, 14, 7, 0, 49, 48, 1,
-		0, 0, 0, 50, 53, 1, 0, 0, 0, 51, 49, 1, 0, 0, 0, 51, 52, 1, 0, 0, 0, 52,
-		54, 1, 0, 0, 0, 53, 51, 1, 0, 0, 0, 54, 55, 5, 9, 0, 0, 55, 9, 1, 0, 0,
-		0, 56, 57, 5, 6, 0, 0, 57, 61, 5, 8, 0, 0, 58, 60, 3, 14, 7, 0, 59, 58,
-		1, 0, 0, 0, 60, 63, 1, 0, 0, 0, 61, 59, 1, 0, 0, 0, 61, 62, 1, 0, 0, 0,
-		62, 64, 1, 0, 0, 0, 63, 61, 1, 0, 0, 0, 64, 65, 5, 9, 0, 0, 65, 11, 1,
-		0, 0, 0, 66, 67, 5, 7, 0, 0, 67, 71, 5, 8, 0, 0, 68, 70, 3, 14, 7, 0, 69,
-		68, 1, 0, 0, 0, 70, 73, 1, 0, 0, 0, 71, 69, 1, 0, 0, 0, 71, 72, 1, 0, 0,
-		0, 72, 74, 1, 0, 0, 0, 73, 71, 1, 0, 0, 0, 74, 75, 5, 9, 0, 0, 75, 13,
-		1, 0, 0, 0, 76, 77, 5, 12, 0, 0, 77, 15, 1, 0, 0, 0, 6, 25, 34, 44, 51,
-		61, 71,
+		4, 1, 14, 66, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 2, 5, 7, 5, 2, 6, 7, 6, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 5,
+		1, 22, 8, 1, 10, 1, 12, 1, 25, 9, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 3, 2,
+		32, 8, 2, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 3, 3, 42, 8,
+		3, 1, 4, 1, 4, 1, 4, 5, 4, 47, 8, 4, 10, 4, 12, 4, 50, 9, 4, 1, 4, 1, 4,
+		1, 5, 1, 5, 1, 5, 5, 5, 57, 8, 5, 10, 5, 12, 5, 60, 9, 5, 1, 5, 1, 5, 1,
+		6, 1, 6, 1, 6, 0, 0, 7, 0, 2, 4, 6, 8, 10, 12, 0, 0, 64, 0, 14, 1, 0, 0,
+		0, 2, 17, 1, 0, 0, 0, 4, 31, 1, 0, 0, 0, 6, 41, 1, 0, 0, 0, 8, 43, 1, 0,
+		0, 0, 10, 53, 1, 0, 0, 0, 12, 63, 1, 0, 0, 0, 14, 15, 3, 2, 1, 0, 15, 16,
+		5, 0, 0, 1, 16, 1, 1, 0, 0, 0, 17, 18, 5, 1, 0, 0, 18, 19, 5, 9, 0, 0,
+		19, 23, 5, 7, 0, 0, 20, 22, 3, 4, 2, 0, 21, 20, 1, 0, 0, 0, 22, 25, 1,
+		0, 0, 0, 23, 21, 1, 0, 0, 0, 23, 24, 1, 0, 0, 0, 24, 26, 1, 0, 0, 0, 25,
+		23, 1, 0, 0, 0, 26, 27, 5, 8, 0, 0, 27, 3, 1, 0, 0, 0, 28, 32, 3, 6, 3,
+		0, 29, 32, 3, 8, 4, 0, 30, 32, 3, 10, 5, 0, 31, 28, 1, 0, 0, 0, 31, 29,
+		1, 0, 0, 0, 31, 30, 1, 0, 0, 0, 32, 5, 1, 0, 0, 0, 33, 34, 5, 2, 0, 0,
+		34, 35, 5, 9, 0, 0, 35, 36, 5, 4, 0, 0, 36, 42, 5, 10, 0, 0, 37, 38, 5,
+		3, 0, 0, 38, 39, 5, 9, 0, 0, 39, 40, 5, 4, 0, 0, 40, 42, 5, 10, 0, 0, 41,
+		33, 1, 0, 0, 0, 41, 37, 1, 0, 0, 0, 42, 7, 1, 0, 0, 0, 43, 44, 5, 5, 0,
+		0, 44, 48, 5, 7, 0, 0, 45, 47, 3, 12, 6, 0, 46, 45, 1, 0, 0, 0, 47, 50,
+		1, 0, 0, 0, 48, 46, 1, 0, 0, 0, 48, 49, 1, 0, 0, 0, 49, 51, 1, 0, 0, 0,
+		50, 48, 1, 0, 0, 0, 51, 52, 5, 8, 0, 0, 52, 9, 1, 0, 0, 0, 53, 54, 5, 6,
+		0, 0, 54, 58, 5, 7, 0, 0, 55, 57, 3, 12, 6, 0, 56, 55, 1, 0, 0, 0, 57,
+		60, 1, 0, 0, 0, 58, 56, 1, 0, 0, 0, 58, 59, 1, 0, 0, 0, 59, 61, 1, 0, 0,
+		0, 60, 58, 1, 0, 0, 0, 61, 62, 5, 8, 0, 0, 62, 11, 1, 0, 0, 0, 63, 64,
+		5, 11, 0, 0, 64, 13, 1, 0, 0, 0, 5, 23, 31, 41, 48, 58,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -119,17 +113,16 @@ const (
 	ApplicationParserEMITS         = 2
 	ApplicationParserLISTENS       = 3
 	ApplicationParserON            = 4
-	ApplicationParserOBJECTS       = 5
-	ApplicationParserENDPOINTS     = 6
-	ApplicationParserCONSUMERS     = 7
-	ApplicationParserLBRACE        = 8
-	ApplicationParserRBRACE        = 9
-	ApplicationParserIDENT         = 10
-	ApplicationParserINT           = 11
-	ApplicationParserSTRING        = 12
-	ApplicationParserLINE_COMMENT  = 13
-	ApplicationParserBLOCK_COMMENT = 14
-	ApplicationParserWS            = 15
+	ApplicationParserENDPOINTS     = 5
+	ApplicationParserCONSUMERS     = 6
+	ApplicationParserLBRACE        = 7
+	ApplicationParserRBRACE        = 8
+	ApplicationParserIDENT         = 9
+	ApplicationParserINT           = 10
+	ApplicationParserSTRING        = 11
+	ApplicationParserLINE_COMMENT  = 12
+	ApplicationParserBLOCK_COMMENT = 13
+	ApplicationParserWS            = 14
 )
 
 // ApplicationParser rules.
@@ -138,10 +131,9 @@ const (
 	ApplicationParserRULE_applicationDecl = 1
 	ApplicationParserRULE_applicationBody = 2
 	ApplicationParserRULE_portDecl        = 3
-	ApplicationParserRULE_objectsBlock    = 4
-	ApplicationParserRULE_endpointsBlock  = 5
-	ApplicationParserRULE_consumersBlock  = 6
-	ApplicationParserRULE_fileRef         = 7
+	ApplicationParserRULE_endpointsBlock  = 4
+	ApplicationParserRULE_consumersBlock  = 5
+	ApplicationParserRULE_fileRef         = 6
 )
 
 // IProgramContext is an interface to support dynamic dispatch.
@@ -234,11 +226,11 @@ func (p *ApplicationParser) Program() (localctx IProgramContext) {
 	p.EnterRule(localctx, 0, ApplicationParserRULE_program)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(16)
+		p.SetState(14)
 		p.ApplicationDecl()
 	}
 	{
-		p.SetState(17)
+		p.SetState(15)
 		p.Match(ApplicationParserEOF)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -392,7 +384,7 @@ func (p *ApplicationParser) ApplicationDecl() (localctx IApplicationDeclContext)
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(19)
+		p.SetState(17)
 		p.Match(ApplicationParserAPPLICATION)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -400,7 +392,7 @@ func (p *ApplicationParser) ApplicationDecl() (localctx IApplicationDeclContext)
 		}
 	}
 	{
-		p.SetState(20)
+		p.SetState(18)
 		p.Match(ApplicationParserIDENT)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -408,27 +400,27 @@ func (p *ApplicationParser) ApplicationDecl() (localctx IApplicationDeclContext)
 		}
 	}
 	{
-		p.SetState(21)
+		p.SetState(19)
 		p.Match(ApplicationParserLBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(25)
+	p.SetState(23)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&236) != 0 {
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&108) != 0 {
 		{
-			p.SetState(22)
+			p.SetState(20)
 			p.ApplicationBody()
 		}
 
-		p.SetState(27)
+		p.SetState(25)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -436,7 +428,7 @@ func (p *ApplicationParser) ApplicationDecl() (localctx IApplicationDeclContext)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(28)
+		p.SetState(26)
 		p.Match(ApplicationParserRBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -466,7 +458,6 @@ type IApplicationBodyContext interface {
 
 	// Getter signatures
 	PortDecl() IPortDeclContext
-	ObjectsBlock() IObjectsBlockContext
 	EndpointsBlock() IEndpointsBlockContext
 	ConsumersBlock() IConsumersBlockContext
 
@@ -522,22 +513,6 @@ func (s *ApplicationBodyContext) PortDecl() IPortDeclContext {
 	return t.(IPortDeclContext)
 }
 
-func (s *ApplicationBodyContext) ObjectsBlock() IObjectsBlockContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IObjectsBlockContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IObjectsBlockContext)
-}
-
 func (s *ApplicationBodyContext) EndpointsBlock() IEndpointsBlockContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
@@ -591,7 +566,7 @@ func (s *ApplicationBodyContext) Accept(visitor antlr.ParseTreeVisitor) interfac
 func (p *ApplicationParser) ApplicationBody() (localctx IApplicationBodyContext) {
 	localctx = NewApplicationBodyContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 4, ApplicationParserRULE_applicationBody)
-	p.SetState(34)
+	p.SetState(31)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -601,28 +576,21 @@ func (p *ApplicationParser) ApplicationBody() (localctx IApplicationBodyContext)
 	case ApplicationParserEMITS, ApplicationParserLISTENS:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(30)
+			p.SetState(28)
 			p.PortDecl()
 		}
 
-	case ApplicationParserOBJECTS:
+	case ApplicationParserENDPOINTS:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(31)
-			p.ObjectsBlock()
-		}
-
-	case ApplicationParserENDPOINTS:
-		p.EnterOuterAlt(localctx, 3)
-		{
-			p.SetState(32)
+			p.SetState(29)
 			p.EndpointsBlock()
 		}
 
 	case ApplicationParserCONSUMERS:
-		p.EnterOuterAlt(localctx, 4)
+		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(33)
+			p.SetState(30)
 			p.ConsumersBlock()
 		}
 
@@ -735,7 +703,7 @@ func (s *PortDeclContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 func (p *ApplicationParser) PortDecl() (localctx IPortDeclContext) {
 	localctx = NewPortDeclContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 6, ApplicationParserRULE_portDecl)
-	p.SetState(44)
+	p.SetState(41)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -745,7 +713,7 @@ func (p *ApplicationParser) PortDecl() (localctx IPortDeclContext) {
 	case ApplicationParserEMITS:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(36)
+			p.SetState(33)
 			p.Match(ApplicationParserEMITS)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -753,7 +721,7 @@ func (p *ApplicationParser) PortDecl() (localctx IPortDeclContext) {
 			}
 		}
 		{
-			p.SetState(37)
+			p.SetState(34)
 			p.Match(ApplicationParserIDENT)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -761,7 +729,7 @@ func (p *ApplicationParser) PortDecl() (localctx IPortDeclContext) {
 			}
 		}
 		{
-			p.SetState(38)
+			p.SetState(35)
 			p.Match(ApplicationParserON)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -769,7 +737,7 @@ func (p *ApplicationParser) PortDecl() (localctx IPortDeclContext) {
 			}
 		}
 		{
-			p.SetState(39)
+			p.SetState(36)
 			p.Match(ApplicationParserINT)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -780,7 +748,7 @@ func (p *ApplicationParser) PortDecl() (localctx IPortDeclContext) {
 	case ApplicationParserLISTENS:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(40)
+			p.SetState(37)
 			p.Match(ApplicationParserLISTENS)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -788,7 +756,7 @@ func (p *ApplicationParser) PortDecl() (localctx IPortDeclContext) {
 			}
 		}
 		{
-			p.SetState(41)
+			p.SetState(38)
 			p.Match(ApplicationParserIDENT)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -796,7 +764,7 @@ func (p *ApplicationParser) PortDecl() (localctx IPortDeclContext) {
 			}
 		}
 		{
-			p.SetState(42)
+			p.SetState(39)
 			p.Match(ApplicationParserON)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -804,7 +772,7 @@ func (p *ApplicationParser) PortDecl() (localctx IPortDeclContext) {
 			}
 		}
 		{
-			p.SetState(43)
+			p.SetState(40)
 			p.Match(ApplicationParserINT)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -815,191 +783,6 @@ func (p *ApplicationParser) PortDecl() (localctx IPortDeclContext) {
 	default:
 		p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 		goto errorExit
-	}
-
-errorExit:
-	if p.HasError() {
-		v := p.GetError()
-		localctx.SetException(v)
-		p.GetErrorHandler().ReportError(p, v)
-		p.GetErrorHandler().Recover(p, v)
-		p.SetError(nil)
-	}
-	p.ExitRule()
-	return localctx
-	goto errorExit // Trick to prevent compiler error if the label is not used
-}
-
-// IObjectsBlockContext is an interface to support dynamic dispatch.
-type IObjectsBlockContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
-
-	// Getter signatures
-	OBJECTS() antlr.TerminalNode
-	LBRACE() antlr.TerminalNode
-	RBRACE() antlr.TerminalNode
-	AllFileRef() []IFileRefContext
-	FileRef(i int) IFileRefContext
-
-	// IsObjectsBlockContext differentiates from other interfaces.
-	IsObjectsBlockContext()
-}
-
-type ObjectsBlockContext struct {
-	antlr.BaseParserRuleContext
-	parser antlr.Parser
-}
-
-func NewEmptyObjectsBlockContext() *ObjectsBlockContext {
-	var p = new(ObjectsBlockContext)
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ApplicationParserRULE_objectsBlock
-	return p
-}
-
-func InitEmptyObjectsBlockContext(p *ObjectsBlockContext) {
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = ApplicationParserRULE_objectsBlock
-}
-
-func (*ObjectsBlockContext) IsObjectsBlockContext() {}
-
-func NewObjectsBlockContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ObjectsBlockContext {
-	var p = new(ObjectsBlockContext)
-
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
-
-	p.parser = parser
-	p.RuleIndex = ApplicationParserRULE_objectsBlock
-
-	return p
-}
-
-func (s *ObjectsBlockContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *ObjectsBlockContext) OBJECTS() antlr.TerminalNode {
-	return s.GetToken(ApplicationParserOBJECTS, 0)
-}
-
-func (s *ObjectsBlockContext) LBRACE() antlr.TerminalNode {
-	return s.GetToken(ApplicationParserLBRACE, 0)
-}
-
-func (s *ObjectsBlockContext) RBRACE() antlr.TerminalNode {
-	return s.GetToken(ApplicationParserRBRACE, 0)
-}
-
-func (s *ObjectsBlockContext) AllFileRef() []IFileRefContext {
-	children := s.GetChildren()
-	len := 0
-	for _, ctx := range children {
-		if _, ok := ctx.(IFileRefContext); ok {
-			len++
-		}
-	}
-
-	tst := make([]IFileRefContext, len)
-	i := 0
-	for _, ctx := range children {
-		if t, ok := ctx.(IFileRefContext); ok {
-			tst[i] = t.(IFileRefContext)
-			i++
-		}
-	}
-
-	return tst
-}
-
-func (s *ObjectsBlockContext) FileRef(i int) IFileRefContext {
-	var t antlr.RuleContext
-	j := 0
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IFileRefContext); ok {
-			if j == i {
-				t = ctx.(antlr.RuleContext)
-				break
-			}
-			j++
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IFileRefContext)
-}
-
-func (s *ObjectsBlockContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *ObjectsBlockContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-func (s *ObjectsBlockContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case ApplicationVisitor:
-		return t.VisitObjectsBlock(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-func (p *ApplicationParser) ObjectsBlock() (localctx IObjectsBlockContext) {
-	localctx = NewObjectsBlockContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, ApplicationParserRULE_objectsBlock)
-	var _la int
-
-	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(46)
-		p.Match(ApplicationParserOBJECTS)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
-	}
-	{
-		p.SetState(47)
-		p.Match(ApplicationParserLBRACE)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
-	}
-	p.SetState(51)
-	p.GetErrorHandler().Sync(p)
-	if p.HasError() {
-		goto errorExit
-	}
-	_la = p.GetTokenStream().LA(1)
-
-	for _la == ApplicationParserSTRING {
-		{
-			p.SetState(48)
-			p.FileRef()
-		}
-
-		p.SetState(53)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
-	}
-	{
-		p.SetState(54)
-		p.Match(ApplicationParserRBRACE)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
 	}
 
 errorExit:
@@ -1138,12 +921,12 @@ func (s *EndpointsBlockContext) Accept(visitor antlr.ParseTreeVisitor) interface
 
 func (p *ApplicationParser) EndpointsBlock() (localctx IEndpointsBlockContext) {
 	localctx = NewEndpointsBlockContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 10, ApplicationParserRULE_endpointsBlock)
+	p.EnterRule(localctx, 8, ApplicationParserRULE_endpointsBlock)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(56)
+		p.SetState(43)
 		p.Match(ApplicationParserENDPOINTS)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1151,14 +934,14 @@ func (p *ApplicationParser) EndpointsBlock() (localctx IEndpointsBlockContext) {
 		}
 	}
 	{
-		p.SetState(57)
+		p.SetState(44)
 		p.Match(ApplicationParserLBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(61)
+	p.SetState(48)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1167,11 +950,11 @@ func (p *ApplicationParser) EndpointsBlock() (localctx IEndpointsBlockContext) {
 
 	for _la == ApplicationParserSTRING {
 		{
-			p.SetState(58)
+			p.SetState(45)
 			p.FileRef()
 		}
 
-		p.SetState(63)
+		p.SetState(50)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1179,7 +962,7 @@ func (p *ApplicationParser) EndpointsBlock() (localctx IEndpointsBlockContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(64)
+		p.SetState(51)
 		p.Match(ApplicationParserRBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1323,12 +1106,12 @@ func (s *ConsumersBlockContext) Accept(visitor antlr.ParseTreeVisitor) interface
 
 func (p *ApplicationParser) ConsumersBlock() (localctx IConsumersBlockContext) {
 	localctx = NewConsumersBlockContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 12, ApplicationParserRULE_consumersBlock)
+	p.EnterRule(localctx, 10, ApplicationParserRULE_consumersBlock)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(66)
+		p.SetState(53)
 		p.Match(ApplicationParserCONSUMERS)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1336,14 +1119,14 @@ func (p *ApplicationParser) ConsumersBlock() (localctx IConsumersBlockContext) {
 		}
 	}
 	{
-		p.SetState(67)
+		p.SetState(54)
 		p.Match(ApplicationParserLBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(71)
+	p.SetState(58)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1352,11 +1135,11 @@ func (p *ApplicationParser) ConsumersBlock() (localctx IConsumersBlockContext) {
 
 	for _la == ApplicationParserSTRING {
 		{
-			p.SetState(68)
+			p.SetState(55)
 			p.FileRef()
 		}
 
-		p.SetState(73)
+		p.SetState(60)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1364,7 +1147,7 @@ func (p *ApplicationParser) ConsumersBlock() (localctx IConsumersBlockContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(74)
+		p.SetState(61)
 		p.Match(ApplicationParserRBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1455,10 +1238,10 @@ func (s *FileRefContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *ApplicationParser) FileRef() (localctx IFileRefContext) {
 	localctx = NewFileRefContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, ApplicationParserRULE_fileRef)
+	p.EnterRule(localctx, 12, ApplicationParserRULE_fileRef)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(76)
+		p.SetState(63)
 		p.Match(ApplicationParserSTRING)
 		if p.HasError() {
 			// Recognition error - abort rule
