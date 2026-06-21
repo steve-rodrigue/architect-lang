@@ -3,6 +3,7 @@ package parsers
 import (
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/applications"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/consumers"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/deployments"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/endpoints"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/services"
@@ -15,4 +16,5 @@ type Application interface {
 	Consumer(script string) (consumers.Consumer, error)
 	Application(script string) (applications.Application, error)
 	Service(script string) (services.Service, error)
+	Deployment(script string) (deployments.Deployment, error)
 }

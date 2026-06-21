@@ -5,6 +5,7 @@ import (
 
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/applications"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/common"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/deployments"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/endpoints"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/services"
@@ -1211,6 +1212,199 @@ service BadService go {
   exposes 0
 }
 `)
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestParserApplicationDeploymentParsesDevDeployment(t *testing.T) {
+	app := NewParserApplication()
+
+	deployment, err := app.Deployment(`
+deployment dev {
+  vendor docker_compose
+
+  service BlogAPI {
+    replicas 1
+  }
+
+  service MainDB {
+    volume "main-db-data"
+  }
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if deployment.Name() != "dev" {
+		t.Fatalf("expected dev, got %s", deployment.Name())
+	}
+
+	if deployment.Vendor() != deployments.VendorDockerCompose {
+		t.Fatalf("expected docker_compose, got %s", deployment.Vendor())
+	}
+
+	if deployment.Inventory() != "" {
+		t.Fatalf("expected empty inventory, got %s", deployment.Inventory())
+	}
+
+	services := deployment.Services()
+	if len(services) != 2 {
+		t.Fatalf("expected 2 services, got %d", len(services))
+	}
+
+	blogAPI := services[0]
+	if blogAPI.Name() != "BlogAPI" {
+		t.Fatalf("expected BlogAPI, got %s", blogAPI.Name())
+	}
+
+	if !blogAPI.HasReplicas() || blogAPI.Replicas() != 1 {
+		t.Fatalf("expected BlogAPI replicas 1")
+	}
+
+	mainDB := services[1]
+	if mainDB.Name() != "MainDB" {
+		t.Fatalf("expected MainDB, got %s", mainDB.Name())
+	}
+
+	if mainDB.Volume() != "main-db-data" {
+		t.Fatalf("expected main-db-data, got %s", mainDB.Volume())
+	}
+}
+
+func TestParserApplicationDeploymentParsesProdDeployment(t *testing.T) {
+	app := NewParserApplication()
+
+	deployment, err := app.Deployment(`
+deployment prod {
+  vendor ansible
+  inventory "inventories/prod.ini"
+
+  service BlogAPI {
+    replicas 3
+    domain "api.stadan.org"
+  }
+
+  service MainDB {
+    host "prod-db-01"
+    volume "/var/lib/postgresql/data"
+    backup true
+  }
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if deployment.Name() != "prod" {
+		t.Fatalf("expected prod, got %s", deployment.Name())
+	}
+
+	if deployment.Vendor() != deployments.VendorAnsible {
+		t.Fatalf("expected ansible, got %s", deployment.Vendor())
+	}
+
+	if deployment.Inventory() != "inventories/prod.ini" {
+		t.Fatalf("expected inventories/prod.ini, got %s", deployment.Inventory())
+	}
+
+	services := deployment.Services()
+	if len(services) != 2 {
+		t.Fatalf("expected 2 services, got %d", len(services))
+	}
+
+	blogAPI := services[0]
+	if blogAPI.Name() != "BlogAPI" {
+		t.Fatalf("expected BlogAPI, got %s", blogAPI.Name())
+	}
+
+	if !blogAPI.HasReplicas() || blogAPI.Replicas() != 3 {
+		t.Fatalf("expected BlogAPI replicas 3")
+	}
+
+	if blogAPI.Domain() != "api.stadan.org" {
+		t.Fatalf("expected api.stadan.org, got %s", blogAPI.Domain())
+	}
+
+	mainDB := services[1]
+	if mainDB.Name() != "MainDB" {
+		t.Fatalf("expected MainDB, got %s", mainDB.Name())
+	}
+
+	if mainDB.Host() != "prod-db-01" {
+		t.Fatalf("expected prod-db-01, got %s", mainDB.Host())
+	}
+
+	if mainDB.Volume() != "/var/lib/postgresql/data" {
+		t.Fatalf("expected /var/lib/postgresql/data, got %s", mainDB.Volume())
+	}
+
+	if !mainDB.HasBackup() || !mainDB.Backup() {
+		t.Fatalf("expected backup true")
+	}
+}
+
+func TestParserApplicationDeploymentParsesBackupFalse(t *testing.T) {
+	app := NewParserApplication()
+
+	deployment, err := app.Deployment(`
+deployment staging {
+  vendor ansible
+
+  service MainDB {
+    backup false
+  }
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	service := deployment.Services()[0]
+	if !service.HasBackup() {
+		t.Fatalf("expected backup to be set")
+	}
+
+	if service.Backup() {
+		t.Fatalf("expected backup false")
+	}
+}
+
+func TestParserApplicationDeploymentRejectsInvalidSyntax(t *testing.T) {
+	app := NewParserApplication()
+
+	_, err := app.Deployment(`
+deployment bad {
+  vendor
+}
+`)
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestParserApplicationDeploymentRejectsMissingVendor(t *testing.T) {
+	app := NewParserApplication()
+
+	_, err := app.Deployment(`
+deployment dev {
+  service BlogAPI {
+    replicas 1
+  }
+}
+`)
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestParserApplicationDeploymentRejectsNegativeReplicas(t *testing.T) {
+	builder := deployments.NewServiceDeploymentBuilder().
+		Name("BlogAPI").
+		Replicas(-1)
+
+	_, err := builder.Build()
 	if err == nil {
 		t.Fatalf("expected error")
 	}
