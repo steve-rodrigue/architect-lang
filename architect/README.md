@@ -46,4 +46,13 @@ antlr4 \
   -Xexact-output-dir \
   -o internal/generated/consumer \
   internal/infrastructure/antlr/grammars/Consumer.g4
+
+antlr4 \
+  -Dlanguage=Go \
+  -package application \
+  -visitor \
+  -no-listener \
+  -Xexact-output-dir \
+  -o internal/generated/application \
+  internal/infrastructure/antlr/grammars/Application.g4
 ```

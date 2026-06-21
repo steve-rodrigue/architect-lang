@@ -4,9 +4,11 @@ import (
 	"fmt"
 
 	antlr4 "github.com/antlr4-go/antlr/v4"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/applications"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/consumers"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/endpoints"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
+	application_generated "github.com/steve-rodrigue/architect-lang/architect/internal/generated/application"
 	consumer_generated "github.com/steve-rodrigue/architect-lang/architect/internal/generated/consumer"
 	endpoint_generated "github.com/steve-rodrigue/architect-lang/architect/internal/generated/endpoint"
 	object_generated "github.com/steve-rodrigue/architect-lang/architect/internal/generated/object"
@@ -159,4 +161,53 @@ func (p *parserApplication) Consumer(script string) (consumers.Consumer, error) 
 	}
 
 	return consumer, nil
+}
+
+// Application parses an application script
+func (p *parserApplication) Application(script string) (applications.Application, error) {
+	input := antlr4.NewInputStream(script)
+
+	lexer := application_generated.NewApplicationLexer(input)
+	lexer.RemoveErrorListeners()
+
+	lexerErrors := &syntaxErrorListener{
+		DefaultErrorListener: antlr4.NewDefaultErrorListener(),
+	}
+	lexer.AddErrorListener(lexerErrors)
+
+	tokens := antlr4.NewCommonTokenStream(lexer, antlr4.TokenDefaultChannel)
+
+	parser := application_generated.NewApplicationParser(tokens)
+	parser.BuildParseTrees = true
+	parser.RemoveErrorListeners()
+
+	parserErrors := &syntaxErrorListener{
+		DefaultErrorListener: antlr4.NewDefaultErrorListener(),
+	}
+	parser.AddErrorListener(parserErrors)
+
+	tree := parser.Program()
+
+	if lexerErrors.err != nil {
+		return nil, lexerErrors.err
+	}
+
+	if parserErrors.err != nil {
+		return nil, parserErrors.err
+	}
+
+	visitor := newApplicationVisitor()
+
+	result := tree.Accept(visitor)
+
+	if visitor.err != nil {
+		return nil, visitor.err
+	}
+
+	application, ok := result.(applications.Application)
+	if !ok || application == nil {
+		return nil, fmt.Errorf("failed to parse application")
+	}
+
+	return application, nil
 }

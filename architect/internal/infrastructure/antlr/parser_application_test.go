@@ -3,6 +3,7 @@ package antlr
 import (
 	"testing"
 
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/applications"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/common"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/endpoints"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
@@ -886,5 +887,155 @@ consumes BadConsumer {
 `)
 	if err == nil {
 		t.Fatalf("expected error")
+	}
+}
+
+func TestParserApplicationApplicationParsesFullApplication(t *testing.T) {
+	app := NewParserApplication()
+
+	application, err := app.Application(`
+application PostService {
+  emits rest on 8080
+  listens events on 9090
+
+  objects {
+    "Post.arch"
+    "PostHistory.arch"
+    "PostEmbedding.arch"
+  }
+
+  endpoints {
+    "CreatePost.arch"
+    "UpdatePost.arch"
+  }
+
+  consumers {
+    "PostCreated.arch"
+    "PostUpdated.arch"
+  }
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if application.Name() != "PostService" {
+		t.Fatalf("expected PostService, got %s", application.Name())
+	}
+
+	ports := application.Ports()
+	if len(ports) != 2 {
+		t.Fatalf("expected 2 ports, got %d", len(ports))
+	}
+
+	if ports[0].Direction() != applications.PortDirectionEmit {
+		t.Fatalf("expected first port emit, got %s", ports[0].Direction())
+	}
+
+	if ports[0].Kind() != applications.PortKind("rest") {
+		t.Fatalf("expected first port rest, got %s", ports[0].Kind())
+	}
+
+	if ports[0].Number() != 8080 {
+		t.Fatalf("expected first port 8080, got %d", ports[0].Number())
+	}
+
+	if ports[1].Direction() != applications.PortDirectionListen {
+		t.Fatalf("expected second port listen, got %s", ports[1].Direction())
+	}
+
+	if ports[1].Kind() != applications.PortKind("events") {
+		t.Fatalf("expected second port events, got %s", ports[1].Kind())
+	}
+
+	if ports[1].Number() != 9090 {
+		t.Fatalf("expected second port 9090, got %d", ports[1].Number())
+	}
+
+	assertStringSlice(t, application.ObjectFiles(), []string{
+		"Post.arch",
+		"PostHistory.arch",
+		"PostEmbedding.arch",
+	})
+
+	assertStringSlice(t, application.EndpointFiles(), []string{
+		"CreatePost.arch",
+		"UpdatePost.arch",
+	})
+
+	assertStringSlice(t, application.ConsumerFiles(), []string{
+		"PostCreated.arch",
+		"PostUpdated.arch",
+	})
+}
+
+func TestParserApplicationApplicationParsesEmptyBlocks(t *testing.T) {
+	app := NewParserApplication()
+
+	application, err := app.Application(`
+application EmptyService {
+  objects {
+  }
+
+  endpoints {
+  }
+
+  consumers {
+  }
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if application.Name() != "EmptyService" {
+		t.Fatalf("expected EmptyService, got %s", application.Name())
+	}
+
+	if len(application.Ports()) != 0 {
+		t.Fatalf("expected 0 ports, got %d", len(application.Ports()))
+	}
+
+	if len(application.ObjectFiles()) != 0 {
+		t.Fatalf("expected 0 object files, got %d", len(application.ObjectFiles()))
+	}
+
+	if len(application.EndpointFiles()) != 0 {
+		t.Fatalf("expected 0 endpoint files, got %d", len(application.EndpointFiles()))
+	}
+
+	if len(application.ConsumerFiles()) != 0 {
+		t.Fatalf("expected 0 consumer files, got %d", len(application.ConsumerFiles()))
+	}
+}
+
+func TestParserApplicationApplicationRejectsInvalidSyntax(t *testing.T) {
+	app := NewParserApplication()
+
+	_, err := app.Application(`
+application BadService {
+  emits rest on
+}
+`)
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func assertStringSlice(
+	t *testing.T,
+	actual []string,
+	expected []string,
+) {
+	t.Helper()
+
+	if len(actual) != len(expected) {
+		t.Fatalf("expected %d items, got %d: %v", len(expected), len(actual), actual)
+	}
+
+	for i := range expected {
+		if actual[i] != expected[i] {
+			t.Fatalf("expected item %d to be %q, got %q", i, expected[i], actual[i])
+		}
 	}
 }
