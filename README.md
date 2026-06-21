@@ -298,11 +298,21 @@ posts List<Post>?
 
 Current literal value kinds:
 
-text string int float bool 
+```text
+string
+int
+float
+bool
+```
 
 Examples:
 
-architect name = "Steve" count = 10 score = 0.98 enabled = true 
+```architect
+name = "Steve"
+count = 10
+score = 0.98
+enabled = true
+```
 
 ## Number Constraints
 
