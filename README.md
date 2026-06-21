@@ -4,6 +4,9 @@ Architect is an AI-native software architecture language and compiler.
 
 It describes domain models, services, APIs, event consumers, deployments, and versioned systems at a high level. The architecture becomes the source of truth, enabling deterministic code generation, refactoring, and long-term evolution of software systems.
 
+> [!NOTE]
+> Architect is under active development. The parser, source loading, and project model resolution are already implemented. The code generation pipeline and execution engine are currently being finalized, with the first end-to-end implementation expected at the beginning of next week.
+
 ![Architect Logo](https://raw.githubusercontent.com/steve-rodrigue/architect-lang/refs/heads/main/assets/logo.png)
 
 ---
