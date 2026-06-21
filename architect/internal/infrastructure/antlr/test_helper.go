@@ -91,3 +91,21 @@ func assertAssignmentFunctionCall(t *testing.T, assignment workflows.Assignment,
 		t.Fatalf("expected %d function args, got %d", argCount, len(call.Arguments()))
 	}
 }
+
+func assertIntSlice(
+	t *testing.T,
+	actual []int,
+	expected []int,
+) {
+	t.Helper()
+
+	if len(actual) != len(expected) {
+		t.Fatalf("expected %d items, got %d: %v", len(expected), len(actual), actual)
+	}
+
+	for i := range expected {
+		if actual[i] != expected[i] {
+			t.Fatalf("expected item %d to be %d, got %d", i, expected[i], actual[i])
+		}
+	}
+}

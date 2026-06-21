@@ -7,6 +7,7 @@ import (
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/common"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/endpoints"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/services"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/workflows"
 )
 
@@ -1037,5 +1038,180 @@ func assertStringSlice(
 		if actual[i] != expected[i] {
 			t.Fatalf("expected item %d to be %q, got %q", i, expected[i], actual[i])
 		}
+	}
+}
+
+func TestParserApplicationServiceParsesApplicationBackedService(t *testing.T) {
+	app := NewParserApplication()
+
+	service, err := app.Service(`
+service BlogAPI go {
+  exposes 8080
+  application "blog_api.arch"
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if service.Name() != "BlogAPI" {
+		t.Fatalf("expected BlogAPI, got %s", service.Name())
+	}
+
+	if service.Kind() != services.ServiceKindGo {
+		t.Fatalf("expected go, got %s", service.Kind())
+	}
+
+	assertIntSlice(t, service.ExposedPorts(), []int{8080})
+
+	if service.ApplicationFile() != "blog_api.arch" {
+		t.Fatalf("expected blog_api.arch, got %s", service.ApplicationFile())
+	}
+
+	if len(service.DependsOn()) != 0 {
+		t.Fatalf("expected no explicit dependencies when application exists")
+	}
+}
+
+func TestParserApplicationServiceParsesInfrastructureService(t *testing.T) {
+	app := NewParserApplication()
+
+	service, err := app.Service(`
+service MainDB postgres {
+  version "17"
+  image "postgres:17"
+  exposes 5432
+  stores User
+  stores Post
+  stores PostHistory
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if service.Name() != "MainDB" {
+		t.Fatalf("expected MainDB, got %s", service.Name())
+	}
+
+	if service.Kind() != services.ServiceKindPostgres {
+		t.Fatalf("expected postgres, got %s", service.Kind())
+	}
+
+	if service.Version() != "17" {
+		t.Fatalf("expected version 17, got %s", service.Version())
+	}
+
+	if service.Image() != "postgres:17" {
+		t.Fatalf("expected postgres:17, got %s", service.Image())
+	}
+
+	assertIntSlice(t, service.ExposedPorts(), []int{5432})
+	assertStringSlice(t, service.Stores(), []string{"User", "Post", "PostHistory"})
+}
+
+func TestParserApplicationServiceParsesEventBusService(t *testing.T) {
+	app := NewParserApplication()
+
+	service, err := app.Service(`
+service Events hatchet {
+  version "latest"
+  event PostCreated
+  event PostUpdated
+  event PostScored
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if service.Name() != "Events" {
+		t.Fatalf("expected Events, got %s", service.Name())
+	}
+
+	if service.Kind() != services.ServiceKindHatchet {
+		t.Fatalf("expected hatchet, got %s", service.Kind())
+	}
+
+	if service.Version() != "latest" {
+		t.Fatalf("expected latest, got %s", service.Version())
+	}
+
+	assertStringSlice(t, service.Events(), []string{
+		"PostCreated",
+		"PostUpdated",
+		"PostScored",
+	})
+}
+
+func TestParserApplicationServiceParsesManualDependenciesWhenNoApplication(t *testing.T) {
+	app := NewParserApplication()
+
+	service, err := app.Service(`
+service Gateway nginx {
+  image "nginx:latest"
+  exposes 80
+  exposes 443
+  depends_on BlogAPI
+  depends_on EmbeddingService
+}
+`)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if service.Name() != "Gateway" {
+		t.Fatalf("expected Gateway, got %s", service.Name())
+	}
+
+	if service.Kind() != services.ServiceKindNginx {
+		t.Fatalf("expected nginx, got %s", service.Kind())
+	}
+
+	if service.Image() != "nginx:latest" {
+		t.Fatalf("expected nginx:latest, got %s", service.Image())
+	}
+
+	assertIntSlice(t, service.ExposedPorts(), []int{80, 443})
+	assertStringSlice(t, service.DependsOn(), []string{"BlogAPI", "EmbeddingService"})
+}
+
+func TestParserApplicationServiceRejectsDependsOnWithApplication(t *testing.T) {
+	app := NewParserApplication()
+
+	_, err := app.Service(`
+service BlogAPI go {
+  application "blog_api.arch"
+  depends_on MainDB
+}
+`)
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestParserApplicationServiceRejectsInvalidSyntax(t *testing.T) {
+	app := NewParserApplication()
+
+	_, err := app.Service(`
+service BadService go {
+  exposes
+}
+`)
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestParserApplicationServiceRejectsInvalidPort(t *testing.T) {
+	app := NewParserApplication()
+
+	_, err := app.Service(`
+service BadService go {
+  exposes 0
+}
+`)
+	if err == nil {
+		t.Fatalf("expected error")
 	}
 }

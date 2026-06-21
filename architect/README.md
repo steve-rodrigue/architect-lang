@@ -55,4 +55,13 @@ antlr4 \
   -Xexact-output-dir \
   -o internal/generated/application \
   internal/infrastructure/antlr/grammars/Application.g4
+
+antlr4 \
+  -Dlanguage=Go \
+  -package service \
+  -visitor \
+  -no-listener \
+  -Xexact-output-dir \
+  -o internal/generated/service \
+  internal/infrastructure/antlr/grammars/Service.g4
 ```
