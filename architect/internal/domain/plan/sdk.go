@@ -69,6 +69,55 @@ const (
 	SectionKindDeployment  SectionKind = "deployment"
 )
 
+// NewProjectBuilder creates a new project builder
+func NewProjectBuilder() ProjectBuilder {
+	return &projectBuilder{}
+}
+
+// NewVersionBuilder creates a new version builder
+func NewVersionBuilder() VersionBuilder {
+	return &versionBuilder{}
+}
+
+// NewSectionBuilder creates a new section builder
+func NewSectionBuilder() SectionBuilder {
+	return &sectionBuilder{}
+}
+
+// NewDependencyBuilder creates a new dependency builder
+func NewDependencyBuilder() DependencyBuilder {
+	return &dependencyBuilder{}
+}
+
+// NewArtifactBuilder creates a new artifact builder
+func NewArtifactBuilder() ArtifactBuilder {
+	return &artifactBuilder{}
+}
+
+// NewArtifactFileBuilder creates a new artifact file builder
+func NewArtifactFileBuilder() ArtifactFileBuilder {
+	return &artifactFileBuilder{
+		constraints:        make([]string, 0),
+		acceptanceCriteria: make([]string, 0),
+	}
+}
+
+// NewTaskBuilder creates a new task builder.
+func NewTaskBuilder() TaskBuilder {
+	return &taskBuilder{
+		dependencyIDs: make([]TaskID, 0),
+		subTaskIDs:    make([]TaskID, 0),
+	}
+}
+
+// NewTaskSpecBuilder creates a new task specification builder.
+func NewTaskSpecBuilder() TaskSpecBuilder {
+	return &taskSpecBuilder{
+		constraints:        make([]string, 0),
+		acceptanceCriteria: make([]string, 0),
+	}
+}
+
 // Planner creates a concrete generation plan from a resolved model project.
 type Planner interface {
 	Plan(project model.Project) (Project, error)

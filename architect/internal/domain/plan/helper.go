@@ -35,6 +35,16 @@ func sectionID(version Version, parentID SectionID, kind SectionKind, name strin
 	return SectionID(strings.Join(parts, ":"))
 }
 
+func sectionPath(parentID SectionID, kind SectionKind, name string) string {
+	current := string(kind) + ":" + cleanIDPart(name)
+
+	if parentID == "" {
+		return current
+	}
+
+	return string(parentID) + "/" + current
+}
+
 func dependencyID(version Version, kind DependencyKind, name string, depVersion string) DependencyID {
 	return DependencyID(
 		strings.Join([]string{
