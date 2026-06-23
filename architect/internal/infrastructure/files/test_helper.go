@@ -7,7 +7,7 @@ import (
 
 	"github.com/steve-rodrigue/architect-lang/architect/internal/applications/parsers"
 	projects_application "github.com/steve-rodrigue/architect-lang/architect/internal/applications/projects"
-	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/model/resolvers"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/model"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/infrastructure/antlr"
 )
 
@@ -69,5 +69,5 @@ func newParserApplication(t *testing.T) parsers.Application {
 
 func newProjectApplication(t *testing.T) projects_application.Application {
 	t.Helper()
-	return projects_application.NewApplication(resolvers.NewResolver())
+	return projects_application.NewApplication(model.NewResolver())
 }

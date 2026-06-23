@@ -4,19 +4,18 @@ import (
 	"fmt"
 
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/model"
-	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/model/resolvers"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/model/sources"
 )
 
 // NewApplication creates a new project application.
-func NewApplication(resolver resolvers.Resolver) Application {
+func NewApplication(resolver model.Resolver) Application {
 	return &application{
 		resolver: resolver,
 	}
 }
 
 type application struct {
-	resolver resolvers.Resolver
+	resolver model.Resolver
 	project  model.Project
 	loaded   bool
 }

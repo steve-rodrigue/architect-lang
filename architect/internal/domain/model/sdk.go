@@ -8,7 +8,13 @@ import (
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/services"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/workflows"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/model/sources"
 )
+
+// NewResolver creates a new model resolver.
+func NewResolver() Resolver {
+	return &resolver{}
+}
 
 // NewProjectBuilder creates a new resolved project builder.
 func NewProjectBuilder() ProjectBuilder {
@@ -188,6 +194,11 @@ func NewFunctionCallExpressionBuilder() FunctionCallExpressionBuilder {
 	return &functionCallExpressionBuilder{
 		arguments: make([]Expression, 0),
 	}
+}
+
+// Resolver resolves a parsed project source into a linked project model.
+type Resolver interface {
+	Resolve(source sources.Project) (Project, error)
 }
 
 // ProjectBuilder represents a resolved project builder.

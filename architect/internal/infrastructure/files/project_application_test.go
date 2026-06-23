@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	projects_application "github.com/steve-rodrigue/architect-lang/architect/internal/applications/projects"
-	model_resolvers "github.com/steve-rodrigue/architect-lang/architect/internal/domain/model/resolvers"
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/model"
 	parser_antlr "github.com/steve-rodrigue/architect-lang/architect/internal/infrastructure/antlr"
 )
 
@@ -107,7 +107,7 @@ deployment dev {
 `)
 
 	parserApplication := parser_antlr.NewParserApplication()
-	resolver := model_resolvers.NewResolver()
+	resolver := model.NewResolver()
 	projectApp := projects_application.NewApplication(resolver)
 
 	fileApp := NewProjectApplication(parserApplication, projectApp)

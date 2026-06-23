@@ -1,4 +1,4 @@
-package resolvers
+package model
 
 import (
 	"fmt"
@@ -10,20 +10,19 @@ import (
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/endpoints"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/objects"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/ast/workflows"
-	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/model"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/model/sources"
 )
 
 type resolver struct{}
 
 type versionContext struct {
-	objects     map[string]model.Object
-	services    map[string]model.Service
-	deployments map[string]model.Deployment
-	events      map[string]model.Event
+	objects     map[string]Object
+	services    map[string]Service
+	deployments map[string]Deployment
+	events      map[string]Event
 }
 
-func (r *resolver) Resolve(source sources.Project) (model.Project, error) {
+func (r *resolver) Resolve(source sources.Project) (Project, error) {
 	if source == nil {
 		return nil, fmt.Errorf("project source is required")
 	}
@@ -31,7 +30,7 @@ func (r *resolver) Resolve(source sources.Project) (model.Project, error) {
 		return nil, fmt.Errorf("project AST is required")
 	}
 
-	builder := model.NewProjectBuilder().
+	builder := NewProjectBuilder().
 		Name(source.Project().Name())
 
 	for _, versionSource := range source.Versions() {
@@ -46,7 +45,7 @@ func (r *resolver) Resolve(source sources.Project) (model.Project, error) {
 	return builder.Build()
 }
 
-func (r *resolver) resolveVersion(source sources.Version) (model.Version, error) {
+func (r *resolver) resolveVersion(source sources.Version) (Version, error) {
 	if source == nil {
 		return nil, fmt.Errorf("version source is required")
 	}
@@ -55,10 +54,10 @@ func (r *resolver) resolveVersion(source sources.Version) (model.Version, error)
 	}
 
 	ctx := &versionContext{
-		objects:     make(map[string]model.Object),
-		services:    make(map[string]model.Service),
-		deployments: make(map[string]model.Deployment),
-		events:      make(map[string]model.Event),
+		objects:     make(map[string]Object),
+		services:    make(map[string]Service),
+		deployments: make(map[string]Deployment),
+		events:      make(map[string]Event),
 	}
 
 	for _, objectAST := range source.Objects() {
@@ -100,7 +99,7 @@ func (r *resolver) resolveVersion(source sources.Version) (model.Version, error)
 				continue
 			}
 
-			event, err := model.NewEventBuilder().
+			event, err := NewEventBuilder().
 				Name(eventName).
 				DeclaredBy(ctx.services[serviceSource.Service().Name()]).
 				Build()
@@ -133,7 +132,7 @@ func (r *resolver) resolveVersion(source sources.Version) (model.Version, error)
 		ctx.deployments[deployment.Name()] = deployment
 	}
 
-	builder := model.NewVersionBuilder().
+	builder := NewVersionBuilder().
 		Number(source.Version().Number())
 
 	for _, object := range ctx.objects {
@@ -147,7 +146,7 @@ func (r *resolver) resolveVersion(source sources.Version) (model.Version, error)
 	}
 
 	for _, nextVersionAST := range source.Version().NextVersions() {
-		nextVersion, err := model.NewVersionBuilder().
+		nextVersion, err := NewVersionBuilder().
 			Number(nextVersionAST.Number()).
 			Build()
 		if err != nil {
@@ -160,15 +159,15 @@ func (r *resolver) resolveVersion(source sources.Version) (model.Version, error)
 	return builder.Build()
 }
 
-func (r *resolver) resolveObjectSkeleton(objectAST objects.Object) (model.Object, error) {
-	return model.NewObjectBuilder().
+func (r *resolver) resolveObjectSkeleton(objectAST objects.Object) (Object, error) {
+	return NewObjectBuilder().
 		Name(objectAST.Name()).
 		AST(objectAST).
 		Build()
 }
 
-func (r *resolver) resolveObject(objectAST objects.Object, ctx *versionContext) (model.Object, error) {
-	builder := model.NewObjectBuilder().
+func (r *resolver) resolveObject(objectAST objects.Object, ctx *versionContext) (Object, error) {
+	builder := NewObjectBuilder().
 		Name(objectAST.Name()).
 		AST(objectAST)
 
@@ -193,13 +192,13 @@ func (r *resolver) resolveObject(objectAST objects.Object, ctx *versionContext) 
 	return builder.Build()
 }
 
-func (r *resolver) resolveField(fieldAST objects.Field, ctx *versionContext) (model.Field, error) {
+func (r *resolver) resolveField(fieldAST objects.Field, ctx *versionContext) (Field, error) {
 	typeRef, err := r.resolveTypeReference(fieldAST.Type(), ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	builder := model.NewFieldBuilder().
+	builder := NewFieldBuilder().
 		Name(fieldAST.Name()).
 		Type(typeRef).
 		AST(fieldAST)
@@ -211,8 +210,8 @@ func (r *resolver) resolveField(fieldAST objects.Field, ctx *versionContext) (mo
 	return builder.Build()
 }
 
-func (r *resolver) resolveTypeReference(typeAST common.TypeReference, ctx *versionContext) (model.TypeReference, error) {
-	builder := model.NewTypeReferenceBuilder().
+func (r *resolver) resolveTypeReference(typeAST common.TypeReference, ctx *versionContext) (TypeReference, error) {
+	builder := NewTypeReferenceBuilder().
 		Name(typeAST.Name()).
 		List(typeAST.IsList()).
 		Optional(typeAST.IsOptional()).
@@ -227,7 +226,7 @@ func (r *resolver) resolveTypeReference(typeAST common.TypeReference, ctx *versi
 	return builder.Build()
 }
 
-func (r *resolver) resolveServiceSkeleton(source sources.Service) (model.Service, error) {
+func (r *resolver) resolveServiceSkeleton(source sources.Service) (Service, error) {
 	if source == nil {
 		return nil, fmt.Errorf("service source is required")
 	}
@@ -235,7 +234,7 @@ func (r *resolver) resolveServiceSkeleton(source sources.Service) (model.Service
 		return nil, fmt.Errorf("service AST is required")
 	}
 
-	builder := model.NewServiceBuilder().
+	builder := NewServiceBuilder().
 		Name(source.Service().Name()).
 		Kind(source.Service().Kind()).
 		Version(source.Service().Version()).
@@ -249,10 +248,10 @@ func (r *resolver) resolveServiceSkeleton(source sources.Service) (model.Service
 	return builder.Build()
 }
 
-func (r *resolver) resolveService(source sources.Service, ctx *versionContext) (model.Service, error) {
+func (r *resolver) resolveService(source sources.Service, ctx *versionContext) (Service, error) {
 	serviceAST := source.Service()
 
-	builder := model.NewServiceBuilder().
+	builder := NewServiceBuilder().
 		Name(serviceAST.Name()).
 		Kind(serviceAST.Kind()).
 		Version(serviceAST.Version()).
@@ -302,10 +301,10 @@ func (r *resolver) resolveService(source sources.Service, ctx *versionContext) (
 	return builder.Build()
 }
 
-func (r *resolver) resolveApplication(source sources.Service, ctx *versionContext) (model.Application, error) {
+func (r *resolver) resolveApplication(source sources.Service, ctx *versionContext) (Application, error) {
 	applicationAST := source.Application()
 
-	builder := model.NewApplicationBuilder().
+	builder := NewApplicationBuilder().
 		Name(applicationAST.Name()).
 		AST(applicationAST)
 
@@ -334,7 +333,7 @@ func (r *resolver) resolveApplication(source sources.Service, ctx *versionContex
 	return builder.Build()
 }
 
-func (r *resolver) resolveEndpoint(endpointAST endpoints.Endpoint, ctx *versionContext) (model.Endpoint, error) {
+func (r *resolver) resolveEndpoint(endpointAST endpoints.Endpoint, ctx *versionContext) (Endpoint, error) {
 	input, err := r.resolveInput(endpointAST.Input(), ctx)
 	if err != nil {
 		return nil, err
@@ -345,7 +344,7 @@ func (r *resolver) resolveEndpoint(endpointAST endpoints.Endpoint, ctx *versionC
 		return nil, err
 	}
 
-	builder := model.NewEndpointBuilder().
+	builder := NewEndpointBuilder().
 		Name(endpointAST.Name()).
 		Method(endpointAST.Method()).
 		Path(endpointAST.Path()).
@@ -359,8 +358,8 @@ func (r *resolver) resolveEndpoint(endpointAST endpoints.Endpoint, ctx *versionC
 	return builder.Build()
 }
 
-func (r *resolver) resolveInput(inputAST endpoints.Input, ctx *versionContext) (model.Input, error) {
-	builder := model.NewInputBuilder().
+func (r *resolver) resolveInput(inputAST endpoints.Input, ctx *versionContext) (Input, error) {
+	builder := NewInputBuilder().
 		AST(inputAST)
 
 	for _, fieldAST := range inputAST.Fields() {
@@ -369,7 +368,7 @@ func (r *resolver) resolveInput(inputAST endpoints.Input, ctx *versionContext) (
 			return nil, err
 		}
 
-		field, err := model.NewInputFieldBuilder().
+		field, err := NewInputFieldBuilder().
 			Name(fieldAST.Name()).
 			Type(typeRef).
 			Sources(fieldAST.Sources()).
@@ -385,10 +384,10 @@ func (r *resolver) resolveInput(inputAST endpoints.Input, ctx *versionContext) (
 	return builder.Build()
 }
 
-func (r *resolver) resolveConsumer(consumerAST consumers.Consumer, ctx *versionContext) (model.Consumer, error) {
+func (r *resolver) resolveConsumer(consumerAST consumers.Consumer, ctx *versionContext) (Consumer, error) {
 	event := ctx.events[consumerAST.EventName()]
 	if event == nil {
-		created, err := model.NewEventBuilder().
+		created, err := NewEventBuilder().
 			Name(consumerAST.EventName()).
 			Build()
 		if err != nil {
@@ -404,7 +403,7 @@ func (r *resolver) resolveConsumer(consumerAST consumers.Consumer, ctx *versionC
 		return nil, err
 	}
 
-	builder := model.NewConsumerBuilder().
+	builder := NewConsumerBuilder().
 		Event(event).
 		ASTEventName(consumerAST.EventName())
 
@@ -415,8 +414,8 @@ func (r *resolver) resolveConsumer(consumerAST consumers.Consumer, ctx *versionC
 	return builder.Build()
 }
 
-func (r *resolver) resolveDeployment(deploymentAST deployments.Deployment, ctx *versionContext) (model.Deployment, error) {
-	builder := model.NewDeploymentBuilder().
+func (r *resolver) resolveDeployment(deploymentAST deployments.Deployment, ctx *versionContext) (Deployment, error) {
+	builder := NewDeploymentBuilder().
 		Name(deploymentAST.Name()).
 		Vendor(deploymentAST.Vendor()).
 		Inventory(deploymentAST.Inventory()).
@@ -428,7 +427,7 @@ func (r *resolver) resolveDeployment(deploymentAST deployments.Deployment, ctx *
 			return nil, fmt.Errorf("deployment %q references unknown service %q", deploymentAST.Name(), serviceDeploymentAST.Name())
 		}
 
-		serviceDeploymentBuilder := model.NewServiceDeploymentBuilder().
+		serviceDeploymentBuilder := NewServiceDeploymentBuilder().
 			Service(service).
 			Domain(serviceDeploymentAST.Domain()).
 			Host(serviceDeploymentAST.Host()).
@@ -454,8 +453,8 @@ func (r *resolver) resolveDeployment(deploymentAST deployments.Deployment, ctx *
 	return builder.Build()
 }
 
-func (r *resolver) resolveActions(actions []workflows.Action, ctx *versionContext) ([]model.Action, error) {
-	resolved := make([]model.Action, 0, len(actions))
+func (r *resolver) resolveActions(actions []workflows.Action, ctx *versionContext) ([]Action, error) {
+	resolved := make([]Action, 0, len(actions))
 
 	for _, action := range actions {
 		resolvedAction, err := r.resolveAction(action, ctx)
@@ -469,7 +468,7 @@ func (r *resolver) resolveActions(actions []workflows.Action, ctx *versionContex
 	return resolved, nil
 }
 
-func (r *resolver) resolveAction(action workflows.Action, ctx *versionContext) (model.Action, error) {
+func (r *resolver) resolveAction(action workflows.Action, ctx *versionContext) (Action, error) {
 	switch value := action.(type) {
 	case workflows.FetchAction:
 		return r.resolveFetchAction(value, ctx)
@@ -490,7 +489,7 @@ func (r *resolver) resolveAction(action workflows.Action, ctx *versionContext) (
 	}
 }
 
-func (r *resolver) resolveFetchAction(action workflows.FetchAction, ctx *versionContext) (model.FetchAction, error) {
+func (r *resolver) resolveFetchAction(action workflows.FetchAction, ctx *versionContext) (FetchAction, error) {
 	variable, err := r.resolveTypedVariable(action.Variable(), ctx)
 	if err != nil {
 		return nil, err
@@ -506,7 +505,7 @@ func (r *resolver) resolveFetchAction(action workflows.FetchAction, ctx *version
 		return nil, err
 	}
 
-	return model.NewFetchActionBuilder().
+	return NewFetchActionBuilder().
 		Variable(variable).
 		Source(source).
 		Condition(condition).
@@ -514,13 +513,13 @@ func (r *resolver) resolveFetchAction(action workflows.FetchAction, ctx *version
 		Build()
 }
 
-func (r *resolver) resolveCreateAction(action workflows.CreateAction, ctx *versionContext) (model.CreateAction, error) {
+func (r *resolver) resolveCreateAction(action workflows.CreateAction, ctx *versionContext) (CreateAction, error) {
 	variable, err := r.resolveTypedVariable(action.Variable(), ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	builder := model.NewCreateActionBuilder().
+	builder := NewCreateActionBuilder().
 		Variable(variable).
 		AST(action)
 
@@ -536,21 +535,21 @@ func (r *resolver) resolveCreateAction(action workflows.CreateAction, ctx *versi
 	return builder.Build()
 }
 
-func (r *resolver) resolveStoreAction(action workflows.StoreAction, ctx *versionContext) (model.StoreAction, error) {
+func (r *resolver) resolveStoreAction(action workflows.StoreAction, ctx *versionContext) (StoreAction, error) {
 	destination := ctx.services[action.Destination()]
 	if destination == nil {
 		return nil, fmt.Errorf("store references unknown destination service %q", action.Destination())
 	}
 
-	return model.NewStoreActionBuilder().
+	return NewStoreActionBuilder().
 		VariableName(action.VariableName()).
 		Destination(destination).
 		AST(action).
 		Build()
 }
 
-func (r *resolver) resolveUpdateAction(action workflows.UpdateAction, ctx *versionContext) (model.UpdateAction, error) {
-	builder := model.NewUpdateActionBuilder().
+func (r *resolver) resolveUpdateAction(action workflows.UpdateAction, ctx *versionContext) (UpdateAction, error) {
+	builder := NewUpdateActionBuilder().
 		VariableName(action.VariableName()).
 		AST(action)
 
@@ -566,7 +565,7 @@ func (r *resolver) resolveUpdateAction(action workflows.UpdateAction, ctx *versi
 	return builder.Build()
 }
 
-func (r *resolver) resolveEmitAction(action workflows.EmitAction, ctx *versionContext) (model.EmitAction, error) {
+func (r *resolver) resolveEmitAction(action workflows.EmitAction, ctx *versionContext) (EmitAction, error) {
 	variable, err := r.resolveTypedVariable(action.Variable(), ctx)
 	if err != nil {
 		return nil, err
@@ -575,7 +574,7 @@ func (r *resolver) resolveEmitAction(action workflows.EmitAction, ctx *versionCo
 	eventName := action.Variable().Type().Name()
 	event := ctx.events[eventName]
 	if event == nil {
-		created, err := model.NewEventBuilder().
+		created, err := NewEventBuilder().
 			Name(eventName).
 			Build()
 		if err != nil {
@@ -586,7 +585,7 @@ func (r *resolver) resolveEmitAction(action workflows.EmitAction, ctx *versionCo
 		ctx.events[eventName] = event
 	}
 
-	builder := model.NewEmitActionBuilder().
+	builder := NewEmitActionBuilder().
 		Event(event).
 		Variable(variable).
 		AST(action)
@@ -603,7 +602,7 @@ func (r *resolver) resolveEmitAction(action workflows.EmitAction, ctx *versionCo
 	return builder.Build()
 }
 
-func (r *resolver) resolveCallAction(action workflows.CallAction, ctx *versionContext) (model.CallAction, error) {
+func (r *resolver) resolveCallAction(action workflows.CallAction, ctx *versionContext) (CallAction, error) {
 	serviceName, operation := splitCallTarget(action.Target())
 
 	service := ctx.services[serviceName]
@@ -611,7 +610,7 @@ func (r *resolver) resolveCallAction(action workflows.CallAction, ctx *versionCo
 		return nil, fmt.Errorf("call references unknown service %q", serviceName)
 	}
 
-	builder := model.NewCallActionBuilder().
+	builder := NewCallActionBuilder().
 		TargetService(service).
 		TargetOperation(operation).
 		AST(action)
@@ -628,45 +627,45 @@ func (r *resolver) resolveCallAction(action workflows.CallAction, ctx *versionCo
 	return builder.Build()
 }
 
-func (r *resolver) resolveReturnAction(action workflows.ReturnAction, ctx *versionContext) (model.ReturnAction, error) {
+func (r *resolver) resolveReturnAction(action workflows.ReturnAction, ctx *versionContext) (ReturnAction, error) {
 	expression, err := r.resolveExpression(action.Expression(), ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return model.NewReturnActionBuilder().
+	return NewReturnActionBuilder().
 		Expression(expression).
 		AST(action).
 		Build()
 }
 
-func (r *resolver) resolveTypedVariable(variable workflows.TypedVariable, ctx *versionContext) (model.TypedVariable, error) {
+func (r *resolver) resolveTypedVariable(variable workflows.TypedVariable, ctx *versionContext) (TypedVariable, error) {
 	typeRef, err := r.resolveTypeReference(variable.Type(), ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return model.NewTypedVariableBuilder().
+	return NewTypedVariableBuilder().
 		Name(variable.Name()).
 		Type(typeRef).
 		AST(variable).
 		Build()
 }
 
-func (r *resolver) resolveAssignment(assignment workflows.Assignment, ctx *versionContext) (model.Assignment, error) {
+func (r *resolver) resolveAssignment(assignment workflows.Assignment, ctx *versionContext) (Assignment, error) {
 	value, err := r.resolveExpression(assignment.Value(), ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return model.NewAssignmentBuilder().
+	return NewAssignmentBuilder().
 		Name(assignment.Name()).
 		Value(value).
 		AST(assignment).
 		Build()
 }
 
-func (r *resolver) resolveCondition(condition workflows.Condition, ctx *versionContext) (model.Condition, error) {
+func (r *resolver) resolveCondition(condition workflows.Condition, ctx *versionContext) (Condition, error) {
 	left, err := r.resolveExpression(condition.Left(), ctx)
 	if err != nil {
 		return nil, err
@@ -677,7 +676,7 @@ func (r *resolver) resolveCondition(condition workflows.Condition, ctx *versionC
 		return nil, err
 	}
 
-	return model.NewConditionBuilder().
+	return NewConditionBuilder().
 		Left(left).
 		Operator(condition.Operator()).
 		Right(right).
@@ -685,16 +684,16 @@ func (r *resolver) resolveCondition(condition workflows.Condition, ctx *versionC
 		Build()
 }
 
-func (r *resolver) resolveExpression(expression workflows.Expression, ctx *versionContext) (model.Expression, error) {
+func (r *resolver) resolveExpression(expression workflows.Expression, ctx *versionContext) (Expression, error) {
 	switch value := expression.(type) {
 	case workflows.IdentifierExpression:
-		return model.NewIdentifierExpressionBuilder().
+		return NewIdentifierExpressionBuilder().
 			Name(value.Name()).
 			AST(value).
 			Build()
 
 	case workflows.SelectorExpression:
-		builder := model.NewSelectorExpressionBuilder().
+		builder := NewSelectorExpressionBuilder().
 			AST(value)
 
 		for _, part := range value.Parts() {
@@ -704,13 +703,13 @@ func (r *resolver) resolveExpression(expression workflows.Expression, ctx *versi
 		return builder.Build()
 
 	case workflows.LiteralExpression:
-		return model.NewLiteralExpressionBuilder().
+		return NewLiteralExpressionBuilder().
 			Value(value.Value()).
 			AST(value).
 			Build()
 
 	case workflows.FunctionCallExpression:
-		builder := model.NewFunctionCallExpressionBuilder().
+		builder := NewFunctionCallExpressionBuilder().
 			Name(value.Name()).
 			AST(value)
 
