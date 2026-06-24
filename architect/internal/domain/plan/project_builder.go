@@ -35,7 +35,7 @@ func (b *projectBuilder) Build() (Project, error) {
 	}
 
 	return &project{
-		id:            projectID(b.model.Name()),
+		id:            GenProjectID(b.model.Name()),
 		model:         b.model,
 		schemaVersion: b.schemaVersion,
 	}, nil

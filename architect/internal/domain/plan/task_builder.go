@@ -81,7 +81,7 @@ func (b *taskBuilder) Build() (Task, error) {
 	}
 
 	return &task{
-		id:            taskID(b.section, b.kind, b.action, b.name),
+		id:            GenTaskID(b.section, b.kind, b.action, b.name),
 		section:       b.section,
 		kind:          b.kind,
 		action:        b.action,

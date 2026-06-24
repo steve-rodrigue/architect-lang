@@ -1,6 +1,10 @@
 package plan
 
-import "github.com/steve-rodrigue/architect-lang/architect/internal/domain/model"
+import (
+	"context"
+
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/model"
+)
 
 type ProjectID string
 type VersionID string
@@ -125,27 +129,27 @@ type Planner interface {
 
 // Service represents a plan service
 type Service interface {
-	SaveProject(project Project) error
-	SaveVersion(version Version) error
-	SaveSection(section Section) error
-	SaveDependency(dependency Dependency) error
-	SaveArtifact(artifact Artifact) error
-	SaveTask(task Task) error
+	SaveProject(ctx context.Context, project Project) error
+	SaveVersion(ctx context.Context, version Version) error
+	SaveSection(ctx context.Context, section Section) error
+	SaveDependency(ctx context.Context, dependency Dependency) error
+	SaveArtifact(ctx context.Context, artifact Artifact) error
+	SaveTask(ctx context.Context, task Task) error
 }
 
 // ProjectRepository loads project plans on demand.
 type ProjectRepository interface {
-	IDs() ([]ProjectID, error)
-	Names() ([]string, error)
+	IDs(ctx context.Context) ([]ProjectID, error)
+	Names(ctx context.Context) ([]string, error)
 
-	Get(id ProjectID) (Project, error)
-	GetByName(name string) (Project, error)
+	Get(ctx context.Context, id ProjectID) (Project, error)
+	GetByName(ctx context.Context, name string) (Project, error)
 
-	CurrentByName(name string) (Project, error)
-	Previous(id ProjectID) (ProjectID, error)
-	History(name string) ([]ProjectID, error)
+	CurrentByName(ctx context.Context, name string) (Project, error)
+	Previous(ctx context.Context, id ProjectID) (ProjectID, error)
+	History(ctx context.Context, name string) ([]ProjectID, error)
 
-	Has(id ProjectID) (bool, error)
+	Has(ctx context.Context, id ProjectID) (bool, error)
 }
 
 // ProjectBuilder represents a project builder.
@@ -164,10 +168,10 @@ type Project interface {
 
 // VersionRepository loads project versions on demand.
 type VersionRepository interface {
-	IDsByProject(projectID ProjectID) ([]VersionID, error)
-	Get(id VersionID) (Version, error)
-	GetByNumber(projectID ProjectID, number string) (Version, error)
-	Has(id VersionID) (bool, error)
+	IDsByProject(ctx context.Context, projectID ProjectID) ([]VersionID, error)
+	Get(ctx context.Context, id VersionID) (Version, error)
+	GetByNumber(ctx context.Context, projectID ProjectID, number string) (Version, error)
+	Has(ctx context.Context, id VersionID) (bool, error)
 }
 
 // VersionBuilder represents a version builder.
@@ -186,10 +190,10 @@ type Version interface {
 
 // SectionRepository loads sections on demand.
 type SectionRepository interface {
-	IDsByVersion(versionID VersionID) ([]SectionID, error)
-	Get(id SectionID) (Section, error)
-	Children(parentID SectionID) ([]SectionID, error)
-	Has(id SectionID) (bool, error)
+	IDsByVersion(ctx context.Context, versionID VersionID) ([]SectionID, error)
+	Get(ctx context.Context, id SectionID) (Section, error)
+	Children(ctx context.Context, parentID SectionID) ([]SectionID, error)
+	Has(ctx context.Context, id SectionID) (bool, error)
 }
 
 // SectionBuilder represents a section builder.
@@ -216,11 +220,11 @@ type Section interface {
 
 // DependencyRepository loads dependencies on demand.
 type DependencyRepository interface {
-	IDsByProject(projectID ProjectID) ([]DependencyID, error)
-	IDsByVersion(versionID VersionID) ([]DependencyID, error)
-	Get(id DependencyID) (Dependency, error)
-	ByKind(kind DependencyKind) ([]DependencyID, error)
-	Has(id DependencyID) (bool, error)
+	IDsByProject(ctx context.Context, projectID ProjectID) ([]DependencyID, error)
+	IDsByVersion(ctx context.Context, versionID VersionID) ([]DependencyID, error)
+	Get(ctx context.Context, id DependencyID) (Dependency, error)
+	ByKind(ctx context.Context, kind DependencyKind) ([]DependencyID, error)
+	Has(ctx context.Context, id DependencyID) (bool, error)
 }
 
 // DependencyBuilder represents a dependency builder.
@@ -246,11 +250,11 @@ type Dependency interface {
 
 // ArtifactRepository loads artifacts on demand.
 type ArtifactRepository interface {
-	IDsByProject(projectID ProjectID) ([]ArtifactID, error)
-	IDsByVersion(versionID VersionID) ([]ArtifactID, error)
-	Get(id ArtifactID) (Artifact, error)
-	ByKind(kind ArtifactKind) ([]ArtifactID, error)
-	Has(id ArtifactID) (bool, error)
+	IDsByProject(ctx context.Context, projectID ProjectID) ([]ArtifactID, error)
+	IDsByVersion(ctx context.Context, versionID VersionID) ([]ArtifactID, error)
+	Get(ctx context.Context, id ArtifactID) (Artifact, error)
+	ByKind(ctx context.Context, kind ArtifactKind) ([]ArtifactID, error)
+	Has(ctx context.Context, id ArtifactID) (bool, error)
 }
 
 // ArtifactBuilder represents an artifact builder.
@@ -293,22 +297,22 @@ type ArtifactFile interface {
 
 // TaskRepository loads tasks on demand.
 type TaskRepository interface {
-	IDsByProject(projectID ProjectID) ([]TaskID, error)
-	IDsByVersion(versionID VersionID) ([]TaskID, error)
-	Get(id TaskID) (Task, error)
+	IDsByProject(ctx context.Context, projectID ProjectID) ([]TaskID, error)
+	IDsByVersion(ctx context.Context, versionID VersionID) ([]TaskID, error)
+	Get(ctx context.Context, id TaskID) (Task, error)
 
-	RootsByProject(projectID ProjectID) ([]TaskID, error)
-	RootsByVersion(versionID VersionID) ([]TaskID, error)
+	RootsByProject(ctx context.Context, projectID ProjectID) ([]TaskID, error)
+	RootsByVersion(ctx context.Context, versionID VersionID) ([]TaskID, error)
 
-	Children(parentID TaskID) ([]TaskID, error)
-	Dependents(taskID TaskID) ([]TaskID, error)
-	Upstream(taskID TaskID) ([]TaskID, error)   // tasks this task depends on
-	Downstream(taskID TaskID) ([]TaskID, error) // tasks depending on this task
+	Children(ctx context.Context, parentID TaskID) ([]TaskID, error)
+	Dependents(ctx context.Context, taskID TaskID) ([]TaskID, error)
+	Upstream(ctx context.Context, taskID TaskID) ([]TaskID, error)   // tasks this task depends on
+	Downstream(ctx context.Context, taskID TaskID) ([]TaskID, error) // tasks depending on this task
 
-	ReadyByProject(projectID ProjectID) ([]TaskID, error)
-	ReadyByVersion(versionID VersionID) ([]TaskID, error)
+	ReadyByProject(ctx context.Context, projectID ProjectID) ([]TaskID, error)
+	ReadyByVersion(ctx context.Context, versionID VersionID) ([]TaskID, error)
 
-	Has(id TaskID) (bool, error)
+	Has(ctx context.Context, id TaskID) (bool, error)
 }
 
 // TaskBuilder represents a task builder.

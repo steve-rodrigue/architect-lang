@@ -38,7 +38,7 @@ func (b *artifactBuilder) Build() (Artifact, error) {
 	}
 
 	return &artifact{
-		id:      artifactID(b.section, b.path),
+		id:      GenArtifactID(b.section, b.path),
 		kind:    kind,
 		section: b.section,
 		path:    cleanPath(b.path),

@@ -27,7 +27,7 @@ func (b *versionBuilder) Build() (Version, error) {
 	}
 
 	return &version{
-		id:      versionID(b.project, b.number),
+		id:      GenVersionID(b.project, b.number),
 		project: b.project,
 		number:  b.number,
 	}, nil

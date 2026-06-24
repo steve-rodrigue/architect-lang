@@ -1,0 +1,53 @@
+services:
+  memgraph:
+    image: ${MEMGRAPH_IMAGE}
+    container_name: ${MEMGRAPH_CONTAINER_NAME}
+    ports:
+      - "${MEMGRAPH_BOLT_PORT}:7687"
+      - "${MEMGRAPH_LOG_PORT}:7444"
+    command: ["${MEMGRAPH_FLAGS}"]
+    volumes:
+      - memgraph_lib:/var/lib/memgraph
+      - memgraph_log:/var/log/memgraph
+      - memgraph_etc:/etc/memgraph
+    healthcheck:
+      test: ["CMD", "bash", "-c", "echo 'RETURN 1;' | mgconsole --host 127.0.0.1 --port 7687"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  memgraph-lab:
+    image: ${MEMGRAPH_LAB_IMAGE}
+    container_name: ${MEMGRAPH_LAB_CONTAINER_NAME}
+    ports:
+      - "${MEMGRAPH_LAB_PORT}:3000"
+    environment:
+      QUICK_CONNECT_MG_HOST: memgraph
+      QUICK_CONNECT_MG_PORT: 7687
+    depends_on:
+      memgraph:
+        condition: service_healthy
+
+  planner:
+    build:
+      context: .
+      dockerfile: ./llm/planner/Dockerfile
+    image: ${PLANNER_IMAGE}
+    container_name: ${PLANNER_CONTAINER_NAME}
+    ports:
+      - "${PLANNER_PORT}:11434"
+    environment:
+      PLANNER_MODEL: ${PLANNER_MODEL_NAME}
+      OLLAMA_HOST: 0.0.0.0:11434
+    volumes:
+      - planner_ollama:/root/.ollama
+
+secrets:
+  hf_token:
+    file: ${HF_TOKEN_FILE}
+
+volumes:
+  memgraph_lib:
+  memgraph_log:
+  memgraph_etc:
+  planner_ollama:

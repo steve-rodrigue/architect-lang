@@ -1,3 +1,5 @@
+.env
+.hftoken
 .antlr
 .vscode
 example

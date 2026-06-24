@@ -43,11 +43,11 @@ func (b *sectionBuilder) Build() (Section, error) {
 	}
 
 	return &section{
-		id:       sectionID(b.version, b.parentID, b.kind, b.name),
+		id:       GenSectionID(b.version, b.parentID, b.kind, b.name),
 		version:  b.version,
 		kind:     b.kind,
 		name:     b.name,
-		path:     sectionPath(b.parentID, b.kind, b.name),
+		path:     GenSectionPath(b.parentID, b.kind, b.name),
 		parentID: b.parentID,
 	}, nil
 }

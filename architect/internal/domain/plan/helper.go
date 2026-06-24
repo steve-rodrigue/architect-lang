@@ -5,11 +5,13 @@ import (
 	"strings"
 )
 
-func projectID(projectName string) ProjectID {
+// GenProjectID generates a project identifer
+func GenProjectID(projectName string) ProjectID {
 	return ProjectID("project:" + cleanIDPart(projectName))
 }
 
-func versionID(project Project, number string) VersionID {
+// GetVersionID generates a version identifier
+func GenVersionID(project Project, number string) VersionID {
 	return VersionID(
 		strings.Join([]string{
 			"version",
@@ -19,7 +21,8 @@ func versionID(project Project, number string) VersionID {
 	)
 }
 
-func sectionID(version Version, parentID SectionID, kind SectionKind, name string) SectionID {
+// GenSectionID generates a section identifier
+func GenSectionID(version Version, parentID SectionID, kind SectionKind, name string) SectionID {
 	parts := []string{
 		"section",
 		string(version.ID()),
@@ -35,7 +38,8 @@ func sectionID(version Version, parentID SectionID, kind SectionKind, name strin
 	return SectionID(strings.Join(parts, ":"))
 }
 
-func sectionPath(parentID SectionID, kind SectionKind, name string) string {
+// GenSectionPath generates a section path
+func GenSectionPath(parentID SectionID, kind SectionKind, name string) string {
 	current := string(kind) + ":" + cleanIDPart(name)
 
 	if parentID == "" {
@@ -45,7 +49,8 @@ func sectionPath(parentID SectionID, kind SectionKind, name string) string {
 	return string(parentID) + "/" + current
 }
 
-func dependencyID(version Version, kind DependencyKind, name string, depVersion string) DependencyID {
+// GenDependencyID generates a dependency identifier
+func GenDependencyID(version Version, kind DependencyKind, name string, depVersion string) DependencyID {
 	return DependencyID(
 		strings.Join([]string{
 			"dependency",
@@ -57,7 +62,8 @@ func dependencyID(version Version, kind DependencyKind, name string, depVersion 
 	)
 }
 
-func artifactID(section Section, path string) ArtifactID {
+// GenArtifactID generates an artifact identifier
+func GenArtifactID(section Section, path string) ArtifactID {
 	return ArtifactID(
 		strings.Join([]string{
 			"artifact",
@@ -67,7 +73,8 @@ func artifactID(section Section, path string) ArtifactID {
 	)
 }
 
-func taskID(section Section, kind TaskKind, action TaskAction, name string) TaskID {
+// GenTaskID generates a task identifier
+func GenTaskID(section Section, kind TaskKind, action TaskAction, name string) TaskID {
 	return TaskID(
 		strings.Join([]string{
 			"task",

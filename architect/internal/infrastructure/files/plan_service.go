@@ -1,6 +1,7 @@
 package files
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -14,7 +15,7 @@ type planService struct {
 	fileName string
 }
 
-func (s *planService) SaveProject(project plan.Project) error {
+func (s *planService) SaveProject(ctx context.Context, project plan.Project) error {
 	if project == nil {
 		return fmt.Errorf("project is required")
 	}
@@ -29,7 +30,7 @@ func (s *planService) SaveProject(project plan.Project) error {
 	return s.write(data)
 }
 
-func (s *planService) SaveVersion(version plan.Version) error {
+func (s *planService) SaveVersion(ctx context.Context, version plan.Version) error {
 	if version == nil {
 		return fmt.Errorf("version is required")
 	}
@@ -48,7 +49,7 @@ func (s *planService) SaveVersion(version plan.Version) error {
 	return s.write(data)
 }
 
-func (s *planService) SaveSection(section plan.Section) error {
+func (s *planService) SaveSection(ctx context.Context, section plan.Section) error {
 	if section == nil {
 		return fmt.Errorf("section is required")
 	}
@@ -71,7 +72,7 @@ func (s *planService) SaveSection(section plan.Section) error {
 	return s.write(data)
 }
 
-func (s *planService) SaveDependency(dependency plan.Dependency) error {
+func (s *planService) SaveDependency(ctx context.Context, dependency plan.Dependency) error {
 	if dependency == nil {
 		return fmt.Errorf("dependency is required")
 	}
@@ -90,7 +91,7 @@ func (s *planService) SaveDependency(dependency plan.Dependency) error {
 	return s.write(data)
 }
 
-func (s *planService) SaveArtifact(artifact plan.Artifact) error {
+func (s *planService) SaveArtifact(ctx context.Context, artifact plan.Artifact) error {
 	if artifact == nil {
 		return fmt.Errorf("artifact is required")
 	}
@@ -109,7 +110,7 @@ func (s *planService) SaveArtifact(artifact plan.Artifact) error {
 	return s.write(data)
 }
 
-func (s *planService) SaveTask(task plan.Task) error {
+func (s *planService) SaveTask(ctx context.Context, task plan.Task) error {
 	if task == nil {
 		return fmt.Errorf("task is required")
 	}

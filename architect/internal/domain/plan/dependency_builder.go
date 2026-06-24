@@ -53,7 +53,7 @@ func (b *dependencyBuilder) Build() (Dependency, error) {
 	}
 
 	return &dependency{
-		id:         dependencyID(b.version, b.kind, b.name, b.depVersion),
+		id:         GenDependencyID(b.version, b.kind, b.name, b.depVersion),
 		version:    b.version,
 		kind:       b.kind,
 		name:       b.name,

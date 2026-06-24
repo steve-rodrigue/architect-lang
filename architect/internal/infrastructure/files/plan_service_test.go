@@ -1,6 +1,7 @@
 package files
 
 import (
+	"context"
 	"encoding/json"
 	"os"
 	"path/filepath"
@@ -12,6 +13,8 @@ import (
 )
 
 func TestPlanServiceSaveAllEntities(t *testing.T) {
+	ctx := context.Background()
+
 	dir := t.TempDir()
 	service := NewPlanService(dir, "project.plan.json")
 
@@ -33,15 +36,15 @@ func TestPlanServiceSaveAllEntities(t *testing.T) {
 		nil,
 	)
 
-	must(t, service.SaveProject(project))
-	must(t, service.SaveVersion(version))
-	must(t, service.SaveSection(rootSection))
-	must(t, service.SaveSection(serviceSection))
-	must(t, service.SaveDependency(dependency))
-	must(t, service.SaveArtifact(fileArtifact))
-	must(t, service.SaveArtifact(directoryArtifact))
-	must(t, service.SaveTask(rootTask))
-	must(t, service.SaveTask(childTask))
+	must(t, service.SaveProject(ctx, project))
+	must(t, service.SaveVersion(ctx, version))
+	must(t, service.SaveSection(ctx, rootSection))
+	must(t, service.SaveSection(ctx, serviceSection))
+	must(t, service.SaveDependency(ctx, dependency))
+	must(t, service.SaveArtifact(ctx, fileArtifact))
+	must(t, service.SaveArtifact(ctx, directoryArtifact))
+	must(t, service.SaveTask(ctx, rootTask))
+	must(t, service.SaveTask(ctx, childTask))
 
 	data := readPlanFile(t, filepath.Join(dir, "project.plan.json"))
 
@@ -79,14 +82,16 @@ func TestPlanServiceSaveAllEntities(t *testing.T) {
 }
 
 func TestPlanServiceUpsertsEntities(t *testing.T) {
+	ctx := context.Background()
+
 	dir := t.TempDir()
 	service := NewPlanService(dir, "project.plan.json")
 
 	projectV1 := buildProject(t, "Stadan", "1")
 	projectV2 := buildProject(t, "Stadan", "2")
 
-	must(t, service.SaveProject(projectV1))
-	must(t, service.SaveProject(projectV2))
+	must(t, service.SaveProject(ctx, projectV1))
+	must(t, service.SaveProject(ctx, projectV2))
 
 	data := readPlanFile(t, filepath.Join(dir, "project.plan.json"))
 
@@ -99,6 +104,8 @@ func TestPlanServiceUpsertsEntities(t *testing.T) {
 }
 
 func TestPlanServiceReferenceValidation(t *testing.T) {
+	ctx := context.Background()
+
 	dir := t.TempDir()
 	service := NewPlanService(dir, "project.plan.json")
 
@@ -110,47 +117,51 @@ func TestPlanServiceReferenceValidation(t *testing.T) {
 	artifact := buildDirectoryArtifact(t, childSection)
 	task := buildTask(t, childSection, "Generate", nil, "", nil, nil)
 
-	assertErrContains(t, service.SaveVersion(version), "unknown project")
+	assertErrContains(t, service.SaveVersion(ctx, version), "unknown project")
 
-	must(t, service.SaveProject(project))
-	assertErrContains(t, service.SaveSection(rootSection), "unknown version")
-	assertErrContains(t, service.SaveDependency(dependency), "unknown version")
+	must(t, service.SaveProject(ctx, project))
+	assertErrContains(t, service.SaveSection(ctx, rootSection), "unknown version")
+	assertErrContains(t, service.SaveDependency(ctx, dependency), "unknown version")
 
-	must(t, service.SaveVersion(version))
-	assertErrContains(t, service.SaveSection(childSection), "unknown parent section")
-	assertErrContains(t, service.SaveArtifact(artifact), "unknown section")
-	assertErrContains(t, service.SaveTask(task), "unknown section")
+	must(t, service.SaveVersion(ctx, version))
+	assertErrContains(t, service.SaveSection(ctx, childSection), "unknown parent section")
+	assertErrContains(t, service.SaveArtifact(ctx, artifact), "unknown section")
+	assertErrContains(t, service.SaveTask(ctx, task), "unknown section")
 
-	must(t, service.SaveSection(rootSection))
-	must(t, service.SaveSection(childSection))
+	must(t, service.SaveSection(ctx, rootSection))
+	must(t, service.SaveSection(ctx, childSection))
 
 	parentTask := buildTask(t, childSection, "Parent", nil, "", nil, nil)
 	childTask := buildTask(t, childSection, "Child", nil, parentTask.ID(), nil, nil)
 	dependencyTask := buildTask(t, childSection, "Dependency", nil, "", []plan.TaskID{parentTask.ID()}, nil)
 	subTaskReference := buildTask(t, childSection, "SubTaskReference", nil, "", nil, []plan.TaskID{parentTask.ID()})
 
-	assertErrContains(t, service.SaveTask(childTask), "unknown parent task")
-	assertErrContains(t, service.SaveTask(dependencyTask), "unknown dependency task")
-	assertErrContains(t, service.SaveTask(subTaskReference), "unknown sub task")
+	assertErrContains(t, service.SaveTask(ctx, childTask), "unknown parent task")
+	assertErrContains(t, service.SaveTask(ctx, dependencyTask), "unknown dependency task")
+	assertErrContains(t, service.SaveTask(ctx, subTaskReference), "unknown sub task")
 
-	must(t, service.SaveTask(parentTask))
-	must(t, service.SaveTask(childTask))
-	must(t, service.SaveTask(dependencyTask))
-	must(t, service.SaveTask(subTaskReference))
+	must(t, service.SaveTask(ctx, parentTask))
+	must(t, service.SaveTask(ctx, childTask))
+	must(t, service.SaveTask(ctx, dependencyTask))
+	must(t, service.SaveTask(ctx, subTaskReference))
 }
 
 func TestPlanServiceNilErrors(t *testing.T) {
+	ctx := context.Background()
+
 	service := NewPlanService(t.TempDir(), "project.plan.json")
 
-	assertErrContains(t, service.SaveProject(nil), "project is required")
-	assertErrContains(t, service.SaveVersion(nil), "version is required")
-	assertErrContains(t, service.SaveSection(nil), "section is required")
-	assertErrContains(t, service.SaveDependency(nil), "dependency is required")
-	assertErrContains(t, service.SaveArtifact(nil), "artifact is required")
-	assertErrContains(t, service.SaveTask(nil), "task is required")
+	assertErrContains(t, service.SaveProject(ctx, nil), "project is required")
+	assertErrContains(t, service.SaveVersion(ctx, nil), "version is required")
+	assertErrContains(t, service.SaveSection(ctx, nil), "section is required")
+	assertErrContains(t, service.SaveDependency(ctx, nil), "dependency is required")
+	assertErrContains(t, service.SaveArtifact(ctx, nil), "artifact is required")
+	assertErrContains(t, service.SaveTask(ctx, nil), "task is required")
 }
 
 func TestPlanServiceInvalidJSONReturnsError(t *testing.T) {
+	ctx := context.Background()
+
 	dir := t.TempDir()
 	path := filepath.Join(dir, "project.plan.json")
 
@@ -159,14 +170,16 @@ func TestPlanServiceInvalidJSONReturnsError(t *testing.T) {
 	service := NewPlanService(dir, "project.plan.json")
 	project := buildProject(t, "Stadan", "1")
 
-	assertErrContains(t, service.SaveProject(project), "decode plan file")
+	assertErrContains(t, service.SaveProject(ctx, project), "decode plan file")
 }
 
 func TestPlanServiceMissingPathReturnsError(t *testing.T) {
+	ctx := context.Background()
+
 	service := NewPlanService("", "project.plan.json")
 	project := buildProject(t, "Stadan", "1")
 
-	assertErrContains(t, service.SaveProject(project), "plan file path is required")
+	assertErrContains(t, service.SaveProject(ctx, project), "plan file path is required")
 }
 
 func TestPlanServiceFilePathBranches(t *testing.T) {
