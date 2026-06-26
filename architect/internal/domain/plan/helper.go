@@ -105,3 +105,70 @@ func cleanPath(value string) string {
 
 	return value
 }
+
+// DependencyKinds returns all supported dependency kinds.
+func DependencyKinds() []DependencyKind {
+	return []DependencyKind{
+		DependencyKindEnvironment,
+		DependencyTool,
+		DependencyImage,
+		DependencyModule,
+	}
+}
+
+// DependencyScopes returns all supported dependency scopes.
+func DependencyScopes() []DependencyScope {
+	return []DependencyScope{
+		DependencyScopeBuild,
+		DependencyScopeRuntime,
+		DependencyScopeTest,
+		DependencyScopeDev,
+	}
+}
+
+// DependencyEcosystems returns all supported dependency ecosystems.
+func DependencyEcosystems() []DependencyEcosystem {
+	return []DependencyEcosystem{
+		DependencyEcosystemGo,
+		DependencyEcosystemPython,
+		DependencyEcosystemNode,
+		DependencyEcosystemDocker,
+		DependencyEcosystemBuf,
+		DependencyEcosystemProtobuf,
+		DependencyEcosystemGit,
+		DependencyEcosystemGeneric,
+	}
+}
+
+// DependencyKindsString returns all kinds as a comma-separated string.
+func DependencyKindsString() string {
+
+	values := make([]string, 0, len(DependencyKinds()))
+	for _, value := range DependencyKinds() {
+		values = append(values, string(value))
+	}
+	return strings.Join(values, ", ")
+
+}
+
+// DependencyScopesString returns all scopes as a comma-separated string.
+func DependencyScopesString() string {
+
+	values := make([]string, 0, len(DependencyScopes()))
+	for _, value := range DependencyScopes() {
+		values = append(values, string(value))
+	}
+	return strings.Join(values, ", ")
+
+}
+
+// DependencyEcosystemsString returns all ecosystems as a comma-separated string.
+func DependencyEcosystemsString() string {
+
+	values := make([]string, 0, len(DependencyEcosystems()))
+	for _, value := range DependencyEcosystems() {
+		values = append(values, string(value))
+	}
+	return strings.Join(values, ", ")
+
+}

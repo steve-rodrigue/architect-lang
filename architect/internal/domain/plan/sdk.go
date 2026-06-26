@@ -3,6 +3,7 @@ package plan
 import (
 	"context"
 
+	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/llm"
 	"github.com/steve-rodrigue/architect-lang/architect/internal/domain/model"
 )
 
@@ -16,10 +17,32 @@ type TaskID string
 type DependencyKind string
 
 const (
-	DependencyRuntime DependencyKind = "runtime"
-	DependencyTool    DependencyKind = "tool"
-	DependencyImage   DependencyKind = "image"
-	DependencyModule  DependencyKind = "module"
+	DependencyKindEnvironment DependencyKind = "environment"
+	DependencyTool            DependencyKind = "tool"
+	DependencyImage           DependencyKind = "image"
+	DependencyModule          DependencyKind = "module"
+)
+
+type DependencyScope string
+
+const (
+	DependencyScopeBuild   DependencyScope = "build"
+	DependencyScopeRuntime DependencyScope = "runtime"
+	DependencyScopeTest    DependencyScope = "test"
+	DependencyScopeDev     DependencyScope = "development"
+)
+
+type DependencyEcosystem string
+
+const (
+	DependencyEcosystemGo       DependencyEcosystem = "go"
+	DependencyEcosystemPython   DependencyEcosystem = "python"
+	DependencyEcosystemNode     DependencyEcosystem = "node"
+	DependencyEcosystemDocker   DependencyEcosystem = "docker"
+	DependencyEcosystemBuf      DependencyEcosystem = "buf"
+	DependencyEcosystemProtobuf DependencyEcosystem = "protobuf"
+	DependencyEcosystemGit      DependencyEcosystem = "git"
+	DependencyEcosystemGeneric  DependencyEcosystem = "generic"
 )
 
 type ArtifactKind string
@@ -86,6 +109,17 @@ func NewVersionBuilder() VersionBuilder {
 // NewSectionBuilder creates a new section builder
 func NewSectionBuilder() SectionBuilder {
 	return &sectionBuilder{}
+}
+
+// NewLLMDependencyPlanner creates a dependency planner backed by an LLM.
+func NewLLMDependencyPlanner(
+	repository llm.Repository,
+	model string,
+) DependencyPlanner {
+	return &llmDependencyPlanner{
+		repository: repository,
+		model:      model,
+	}
 }
 
 // NewDependencyBuilder creates a new dependency builder
@@ -218,6 +252,11 @@ type Section interface {
 	HasParentID() bool
 }
 
+// DependencyPlanner represents a dependency planner
+type DependencyPlanner interface {
+	PlanServiceDependencies(version Version, service model.Service) ([]Dependency, error)
+}
+
 // DependencyRepository loads dependencies on demand.
 type DependencyRepository interface {
 	IDsByProject(ctx context.Context, projectID ProjectID) ([]DependencyID, error)
@@ -230,10 +269,15 @@ type DependencyRepository interface {
 // DependencyBuilder represents a dependency builder.
 type DependencyBuilder interface {
 	Version(version Version) DependencyBuilder
+
 	Kind(kind DependencyKind) DependencyBuilder
+	Scope(scope DependencyScope) DependencyBuilder
+	Ecosystem(ecosystem DependencyEcosystem) DependencyBuilder
+
 	Name(name string) DependencyBuilder
 	DepVersion(depVersion string) DependencyBuilder
 	Source(source string) DependencyBuilder
+
 	Build() (Dependency, error)
 }
 
@@ -242,10 +286,13 @@ type Dependency interface {
 	ID() DependencyID
 	Version() Version
 
-	Kind() DependencyKind
-	Name() string       // what (ex: protobuf)
-	DepVersion() string // which version (ex: v33.0)
-	Source() string     // where to obtain it (ex: buf.build/googleapis/googleapis)
+	Kind() DependencyKind           // What kind of dependency this is (environment, tool, module).
+	Scope() DependencyScope         // When this dependency is required (build, runtime, test, development).
+	Ecosystem() DependencyEcosystem // Which ecosystem manages this dependency (Go, Python, Docker, etc.).
+
+	Name() string       // Dependency name (ex: protobuf, github.com/neo4j/neo4j-go-driver/v5).
+	DepVersion() string // Required dependency version (ex: v33.0).
+	Source() string     // Where to obtain it (ex: buf.build/googleapis/googleapis).
 }
 
 // ArtifactRepository loads artifacts on demand.

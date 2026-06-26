@@ -1,9 +1,13 @@
 package plan
 
 type dependency struct {
-	id         DependencyID
-	version    Version
-	kind       DependencyKind
+	id      DependencyID
+	version Version
+
+	kind      DependencyKind
+	scope     DependencyScope
+	ecosystem DependencyEcosystem
+
 	name       string
 	depVersion string
 	source     string
@@ -19,6 +23,14 @@ func (d *dependency) Version() Version {
 
 func (d *dependency) Kind() DependencyKind {
 	return d.kind
+}
+
+func (d *dependency) Scope() DependencyScope {
+	return d.scope
+}
+
+func (d *dependency) Ecosystem() DependencyEcosystem {
+	return d.ecosystem
 }
 
 func (d *dependency) Name() string {
